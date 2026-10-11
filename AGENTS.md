@@ -2,8 +2,10 @@
 
 ## Purpose
 
-Ouro is a product in early development: a Bun + Elysia API and a TanStack Start
-web surface whose first page is a landing page with a waitlist.
+Ouro is an AI copilot for Forward Deployed Engineers, in early development: a
+Bun + Elysia API and a TanStack Start workspace. It shadows a Google Meet
+through a Vexa notetaker, shows the live transcript, and keeps the client's
+requirements and implementation gaps current as the meeting runs.
 
 This repository is set up for iteration at high speed: small vertical slices,
 fast local feedback, and a gate that catches drift mechanically so review can
@@ -58,7 +60,7 @@ A strong change is easy to locate, explain, test, and delete.
 │   └── web/                 # @ouro/web — TanStack Start + React + StyleX
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
-│       │   ├── features/    # product concepts (landing, waitlist)
+│       │   ├── features/    # product concepts (workspace, meetings, analysis)
 │       │   └── api/         # the typed Eden client to apps/api
 │       └── test/            # tests against the production build
 ├── packages/
@@ -141,9 +143,9 @@ If the answers are weak, do not add it.
 ## Naming
 
 Names are architecture. Files name the owned concept (`routes.ts`, `store.ts`,
-`join-waitlist.ts`, `hero.tsx`); functions read as actions (`createApp`,
-`openDatabase`, `joinWaitlist`); types name domain concepts
-(`WaitlistStore`, `JoinOutcome`), not implementation accidents.
+`start-shadowing.ts`, `meeting-view.tsx`); functions read as actions
+(`createApp`, `openDatabase`, `startShadowing`); types name domain concepts
+(`MeetingStore`, `StartOutcome`), not implementation accidents.
 
 Filenames are kebab-case. Tests sit beside the code they prove
 (`routes.test.ts`), except `apps/web/test/`, which runs against the build.
@@ -161,7 +163,7 @@ record.
 
 ```bash
 bun install
-bun run dev            # api on :3001 (watch), web on :3000 (HMR, /api proxied)
+bun run dev            # api on :3001 (watch; needs apps/api/.env), web on :3000 (HMR, /api proxied)
 bun run check          # format, lint, typecheck, knip — seconds
 bun run test           # unit, route, SSR-build, and structure tests
 bun run verify         # check + test + build: the full gate CI runs
@@ -207,7 +209,7 @@ Keep the primary checkout clean on `main`. Concurrent tasks get isolated
 worktrees outside it:
 
 ```bash
-git worktree add ../ouro-wt/feat-waitlist-confirmation -b feat/waitlist-confirmation origin/main
+git worktree add ../ouro-wt/feat-requirement-extraction -b feat/requirement-extraction origin/main
 ```
 
 One owner controls one worktree at a time. Plan parallel work around conflict

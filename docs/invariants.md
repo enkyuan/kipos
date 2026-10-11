@@ -2,16 +2,57 @@
 
 Truths every change must preserve. Each names the test that proves it.
 
-## Waitlist
+## Meeting ingestion
 
-- **One entry per address.** Joining twice, in any letter case, leaves one
-  row. Enforced by the `waitlist_entries` primary key (`COLLATE NOCASE`) and
-  lowercase normalization. Proven in `apps/api/src/waitlist/routes.test.ts`.
-- **No membership oracle.** A new and a repeated join return the same status
-  and body (202 `{ "status": "accepted" }`), so the endpoint cannot reveal
-  whether an address is listed. Proven in the same file.
-- **Invalid input records nothing.** A rejected request (422) leaves the
-  database unchanged.
+Proven in `apps/api/src/meetings/*.test.ts` unless noted.
+
+- **Nothing starts without authorization.** `POST /api/meetings` without
+  `authorized: true`, or with a link that is not a Google Meet meeting,
+  answers 422 and sends no bot. The bot still needs the host to admit it.
+- **One notetaker per meeting.** While a session for a meeting is live, a
+  repeated start returns it instead of sending another bot, including when
+  the provider's answer was unconfirmed. Only a session silent for two
+  minutes (never heard from) or six hours is replaced. The session id is in
+  the page URL, so a refresh never starts anything.
+- **Only verified webhooks count.** A webhook whose signature does not
+  verify over the raw body, or whose timestamp is more than five minutes
+  off, is rejected (401) and stores nothing.
+- **No duplicate utterances.** A segment delivered again by any path is
+  stored once (`UNIQUE (meeting_session_id, dedup_key)`, Vexa's segment id).
+- **Spoken order.** The transcript is ordered by start offset, whatever
+  order segments arrived in; the live view merges by id and sorts the same way.
+- **Only finalized speech.** Drafts (`pending`, `completed: false`) are never stored.
+- **Unknown speakers stay unknown.** Unattributed speech is stored with a
+  null speaker and shown as "Unknown speaker".
+- **Status reflects the provider, in any delivery order.** The status is
+  derived from every report; "Listening" only from Vexa's `active`. A
+  refused admission, a fatal bot error and other failures show with a
+  readable reason.
+- **Keys stay server-side.** Provider keys are read only by
+  `apps/api/src/server.ts` and never appear in a response or the web bundle
+  (`vexa-client.test.ts`).
+
+## Requirement analysis
+
+Proven in `apps/api/src/analysis/*.test.ts`.
+
+- **Every record rests on real evidence.** A requirement or issue citing an
+  utterance id that is not in this meeting's transcript is rejected.
+- **No duplicate cards.** A repeated issue updates the original (by `ref`,
+  or same type and similar wording).
+- **Resolution keeps history.** A resolved issue keeps its original
+  evidence and adds the answering utterances; an already-answered question
+  never becomes an issue.
+- **Dismissal sticks.** A dismissed issue comes back only with evidence
+  newer than its dismissal.
+- **No silent confirmation.** A requirement is `confirmed` only with a
+  participant's explicit confirmation cited.
+- **Bad output fabricates nothing.** Invalid model output or a model error
+  writes nothing, leaves the transcript intact, and the next cycle runs.
+- **Incremental and exclusive.** Each utterance is analyzed once (the
+  cursor); one cycle per meeting at a time; never per sentence.
+- **The transcript is data.** Lines are quoted as JSON and cannot form a
+  section of the prompt; the model is offered no acting tool.
 
 ## API
 
@@ -38,5 +79,6 @@ Truths every change must preserve. Each names the test that proves it.
   `tooling/oxlint.json`.
 - **Every ui primitive is public and every export resolves.** Proven in
   `packages/ui/test/exports.test.ts`.
-- **The landing page server-renders** with its stylesheet linked. Proven in
-  `apps/web/test/build/landing.test.ts`.
+- **The workspace server-renders** with its recording notice, consent
+  control and stylesheet, and ships no development tooling. Proven in
+  `apps/web/test/build/workspace.test.ts`.
