@@ -2,6 +2,7 @@ import {
   apiClient,
   listenToMeeting,
   type Connection,
+  type DraftSpeech,
   type MeetingSession,
   type TranscriptUtterance,
 } from "#api/client";
@@ -17,6 +18,8 @@ export type MeetingState =
       kind: "ready";
       session: MeetingSession;
       utterances: TranscriptUtterance[];
+      /** Words still being spoken, one entry per speaker, in the order they started. */
+      drafts: DraftSpeech[];
       connection: Connection;
     };
 
@@ -25,12 +28,22 @@ type Action =
   | { type: "missing" | "unavailable" }
   | { type: "session"; session: MeetingSession }
   | { type: "utterance"; utterance: TranscriptUtterance }
+  | { type: "draft"; draft: DraftSpeech }
   | { type: "connection"; connection: Connection };
 
 /** Spoken order: by start time, then arrival. Replays (same id) replace, never duplicate. */
 function merge(list: TranscriptUtterance[], next: TranscriptUtterance): TranscriptUtterance[] {
   const others = list.filter((utterance) => utterance.id !== next.id);
   return [...others, next].sort((a, b) => a.startTime - b.startTime || a.id - b.id);
+}
+
+/** A speaker's new draft replaces their last in place; an empty one clears it. */
+function withDraft(drafts: DraftSpeech[], next: DraftSpeech): DraftSpeech[] {
+  const same = (draft: DraftSpeech) => draft.speakerName === next.speakerName;
+  if (!next.text) return drafts.filter((draft) => !same(draft));
+  return drafts.some(same)
+    ? drafts.map((draft) => (same(draft) ? next : draft))
+    : [...drafts, next];
 }
 
 function reduce(state: MeetingState, action: Action): MeetingState {
@@ -40,6 +53,7 @@ function reduce(state: MeetingState, action: Action): MeetingState {
         kind: "ready",
         session: action.session,
         utterances: action.utterances,
+        drafts: [],
         connection: "connecting",
       };
     case "missing":
@@ -51,7 +65,15 @@ function reduce(state: MeetingState, action: Action): MeetingState {
     case "session":
       return { ...state, session: action.session };
     case "utterance":
-      return { ...state, utterances: merge(state.utterances, action.utterance) };
+      // A confirmed line supersedes its speaker's draft; the provider's
+      // next frame carries whatever that speaker says after it.
+      return {
+        ...state,
+        utterances: merge(state.utterances, action.utterance),
+        drafts: state.drafts.filter((d) => d.speakerName !== action.utterance.speakerName),
+      };
+    case "draft":
+      return { ...state, drafts: withDraft(state.drafts, action.draft) };
     case "connection":
       return { ...state, connection: action.connection };
   }
@@ -90,6 +112,7 @@ export function useMeeting(meetingId: string): MeetingState {
           if (name === "session") dispatch({ type: "session", session: data as MeetingSession });
           if (name === "utterance")
             dispatch({ type: "utterance", utterance: data as TranscriptUtterance });
+          if (name === "draft") dispatch({ type: "draft", draft: data as DraftSpeech });
         },
         onConnection: (connection) => dispatch({ type: "connection", connection }),
       });

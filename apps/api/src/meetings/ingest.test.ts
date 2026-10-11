@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import type { MeetingSession } from "./contract";
-import { drainDeliveries } from "./ingest";
+import { drainDeliveries, ingestEvents } from "./ingest";
 import { readTranscriptRecord } from "./vexa-events";
 import {
   createTestApp,
@@ -44,6 +44,30 @@ describe("transcript ingestion", () => {
     ]);
   });
 
+  test("publishes each speaker's words in progress live, without storing them", async () => {
+    const { stream, session, stores, feed } = await started();
+    const published: { type: string; data: unknown }[] = [];
+    feed.subscribe(session.id, (event) => published.push(event));
+    stream(
+      session.id,
+      transcriptFrame(
+        [segment({ text: "We ship Friday.", start: 1 })],
+        [
+          { ...segment({ text: "and the", start: 3 }), completed: false },
+          { ...segment({ text: "invoices", start: 4 }), completed: false },
+        ],
+      ),
+      // The bundle's speaker has nothing pending: their draft is cleared.
+      transcriptFrame([]),
+    );
+    expect(published.map(({ type }) => type)).toEqual(["utterance", "draft", "draft"]);
+    expect(published.slice(1).map(({ data }) => data)).toEqual([
+      { speakerName: "Ada", text: "and the invoices" },
+      { speakerName: "Ada", text: "" },
+    ]);
+    expect(stores.meetings.transcript(session.id).map((u) => u.text)).toEqual(["We ship Friday."]);
+  });
+
   test("a segment delivered again, by any path, is stored once", async () => {
     const { stream, session, texts } = await started();
     const once = segment({ text: "Once", start: 4, id: "sess:1:4000" });
@@ -70,6 +94,33 @@ describe("transcript ingestion", () => {
     stream(session.id, transcriptFrame([segment({ text: "Who", start: 1, speaker: "" })]));
     expect(stores.meetings.transcript(session.id)).toEqual([
       expect.objectContaining({ speakerId: null, speakerName: null, text: "Who" }),
+    ]);
+  });
+});
+
+describe("transcript times", () => {
+  test("times epoch-stamped segments from the session's start, on every path", async () => {
+    const { stream, session, stores, feed } = await started();
+    const at = (offset: number) => Date.parse(session.startedAt) / 1000 + offset;
+    const later = segment({ text: "Then this.", start: at(42.5), end: at(44), id: "ch-0:2" });
+    const earlier = segment({ text: "First this.", start: at(3.25), end: at(5), id: "ch-0:1" });
+    stream(session.id, transcriptFrame([later]));
+    const record = { start_time: session.startedAt, segments: [earlier, later] };
+    const reading = { receivedAt: new Date().toISOString(), startedAt: session.startedAt };
+    ingestEvents(
+      { meetings: stores.meetings, feed },
+      session.id,
+      readTranscriptRecord(record, reading),
+    );
+    expect(
+      stores.meetings.transcript(session.id).map(({ text, startTime, endTime }) => ({
+        text,
+        startTime,
+        endTime,
+      })),
+    ).toEqual([
+      { text: "First this.", startTime: 3.25, endTime: 5 },
+      { text: "Then this.", startTime: 42.5, endTime: 44 },
     ]);
   });
 });
@@ -156,7 +207,7 @@ describe("catch-up reads", () => {
       end_time: "2026-10-04T10:30:00Z",
       segments: [segment({ text: "Last week", start: 1 })],
     };
-    const options = { receivedAt: "2026-10-11T10:05:00Z", notBefore: "2026-10-11T10:00:00Z" };
+    const options = { receivedAt: "2026-10-11T10:05:00Z", startedAt: "2026-10-11T10:00:00Z" };
     expect(readTranscriptRecord(earlier, options)).toEqual([]);
     expect(
       readTranscriptRecord({ ...earlier, start_time: "2026-10-11T10:00:30Z" }, options),

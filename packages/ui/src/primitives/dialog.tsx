@@ -21,7 +21,9 @@ import { Button } from "./button";
 // centered layout under `media.sm`: below it the popup sticks to the bottom
 // of the screen as a sheet. The panel owns the gap under the header with
 // padding instead of coss's `in-[…:has(…)]` selectors, and scrolls natively
-// rather than through coss's ScrollArea.
+// rather than through coss's ScrollArea. Motion departs from coss's 200ms
+// ease-in-out: entrances use a strong ease-out, and exits are quicker, so a
+// closing dialog stops catching clicks sooner.
 
 const STARTING = ":is([data-starting-style])";
 const ENDING = ":is([data-ending-style])";
@@ -34,8 +36,8 @@ const styles = stylex.create({
     backdropFilter: "blur(4px)",
     opacity: { default: 1, [STARTING]: 0, [ENDING]: 0 },
     transitionProperty: "opacity",
-    transitionDuration: "200ms",
-    transitionTimingFunction: motion.ease,
+    transitionDuration: { default: "200ms", [ENDING]: "150ms" },
+    transitionTimingFunction: motion.easeOut,
   },
   viewport: {
     position: "fixed",
@@ -78,8 +80,8 @@ const styles = stylex.create({
       [ENDING]: { default: null, [media.sm]: "0.98" },
     },
     transitionProperty: "scale, opacity, translate",
-    transitionDuration: "200ms",
-    transitionTimingFunction: "ease-in-out",
+    transitionDuration: { default: "200ms", [ENDING]: "150ms" },
+    transitionTimingFunction: motion.easeOut,
     "::before": {
       content: "''",
       display: { default: "none", [media.sm]: "block" },

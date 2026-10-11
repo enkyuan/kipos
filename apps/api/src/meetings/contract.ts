@@ -35,7 +35,10 @@ export const meetingSessionSchema = t.Object({
 export type MeetingSession = Static<typeof meetingSessionSchema>;
 export type MeetingStatus = MeetingSession["status"];
 
-/** A finalized utterance. Times are seconds from the start of the recording. */
+/**
+ * A finalized utterance. Times are seconds from the start of the recording:
+ * the session's `startedAt`, whatever clock the provider used.
+ */
 export const transcriptUtteranceSchema = t.Object({
   id: t.Number(),
   meetingSessionId: t.String(),
@@ -49,3 +52,10 @@ export const transcriptUtteranceSchema = t.Object({
 });
 
 export type TranscriptUtterance = Static<typeof transcriptUtteranceSchema>;
+
+/**
+ * One speaker's words still being transcribed: the provider's current
+ * hypothesis, shown live and replaced as it changes. Never stored; an empty
+ * `text` means the speaker has no speech in progress.
+ */
+export type DraftSpeech = { speakerName: string | null; text: string };

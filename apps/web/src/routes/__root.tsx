@@ -1,6 +1,7 @@
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-router";
 import * as stylex from "@stylexjs/stylex";
 import { Button } from "@ouro/ui/button";
+import { ToastProvider } from "@ouro/ui/toast";
 import { color, fontSize, fontWeight, space } from "@ouro/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
@@ -46,8 +47,8 @@ function NotFound() {
     <main {...stylex.props(styles.notFound)}>
       <h1 {...stylex.props(styles.notFoundTitle)}>Page not found</h1>
       <p {...stylex.props(styles.notFoundText)}>There's nothing at this address.</p>
-      <Button variant="outline" render={<a href="/" />}>
-        Back to the workspace
+      <Button variant="outline" render={<Link to="/" />}>
+        Back to meetings
       </Button>
     </main>
   );
@@ -60,7 +61,9 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <div {...stylex.props(styles.root)}>{children}</div>
+        <ToastProvider>
+          <div {...stylex.props(styles.root)}>{children}</div>
+        </ToastProvider>
         <DevAnnotations />
         <Scripts />
       </body>

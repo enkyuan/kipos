@@ -1,3 +1,5 @@
+import type { DraftSpeech } from "./contract";
+
 /** A finalized utterance as read from a provider message, before it is stored. */
 export type NewUtterance = {
   /** The provider's segment id: the same segment, however delivered, is one utterance. */
@@ -14,6 +16,7 @@ export type StatusReport = { status: string; reason: string | null; at: string }
 
 export type ProviderEvent =
   | { kind: "utterance"; utterance: NewUtterance }
+  | { kind: "draft"; draft: DraftSpeech }
   | { kind: "status"; report: StatusReport };
 
 type Json = Record<string, unknown>;
@@ -31,12 +34,34 @@ const validTime = (value: unknown) => {
   return at && !Number.isNaN(Date.parse(at)) ? at : undefined;
 };
 
-function readSegment(value: unknown): NewUtterance | null {
+/** What a provider message is read against. */
+export type Reading = {
+  receivedAt: string;
+  /** The session's start (ISO): utterance times count from it. */
+  startedAt: string;
+};
+
+// Vexa times segments either in seconds from its start or, on the live
+// stream, in Unix epoch seconds. A value this large is a wall-clock time
+// (September 2001 on): no meeting runs for 31 years.
+const EPOCH_FLOOR_S = 1e9;
+
+/**
+ * Seconds from the session's start. One fixed origin per session gives a
+ * segment the same time on every delivery path, which keeps spoken order
+ * and the fallback dedup key stable.
+ */
+const fromStart = (time: number, startedAtMs: number) =>
+  time < EPOCH_FLOOR_S ? time : Math.round(time * 1000 - startedAtMs) / 1000;
+
+function readSegment(value: unknown, startedAtMs: number): NewUtterance | null {
   const segment = object(value);
   const spoken = text(segment?.text)?.trim();
-  const startTime = seconds(segment?.start);
-  if (!segment || !spoken || startTime === undefined) return null;
-  const endTime = seconds(segment.end) ?? seconds(segment.end_time) ?? startTime;
+  const start = seconds(segment?.start);
+  if (!segment || !spoken || start === undefined) return null;
+  const startTime = fromStart(start, startedAtMs);
+  const end = seconds(segment.end) ?? seconds(segment.end_time);
+  const endTime = end === undefined ? startTime : fromStart(end, startedAtMs);
   const speaker = speakerOf(segment);
   return {
     dedupKey: text(segment.segment_id) ?? `${speaker ?? "unknown"}@${startTime}`,
@@ -51,9 +76,9 @@ function readSegment(value: unknown): NewUtterance | null {
 /** Vexa publishes an empty speaker when it cannot attribute a turn: unknown. */
 const speakerOf = (segment: Json) => text(segment.speaker)?.trim() || null;
 
-const utterances = (segments: unknown[]): ProviderEvent[] =>
+const utterances = (segments: unknown[], startedAt: string): ProviderEvent[] =>
   segments.flatMap((segment) => {
-    const utterance = readSegment(segment);
+    const utterance = readSegment(segment, Date.parse(startedAt));
     return utterance ? [{ kind: "utterance" as const, utterance }] : [];
   });
 
@@ -72,15 +97,55 @@ function confirmedSegments(message: Json): unknown[] {
   }
 }
 
+/** Draft segments a transcript frame carries: speech still being transcribed. */
+function pendingSegments(message: Json): unknown[] {
+  switch (message.type) {
+    case "transcript":
+      return list(message.pending);
+    case "transcript.mutable":
+      return list(object(message.payload)?.segments).filter((s) => object(s)?.completed !== true);
+    default:
+      return [];
+  }
+}
+
+/**
+ * Each speaker's words in progress. A `transcript` bundle is one speaker's,
+ * so its (possibly empty) `pending` replaces that speaker's draft; other
+ * frames only report the speakers they carry drafts for.
+ */
+function drafts(message: Json): ProviderEvent[] {
+  const bySpeaker = new Map<string | null, string[]>();
+  if (message.type === "transcript" && typeof message.speaker === "string") {
+    bySpeaker.set(message.speaker.trim() || null, []);
+  }
+  for (const value of pendingSegments(message)) {
+    const segment = object(value);
+    const spoken = text(segment?.text)?.trim();
+    if (!segment || !spoken) continue;
+    const speaker = speakerOf(segment);
+    bySpeaker.set(speaker, [...(bySpeaker.get(speaker) ?? []), spoken]);
+  }
+  return [...bySpeaker].map(([speakerName, words]) => ({
+    kind: "draft" as const,
+    draft: { speakerName, text: words.join(" ") },
+  }));
+}
+
 /**
  * Reads one frame from Vexa's `/ws` stream. Only confirmed segments become
- * utterances: drafts (`pending`, `completed: false`) are speech hypotheses
- * and are always ignored.
+ * utterances. Drafts (`pending`, `completed: false`) are speech hypotheses:
+ * they become `draft` events to show, never utterances to store.
  */
-export function readStreamFrame(frame: unknown, receivedAt: string): ProviderEvent[] {
+export function readStreamFrame(
+  frame: unknown,
+  { receivedAt, startedAt }: Reading,
+): ProviderEvent[] {
   const message = object(frame);
   if (!message) return [];
-  if (message.type !== "meeting.status") return utterances(confirmedSegments(message));
+  if (message.type !== "meeting.status") {
+    return [...utterances(confirmedSegments(message), startedAt), ...drafts(message)];
+  }
   const payload = object(message.payload);
   const status = text(payload?.status);
   if (!status) return [];
@@ -92,9 +157,9 @@ export function readStreamFrame(frame: unknown, receivedAt: string): ProviderEve
 // an earlier meeting on the same (recurring) Meet code.
 const EARLIER_MEETING_MS = 2 * 60_000;
 
-function isEarlierMeeting(record: Json | undefined, notBefore: string): boolean {
+function isEarlierMeeting(record: Json | undefined, startedAt: string): boolean {
   const began = validTime(record?.start_time) ?? validTime(record?.created_at);
-  return began !== undefined && Date.parse(began) < Date.parse(notBefore) - EARLIER_MEETING_MS;
+  return began !== undefined && Date.parse(began) < Date.parse(startedAt) - EARLIER_MEETING_MS;
 }
 
 function terminalReport(record: Json | undefined, receivedAt: string): ProviderEvent[] {
@@ -108,16 +173,16 @@ function terminalReport(record: Json | undefined, receivedAt: string): ProviderE
 /**
  * Reads `GET /transcripts/...`: the confirmed segments, plus the terminal
  * status with its reason (live statuses come from the stream). A record of
- * an earlier meeting on the same code (before `notBefore`) yields nothing.
+ * an earlier meeting on the same code (before `startedAt`) yields nothing.
  */
 export function readTranscriptRecord(
   body: unknown,
-  { receivedAt, notBefore }: { receivedAt: string; notBefore: string },
+  { receivedAt, startedAt }: Reading,
 ): ProviderEvent[] {
   const record = object(body);
-  if (isEarlierMeeting(record, notBefore)) return [];
+  if (isEarlierMeeting(record, startedAt)) return [];
   const confirmed = list(record?.segments).filter((s) => object(s)?.completed !== false);
-  return [...utterances(confirmed), ...terminalReport(record, receivedAt)];
+  return [...utterances(confirmed, startedAt), ...terminalReport(record, receivedAt)];
 }
 
 /** Which Vexa meeting a webhook is about: its record id and meeting code. */

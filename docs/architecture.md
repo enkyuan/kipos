@@ -70,7 +70,8 @@ POST /api/webhooks/vexa ──────┘                  meeting_status_re
   change it (`meetings/status.ts`).
 - **Live channel.** `GET /api/meetings/:id/events` subscribes, then replays
   the session, transcript and analysis, then streams changes. Clients merge
-  by id.
+  by id. `draft` events (each speaker's words in progress) are live only:
+  never stored or replayed.
 - Code: `apps/api/src/meetings/` (`routes.ts`, `vexa-client.ts`,
   `vexa-stream.ts`, `vexa-events.ts`, `ingest.ts`, `status.ts`, `store.ts`,
   `webhook-routes.ts`), `apps/web/src/features/meetings/`. Decisions:

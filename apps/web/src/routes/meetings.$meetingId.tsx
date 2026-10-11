@@ -12,7 +12,12 @@ function Meeting() {
   const { meetingId } = Route.useParams();
   return (
     <WorkspaceLayout width="wide">
-      <MeetingView meetingId={meetingId} aside={<AnalysisPanel meetingId={meetingId} />} />
+      {/* Keyed: another meeting is a fresh view, never the last one's state. */}
+      <MeetingView
+        key={meetingId}
+        meetingId={meetingId}
+        aside={<AnalysisPanel meetingId={meetingId} />}
+      />
     </WorkspaceLayout>
   );
 }

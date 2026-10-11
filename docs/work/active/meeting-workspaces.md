@@ -31,7 +31,8 @@ Must not modify: migrations, stored data.
 - `GET /api/meetings` lists every session, newest first.
 - `/` server-renders the grid heading and the "New meeting" control; the
   list loads in the browser.
-- The dialog's form keeps the recording notice and consent control.
+- The dialog's form keeps the consent control (its recording notice was
+  later removed: `workspace-navigation.md`).
 - `bun run verify` passes.
 
 ## Decisions

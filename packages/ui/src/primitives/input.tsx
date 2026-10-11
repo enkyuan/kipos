@@ -80,7 +80,9 @@ const styles = stylex.create({
 
 export type InputProps = Omit<BaseInput.Props, "className" | "style" | "size"> & {
   size?: "sm" | "default" | "lg";
-  /** Styles for the control box (width, margins), not the text. */
+  /** The bare input with no control box, for a box drawn by its container (`InputGroup`). */
+  unstyled?: boolean;
+  /** Styles for the control box (width, margins), not the text; the input itself when `unstyled`. */
   xstyle?: stylex.StyleXStyles;
 };
 
@@ -88,7 +90,21 @@ export type InputProps = Omit<BaseInput.Props, "className" | "style" | "size"> &
  * `import { Input } from "@ouro/ui/input"`. Inside `Field.Root` it takes the
  * field's label, description and validity automatically.
  */
-export function Input({ size = "default", xstyle, ...props }: InputProps): ReactElement {
+export function Input({
+  size = "default",
+  unstyled = false,
+  xstyle,
+  ...props
+}: InputProps): ReactElement {
+  if (unstyled) {
+    return (
+      <BaseInput
+        {...stylex.props(styles.input, styles[size], xstyle)}
+        data-slot="input"
+        {...props}
+      />
+    );
+  }
   return (
     <span {...stylex.props(styles.control, styles.plain, xstyle)} data-slot="input-control">
       <BaseInput {...stylex.props(styles.input, styles[size])} data-slot="input" {...props} />

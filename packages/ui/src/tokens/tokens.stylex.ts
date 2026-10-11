@@ -155,6 +155,11 @@ export const shadow = stylex.defineConsts({
 export const motion = stylex.defineConsts({
   fast: "150ms",
   ease: "cubic-bezier(0.4, 0, 0.2, 1)",
+  // Entrances and exits: moves at once, then settles. Built-in `ease-out`
+  // starts too slowly to read as a response to the click.
+  easeOut: "cubic-bezier(0.23, 1, 0.32, 1)",
+  // Press feedback: the pressed control shrinks this much.
+  press: "0.96",
 });
 
 export const media = stylex.defineConsts({

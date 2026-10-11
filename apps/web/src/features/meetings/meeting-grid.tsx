@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { Link } from "@tanstack/react-router";
 import type { MeetingSession } from "#api/client";
 import {
   Dialog,
@@ -69,7 +70,8 @@ const styles = stylex.create({
     cursor: "pointer",
     outline: "none",
     boxShadow: { default: null, ":focus-visible": focusRing },
-    transitionProperty: "background-color, box-shadow",
+    scale: { default: null, ":active": { default: motion.press, [media.reducedMotion]: null } },
+    transitionProperty: "background-color, box-shadow, scale",
     transitionDuration: motion.fast,
     transitionTimingFunction: motion.ease,
   },
@@ -169,7 +171,11 @@ function NewMeetingTile({ onStarted }: { onStarted: (meetingId: string) => void 
 
 function MeetingTile({ session }: { session: MeetingSession }) {
   return (
-    <a href={`/meetings/${encodeURIComponent(session.id)}`} {...stylex.props(styles.tile)}>
+    <Link
+      to="/meetings/$meetingId"
+      params={{ meetingId: session.id }}
+      {...stylex.props(styles.tile)}
+    >
       {session.status !== "ended" && (
         <span {...stylex.props(styles.badge)}>
           <StatusBadge status={session.status} />
@@ -181,6 +187,6 @@ function MeetingTile({ session }: { session: MeetingSession }) {
         </span>
         <span {...stylex.props(styles.code)}>{meetCode(session)}</span>
       </span>
-    </a>
+    </Link>
   );
 }

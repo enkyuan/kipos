@@ -73,4 +73,9 @@ export function createApp(deps: AppDependencies) {
 export type App = ReturnType<typeof createApp>;
 
 export type { AnalysisState, BusinessRequirement, CandidateIssue } from "./analysis/contract";
-export type { MeetingSession, MeetingStatus, TranscriptUtterance } from "./meetings/contract";
+export type {
+  DraftSpeech,
+  MeetingSession,
+  MeetingStatus,
+  TranscriptUtterance,
+} from "./meetings/contract";

@@ -20,8 +20,12 @@ src/tokens/
                        tokens: color, radius, font (vars); space, fontSize,
                        lineHeight, fontWeight, tracking, shadow, motion,
                        media (consts)
-  base.css             coss's base layer: fonts, borders, body, and the
-                       descendant rules StyleX cannot express
+  base.css             coss's base layer: fonts, borders, body, the
+                       descendant rules StyleX cannot express, and toast
+                       stacking (arithmetic on Base UI's per-toast CSS
+                       variables under compound state selectors). It sits
+                       below StyleX's layers, so it cannot override a
+                       property a primitive sets.
 src/primitives/        one file per coss component, exported as
                        `@ouro/ui/<name>`
 test/                  public-export contract

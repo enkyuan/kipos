@@ -71,7 +71,8 @@ Imports across folders go through the package aliases (`#api/*`,
 - Live data arrives over Server-Sent Events through `listenToMeeting` in
   `src/api/client.ts` (it rebuilds a closed connection with backoff). A
   stream replays persisted state on every (re)connect, so consumers merge
-  records by id.
+  records by id. `draft` events are live only (never replayed) and show
+  words in progress; nothing derived from the record may read them.
 - Features that refer to the transcript link to `#utterance-<id>`: the
   transcript renders each line with that id and highlights the `:target`.
   It is the one cross-feature contract, and it is a URL, not an import.

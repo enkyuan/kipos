@@ -5,6 +5,7 @@ export type {
   AnalysisState,
   BusinessRequirement,
   CandidateIssue,
+  DraftSpeech,
   MeetingSession,
   MeetingStatus,
   TranscriptUtterance,
@@ -24,10 +25,18 @@ export function apiClient() {
 /**
  * Event names on a meeting's live channel and their JSON payloads:
  * `session` (MeetingSession), `utterance` (TranscriptUtterance),
- * `analysis` (AnalysisState), `requirement` (BusinessRequirement),
- * `issue` (CandidateIssue).
+ * `draft` (DraftSpeech: live only, never replayed), `analysis`
+ * (AnalysisState), `requirement` (BusinessRequirement), `issue`
+ * (CandidateIssue).
  */
-const MEETING_EVENTS = ["session", "utterance", "analysis", "requirement", "issue"] as const;
+const MEETING_EVENTS = [
+  "session",
+  "utterance",
+  "draft",
+  "analysis",
+  "requirement",
+  "issue",
+] as const;
 type MeetingEventName = (typeof MEETING_EVENTS)[number];
 
 export type Connection = "connecting" | "live" | "reconnecting";

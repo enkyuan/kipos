@@ -21,7 +21,13 @@ Proven in `apps/api/src/meetings/*.test.ts` unless noted.
   stored once (`UNIQUE (meeting_session_id, dedup_key)`, Vexa's segment id).
 - **Spoken order.** The transcript is ordered by start offset, whatever
   order segments arrived in; the live view merges by id and sorts the same way.
-- **Only finalized speech.** Drafts (`pending`, `completed: false`) are never stored.
+  Offsets are seconds from the session's `startedAt`, on every delivery path:
+  provider wall-clock (epoch) times are converted at ingestion
+  (`ingest.test.ts`).
+- **Only finalized speech is stored.** Drafts (`pending`, `completed: false`)
+  are never stored, analyzed or replayed; they reach open live channels as
+  `draft` events, one per speaker, and a confirmed line replaces its
+  speaker's draft (`ingest.test.ts`).
 - **Unknown speakers stay unknown.** Unattributed speech is stored with a
   null speaker and shown as "Unknown speaker".
 - **Status reflects the provider, in any delivery order.** The status is
@@ -79,6 +85,6 @@ Proven in `apps/api/src/analysis/*.test.ts`.
   `tooling/oxlint.json`.
 - **Every ui primitive is public and every export resolves.** Proven in
   `packages/ui/test/exports.test.ts`.
-- **The workspace server-renders** with its recording notice, consent
+- **The workspace server-renders** with its meetings grid, "New meeting"
   control and stylesheet, and ships no development tooling. Proven in
   `apps/web/test/build/workspace.test.ts`.

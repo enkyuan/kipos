@@ -7,25 +7,25 @@ import { EvidenceLinks } from "./evidence-links";
 import type { EvidenceLine } from "./use-analysis";
 
 const styles = stylex.create({
-  card: {
-    display: "flex",
-    flexDirection: "column",
-    gap: space.s2_5,
-    padding: space.s3,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: color.border,
-    borderRadius: radius.xl,
-    backgroundColor: color.card,
-  },
+  card: { display: "flex", flexDirection: "column", gap: space.s2_5 },
+  // The one to ask next stands out on a brand surface; the rest sit flat in
+  // the panel, divided by its spacing.
   prominent: {
     gap: space.s3,
     padding: space.s4,
-    borderColor: color.brand,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: `color-mix(in srgb, ${color.brand} 48%, transparent)`,
+    borderRadius: radius.xl,
     backgroundColor: color.brandSurface,
   },
   badges: { display: "flex", flexWrap: "wrap", gap: space.s1 },
-  title: { fontSize: fontSize.sm, fontWeight: fontWeight.semibold, lineHeight: lineHeight.sm },
+  title: {
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.semibold,
+    lineHeight: lineHeight.sm,
+    textWrap: "balance",
+  },
   prominentTitle: { fontSize: fontSize.base },
   label: { color: color.mutedForeground, fontSize: fontSize.xs },
   impact: { fontSize: fontSize.sm, lineHeight: lineHeight.sm },

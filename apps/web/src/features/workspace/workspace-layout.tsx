@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { Link } from "@tanstack/react-router";
 import { color, font, fontSize, fontWeight, media, space, tracking } from "@ouro/ui/tokens.stylex";
 import type { ReactNode } from "react";
 
@@ -6,7 +7,6 @@ const styles = stylex.create({
   header: {
     display: "flex",
     alignItems: "baseline",
-    gap: space.s3,
     marginInline: "auto",
     paddingBlock: space.s5,
     paddingInline: { default: space.s4, [media.sm]: space.s6 },
@@ -19,7 +19,6 @@ const styles = stylex.create({
     letterSpacing: tracking.heading,
     textDecoration: "none",
   },
-  section: { color: color.mutedForeground, fontSize: fontSize.sm },
   narrow: { maxWidth: "48rem" },
   wide: { maxWidth: "80rem" },
   main: {
@@ -46,10 +45,9 @@ export function WorkspaceLayout({
   return (
     <>
       <header {...stylex.props(styles.header, styles[width])}>
-        <a href="/" {...stylex.props(styles.wordmark)}>
+        <Link to="/" {...stylex.props(styles.wordmark)}>
           ouro
-        </a>
-        <span {...stylex.props(styles.section)}>FDE workspace</span>
+        </Link>
       </header>
       <main {...stylex.props(styles.main, styles[width])}>{children}</main>
     </>

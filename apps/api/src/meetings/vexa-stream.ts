@@ -86,7 +86,7 @@ function follow(
     try {
       const record = await client.readTranscript({ code, meetingId: session.providerBotId });
       const receivedAt = new Date().toISOString();
-      apply(readTranscriptRecord(record, { receivedAt, notBefore: session.startedAt }));
+      apply(readTranscriptRecord(record, { receivedAt, startedAt: session.startedAt }));
     } catch (error) {
       console.warn(`Vexa catch-up for ${code} failed`, error);
     }
@@ -108,7 +108,9 @@ function follow(
       return void catchUp();
     }
     if (frame.type === "error") console.warn(`Vexa stream error for ${code}`, frame.error);
-    const events = readStreamFrame(frame, new Date().toISOString());
+    const startedAt = sessionOf(sessionId)?.startedAt;
+    if (!startedAt) return stop();
+    const events = readStreamFrame(frame, { receivedAt: new Date().toISOString(), startedAt });
     apply(events);
     // The stream says *that* the meeting ended; the record says why.
     if (events.some(isEnd)) void catchUp(true);

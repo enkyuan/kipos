@@ -18,7 +18,8 @@ import {
 // targets stay comfortable. Hover sits under `media.hover`, as Tailwind v4's
 // `hover:` does, so a tap never leaves a button looking hovered. Icons inside
 // are sized by base.css (`[data-slot=button] svg`), since StyleX cannot
-// style descendants.
+// style descendants. One addition to coss: a pressed button shrinks
+// slightly, so a click is felt before its result arrives.
 
 const focusRing = `0 0 0 ${shadow.focusOffset} ${color.background}, 0 0 0 ${shadow.focusWidth} ${color.ring}`;
 const spin = stylex.keyframes({ to: { rotate: "360deg" } });
@@ -43,9 +44,10 @@ const styles = stylex.create({
     textDecoration: "none",
     cursor: "pointer",
     outline: "none",
-    transitionProperty: "box-shadow, background-color",
+    transitionProperty: "box-shadow, background-color, scale",
     transitionDuration: motion.fast,
     transitionTimingFunction: motion.ease,
+    scale: { default: null, ":active": { default: motion.press, [media.reducedMotion]: null } },
     opacity: { default: null, ":disabled": 0.64 },
     pointerEvents: { default: null, ":disabled": "none" },
     // The raised highlight sits on its own layer so it keeps the radius.
@@ -95,10 +97,25 @@ const sizes = stylex.create({
     paddingInline: `calc(${space.s4} - 1px)`,
     fontSize: { default: fontSize.lg, [media.sm]: fontSize.base },
   },
+  xs: {
+    height: { default: "1.75rem", [media.sm]: "1.5rem" },
+    gap: space.s1,
+    paddingInline: `calc(${space.s2} - 1px)`,
+    borderRadius: radius.md,
+    fontSize: { default: fontSize.sm, [media.sm]: fontSize.xs },
+    "::before": { borderRadius: `calc(${radius.md} - 1px)` },
+  },
   icon: {
     width: { default: "2.25rem", [media.sm]: "2rem" },
     height: { default: "2.25rem", [media.sm]: "2rem" },
     padding: 0,
+  },
+  "icon-xs": {
+    width: { default: "1.75rem", [media.sm]: "1.5rem" },
+    height: { default: "1.75rem", [media.sm]: "1.5rem" },
+    padding: 0,
+    borderRadius: radius.md,
+    "::before": { borderRadius: `calc(${radius.md} - 1px)` },
   },
 });
 

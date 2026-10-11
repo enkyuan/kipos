@@ -1,33 +1,63 @@
 import * as stylex from "@stylexjs/stylex";
 import type { AnalysisState, CandidateIssue } from "#api/client";
 import { Alert, AlertDescription, AlertTitle } from "@ouro/ui/alert";
-import { color, font, fontSize, fontWeight, space, tracking } from "@ouro/ui/tokens.stylex";
-import { useState } from "react";
+import { Card, CardDescription, CardHeader, CardPanel, CardTitle } from "@ouro/ui/card";
+import { Separator } from "@ouro/ui/separator";
+import { color, fontSize, fontWeight, space } from "@ouro/ui/tokens.stylex";
+import { useState, type ReactNode } from "react";
 import { IssueCard } from "./issue-card";
 import { RequirementList } from "./requirement-list";
-import { useAnalysis } from "./use-analysis";
+import { useAnalysis, type EvidenceLine } from "./use-analysis";
 
 const styles = stylex.create({
   panel: { display: "flex", flexDirection: "column", gap: space.s5 },
-  section: { display: "flex", flexDirection: "column", gap: space.s2_5 },
-  heading: {
-    fontFamily: font.heading,
-    fontSize: fontSize.xl,
-    fontWeight: fontWeight.medium,
-    letterSpacing: tracking.heading,
-  },
+  section: { display: "flex", flexDirection: "column", gap: space.s3 },
   subheading: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: space.s1_5,
     color: color.mutedForeground,
     fontSize: fontSize.xs,
     fontWeight: fontWeight.semibold,
     textTransform: "uppercase",
     letterSpacing: "0.04em",
   },
+  count: { fontWeight: fontWeight.regular, fontVariantNumeric: "tabular-nums" },
   muted: { color: color.mutedForeground, fontSize: fontSize.sm },
   error: { color: color.destructiveForeground, fontSize: fontSize.sm },
-  details: { display: "flex", flexDirection: "column", gap: space.s2_5 },
+  issues: { display: "flex", flexDirection: "column", gap: space.s5 },
+  details: { display: "flex", flexDirection: "column", gap: space.s3 },
   summary: { color: color.mutedForeground, fontSize: fontSize.sm, cursor: "pointer" },
 });
+
+/** One labelled group of the panel, its heading carrying how many it holds. */
+function Group({ label, count, children }: { label: string; count?: number; children: ReactNode }) {
+  return (
+    <section aria-label={label} {...stylex.props(styles.section)}>
+      <h3 {...stylex.props(styles.subheading)}>
+        {label}
+        {count !== undefined && <span {...stylex.props(styles.count)}>{count}</span>}
+      </h3>
+      {children}
+    </section>
+  );
+}
+
+type IssueStackProps = {
+  issues: CandidateIssue[];
+  lines: Map<number, EvidenceLine>;
+  onAction: (id: string) => (action: "dismiss" | "save") => void;
+};
+
+function IssueStack({ issues, lines, onAction }: IssueStackProps) {
+  return (
+    <div {...stylex.props(styles.issues)}>
+      {issues.map((issue) => (
+        <IssueCard key={issue.id} issue={issue} lines={lines} onAction={onAction(issue.id)} />
+      ))}
+    </div>
+  );
+}
 
 const RANK = { high: 0, medium: 1, low: 2 } as const;
 
@@ -46,8 +76,8 @@ function stateText(state: AnalysisState | null): string {
 }
 
 /**
- * The FDE's private side panel: gaps worth asking about, the one to ask
- * next, and the requirements heard so far. Nothing here is shown to, or
+ * The FDE's private side panel, one card: the one gap to ask next, the
+ * others still open, the requirements heard so far, and what was closed. Nothing here is shown to, or
  * sent to, the meeting.
  */
 export function AnalysisPanel({ meetingId }: { meetingId: string }) {
@@ -61,11 +91,9 @@ export function AnalysisPanel({ meetingId }: { meetingId: string }) {
     setFailed(!(await act(id, action)));
 
   return (
-    <aside aria-labelledby="analysis-heading" {...stylex.props(styles.panel)}>
-      <div {...stylex.props(styles.section)}>
-        <h2 id="analysis-heading" {...stylex.props(styles.heading)}>
-          Gaps to clarify
-        </h2>
+    <Card render={<aside aria-labelledby="analysis-heading" />}>
+      <CardHeader>
+        <CardTitle render={<h2 id="analysis-heading" />}>Gaps to clarify</CardTitle>
         {analysis.state?.enabled === false ? (
           <Alert role="note">
             <AlertTitle>Analysis is off</AlertTitle>
@@ -74,60 +102,51 @@ export function AnalysisPanel({ meetingId }: { meetingId: string }) {
             </AlertDescription>
           </Alert>
         ) : (
-          <output {...stylex.props(styles.muted)}>{stateText(analysis.state)}</output>
+          <CardDescription render={<output />}>{stateText(analysis.state)}</CardDescription>
         )}
         {failed && (
           <p role="alert" {...stylex.props(styles.error)}>
             That didn't save. Try again.
           </p>
         )}
-      </div>
+      </CardHeader>
+      <CardPanel xstyle={styles.panel}>
+        <Group label="Ask next">
+          {next ? (
+            <IssueCard issue={next} lines={analysis.lines} prominent onAction={onAction(next.id)} />
+          ) : (
+            <p {...stylex.props(styles.muted)}>
+              No open gaps. Ouro only raises one when an answer would change the implementation.
+            </p>
+          )}
+        </Group>
 
-      <section aria-label="Ask next" {...stylex.props(styles.section)}>
-        <h3 {...stylex.props(styles.subheading)}>Ask next</h3>
-        {next ? (
-          <IssueCard issue={next} lines={analysis.lines} prominent onAction={onAction(next.id)} />
-        ) : (
-          <p {...stylex.props(styles.muted)}>
-            No open gaps. Ouro only raises one when an answer would change the implementation.
-          </p>
+        {rest.length > 0 && (
+          <>
+            <Separator />
+            <Group label="Also open" count={rest.length}>
+              <IssueStack issues={rest} lines={analysis.lines} onAction={onAction} />
+            </Group>
+          </>
         )}
-      </section>
 
-      {rest.length > 0 && (
-        <section aria-label="Other open gaps" {...stylex.props(styles.section)}>
-          <h3 {...stylex.props(styles.subheading)}>Also open</h3>
-          {rest.map((issue) => (
-            <IssueCard
-              key={issue.id}
-              issue={issue}
-              lines={analysis.lines}
-              onAction={onAction(issue.id)}
-            />
-          ))}
-        </section>
-      )}
+        <Separator />
+        <Group label="Requirements" count={analysis.requirements.length}>
+          <RequirementList requirements={analysis.requirements} lines={analysis.lines} />
+        </Group>
 
-      <section aria-label="Requirements" {...stylex.props(styles.section)}>
-        <h3 {...stylex.props(styles.subheading)}>Requirements</h3>
-        <RequirementList requirements={analysis.requirements} lines={analysis.lines} />
-      </section>
-
-      {closed.length > 0 && (
-        <details {...stylex.props(styles.details)}>
-          <summary {...stylex.props(styles.summary)}>
-            Resolved and dismissed ({closed.length})
-          </summary>
-          {closed.map((issue) => (
-            <IssueCard
-              key={issue.id}
-              issue={issue}
-              lines={analysis.lines}
-              onAction={onAction(issue.id)}
-            />
-          ))}
-        </details>
-      )}
-    </aside>
+        {closed.length > 0 && (
+          <>
+            <Separator />
+            <details {...stylex.props(styles.details)}>
+              <summary {...stylex.props(styles.summary)}>
+                Resolved and dismissed ({closed.length})
+              </summary>
+              <IssueStack issues={closed} lines={analysis.lines} onAction={onAction} />
+            </details>
+          </>
+        )}
+      </CardPanel>
+    </Card>
   );
 }

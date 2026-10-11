@@ -49,9 +49,21 @@
       "types": "./src/primitives/input.tsx",
       "default": "./src/primitives/input.tsx"
     },
+    "./input-group": {
+      "types": "./src/primitives/input-group.tsx",
+      "default": "./src/primitives/input-group.tsx"
+    },
     "./separator": {
       "types": "./src/primitives/separator.tsx",
       "default": "./src/primitives/separator.tsx"
+    },
+    "./spinner": {
+      "types": "./src/primitives/spinner.tsx",
+      "default": "./src/primitives/spinner.tsx"
+    },
+    "./toast": {
+      "types": "./src/primitives/toast.tsx",
+      "default": "./src/primitives/toast.tsx"
     }
   },
   "scripts": {

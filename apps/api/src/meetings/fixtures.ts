@@ -32,11 +32,13 @@ export function createTestApp(answer?: BotRequest) {
   });
   /** Delivers frames as the live stream would. */
   const stream = (sessionId: string, ...frames: unknown[]) => {
+    const { startedAt } = stores.meetings.find(sessionId)!;
     for (const frame of frames) {
+      const receivedAt = new Date().toISOString();
       ingestEvents(
         { meetings: stores.meetings, feed },
         sessionId,
-        readStreamFrame(frame, new Date().toISOString()),
+        readStreamFrame(frame, { receivedAt, startedAt }),
       );
     }
   };

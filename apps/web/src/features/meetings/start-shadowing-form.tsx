@@ -6,7 +6,6 @@ import { Form } from "@ouro/ui/form";
 import { Input } from "@ouro/ui/input";
 import { color, fontSize, fontWeight, lineHeight, space } from "@ouro/ui/tokens.stylex";
 import { useState } from "react";
-import { ConsentNotice } from "./consent-notice";
 import { startShadowing, type StartOutcome } from "./start-shadowing";
 
 const styles = stylex.create({
@@ -56,7 +55,6 @@ export function StartShadowingForm({ onStarted }: { onStarted: (meetingId: strin
         />
         <FieldError />
       </Field>
-      <ConsentNotice />
       <Field name="authorized" validate={required("Confirm that everyone agreed before starting.")}>
         <FieldLabel xstyle={styles.consentLabel}>
           <Checkbox checked={authorized} onCheckedChange={setAuthorized} />

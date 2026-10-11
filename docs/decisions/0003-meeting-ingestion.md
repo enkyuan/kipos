@@ -20,7 +20,10 @@ keys, and the smallest stack that does it.
    subscription to Vexa's `/ws` per live session (authenticated with the
    API key, so no public endpoint is needed). Only confirmed segments
    (`confirmed[]`, `completed: true`) are stored; drafts are speech
-   hypotheses and are never stored.
+   hypotheses and are never stored. Drafts are forwarded to open live
+   channels as `draft` events (one speaker's words in progress, replaced
+   by each frame of that speaker's bundle), so the transcript shows speech
+   as it happens without a hypothesis entering the record.
 3. **Catch-up by REST.** The transcript record (by Vexa meeting id when
    known, else by meeting code, ignoring a record of an earlier meeting on a
    recurring code) is read on every (re)subscribe, when the stream reports

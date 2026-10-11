@@ -50,7 +50,7 @@ const COPY: Record<MeetingStatus, StatusCopy> = {
   },
   recording: {
     label: "Listening",
-    detail: "Admitted and transcribing. Lines appear below as each speaker finishes.",
+    detail: "Admitted and transcribing. Words appear below as people speak.",
     variant: "success",
   },
   ended: {

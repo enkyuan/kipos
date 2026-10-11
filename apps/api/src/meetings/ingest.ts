@@ -35,6 +35,7 @@ export type Ingestion = {
 /**
  * Applies provider events to one session: stores what is new and publishes
  * it. Repeats change nothing, so any path may deliver the same event again.
+ * Drafts are only published: they are not the meeting's record.
  */
 export function ingestEvents(
   { meetings, feed, onMeetingChanged }: Ingestion,
@@ -44,7 +45,9 @@ export function ingestEvents(
   const receivedAt = new Date().toISOString();
   let changed = false;
   for (const event of events) {
-    if (event.kind === "utterance") {
+    if (event.kind === "draft") {
+      feed.publish(sessionId, { type: "draft", data: event.draft });
+    } else if (event.kind === "utterance") {
       const utterance = meetings.recordUtterance(sessionId, event.utterance, receivedAt);
       if (utterance) feed.publish(sessionId, { type: "utterance", data: utterance });
       changed ||= utterance !== null;
