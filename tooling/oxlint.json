@@ -1,0 +1,180 @@
+{
+  "$schema": "../node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import", "react-perf"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["**/dist/**", "**/node_modules/**", "**/routeTree.gen.ts"],
+  "rules": {
+    // Structural limits are architecture alarms (AGENTS.md "Code shape"): a
+    // violation means reconsider ownership, not split mechanically.
+    "max-lines": ["error", { "max": 300, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": [
+      "error",
+      { "max": 80, "skipBlankLines": true, "skipComments": true }
+    ],
+    "complexity": ["error", { "max": 12 }],
+    "max-depth": ["error", { "max": 4 }],
+    "max-params": ["error", { "max": 3 }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-cycle": "error",
+    "typescript/consistent-type-imports": "error",
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    // The automatic JSX runtime needs no React in scope.
+    "react/react-in-jsx-scope": "off",
+    // Base UI's render prop takes an empty element (`render={<a href="/" />}`,
+    // `render={<h3 />}`) and fills it with the component's children; these
+    // two rules read the empty element as an unlabeled control or heading.
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/heading-has-content": "off"
+  },
+  "overrides": [
+    {
+      // packages/ui sits below every app (docs/architecture.md): no app code,
+      // no router, no server framework. Components read semantic tokens,
+      // never palette shades.
+      "files": ["**/packages/ui/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@ouro/web", "@ouro/web/*", "@ouro/api", "@ouro/api/*", "**/apps/**"],
+                "message": "packages/ui never imports an app (docs/architecture.md)."
+              },
+              {
+                "group": ["@tanstack/*", "elysia", "elysia/*", "@elysiajs/*"],
+                "message": "packages/ui stays framework-free: routing and data belong to the app."
+              },
+              {
+                "group": ["**/palette.stylex"],
+                "message": "Components consume semantic roles from tokens.stylex, never palette shades."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // The token layer is the one place that maps palette → roles.
+      "files": ["**/packages/ui/src/tokens/**"],
+      "rules": { "no-restricted-imports": "off" }
+    },
+    {
+      "files": ["**/apps/api/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@ouro/web",
+                  "@ouro/web/*",
+                  "@ouro/ui",
+                  "@ouro/ui/*",
+                  "react",
+                  "react-dom"
+                ],
+                "message": "apps/api has no UI and never imports the web app (docs/architecture.md)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // apps/web: @ouro/ui through its public exports only, and the API as
+      // types only, through the Eden client (#api/client).
+      "files": ["**/apps/web/src/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@ouro/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @ouro/ui through its package exports (packages/ui/package.json)."
+              },
+              {
+                "group": ["**/apps/api/**", "@ouro/api/*", "bun", "bun:*"],
+                "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
+              },
+              {
+                "group": ["../../*", "../../**"],
+                "message": "Two levels up crosses an ownership boundary: import through #api/* or #features/*."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // An API feature folder (src/<feature>/) never imports another one;
+      // shared code lives in a top-level module (errors.ts, database.ts).
+      // Overrides replace the rule's options, so the app-wide groups repeat.
+      "files": ["**/apps/api/src/*/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@ouro/web",
+                  "@ouro/web/*",
+                  "@ouro/ui",
+                  "@ouro/ui/*",
+                  "react",
+                  "react-dom"
+                ],
+                "message": "apps/api has no UI and never imports the web app (docs/architecture.md)."
+              },
+              {
+                "group": ["../*/*"],
+                "message": "API features never import each other (apps/api/AGENTS.md)."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Web features never import each other: the route composes them
+      // (apps/AGENTS.md). Inside a feature, import relatively.
+      "files": ["**/apps/web/src/features/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@ouro/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @ouro/ui through its package exports (packages/ui/package.json)."
+              },
+              {
+                "group": ["**/apps/api/**", "@ouro/api/*", "bun", "bun:*"],
+                "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
+              },
+              {
+                "group": ["../../*", "../../**"],
+                "message": "Two levels up crosses an ownership boundary: import through #api/* or #features/*."
+              },
+              {
+                "regex": "^#features/",
+                "message": "Features never import each other (apps/AGENTS.md): compose them in the route."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

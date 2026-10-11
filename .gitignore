@@ -1,0 +1,19 @@
+# Local environment files. Never commit real secrets.
+.env
+.env.*
+!.env.example
+
+# Bun workspace dependencies and build output.
+node_modules/
+dist/
+.output/
+.tanstack/
+*.tsbuildinfo
+
+# Local durable state (apps/api SQLite files).
+apps/api/data/
+
+.DS_Store
+
+# Claude Code harness state (machine-local).
+.claude/*.lock

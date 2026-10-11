@@ -1,0 +1,32 @@
+{
+  "name": "@ouro/monorepo",
+  "private": true,
+  "license": "UNLICENSED",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --filter @ouro/api --filter @ouro/web dev",
+    "dev:api": "bun run --cwd apps/api dev",
+    "dev:web": "bun run --cwd apps/web dev",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint --config tooling/oxlint.json --deny-warnings apps packages tooling",
+    "typecheck": "bun run --sequential --filter '@ouro/*' typecheck",
+    "knip": "knip",
+    "test": "bun run --sequential --filter '@ouro/*' test && bun test tooling",
+    "build": "bun run --sequential --filter '@ouro/*' build",
+    "check": "bun run format:check && bun run lint && bun run typecheck && bun run knip",
+    "verify": "bun run check && bun run test && bun run build"
+  },
+  "devDependencies": {
+    "@types/bun": "1.3.11",
+    "knip": "6.41.0",
+    "oxfmt": "0.72.0",
+    "oxlint": "1.87.0",
+    "typescript": "5.9.3"
+  },
+  "packageManager": "bun@1.3.11"
+}
