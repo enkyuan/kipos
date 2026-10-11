@@ -6,12 +6,7 @@
   "author": {
     "name": "Superpower team"
   },
-  "keywords": [
-    "fde",
-    "business-context",
-    "dial",
-    "requirements"
-  ],
+  "keywords": ["fde", "business-context", "dial", "requirements"],
   "userConfig": {
     "api_url": {
       "type": "string",
