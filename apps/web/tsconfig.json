@@ -1,0 +1,11 @@
+{
+  "extends": "@ouro/tsconfig/base.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "paths": {
+      "#api/*": ["./src/api/*"],
+      "#features/*": ["./src/features/*"]
+    }
+  },
+  "include": ["src", "test", "*.config.ts"]
+}
