@@ -25,7 +25,8 @@ You are building software for a client company. You know how to write code; Supe
 2. **While building:** whenever the code needs a business decision (a threshold, an approver, a mapping, an exception, an edge case), look it up with `get_requirements(topic)` or `search_knowledge`.
 3. **The rule is missing, ambiguous, or `conflicting`, or it appears under `unresolved`/`unknowns`:**
    - Do not pick a value yourself, and do not hard-code a "reasonable default".
-   - Check `list_clarifications` first: someone may have asked already.
+   - Check `list_clarifications`: if someone already got a clear answer, use it (step 5). A past attempt that ended without an answer (no answer, cut short, "I don't know", failed text) is not an answer: ask again.
+   - **Then call `request_clarification` right away.** Don't stop to ask the engineer whether to call: Claude Code shows them an approval prompt for this tool, and that prompt is their authorization. Never end your turn with the rule still unknown and no clarification in flight.
    - Call `request_clarification` with:
      - `channel`: `call` for a decision you need now, or one that may need follow-ups (thresholds, approval chains); `sms` for a short factual question that can wait. If the engineer says how to reach people, do that;
      - **one** specific question in business language, not code terms;
@@ -36,7 +37,7 @@ You are building software for a client company. You know how to write code; Supe
 4. **While waiting (asynchronous):** keep building everything that does not depend on the answer. Isolate the unknown behind one clearly named function or config value, with a `// TODO(superpower:<clarification_id>)` comment. Then call `wait_for_clarification`, or call `check_clarification` between other steps.
 5. **When `status` is `completed` (call) or `replied` (text):** read the transcript or the text replies (and `answer`, if present). These statuses only mean the conversation happened. First check that the employee actually answered the question. If they did, implement exactly what they said. Put a short comment at the rule citing the source, e.g. `// Rule from Akshat Gopalan (Finance Manager), clarification <id>`. Add a test for the rule and its boundary values. Tell the engineer what you learned in one or two lines.
    - If they did not answer (they didn't know, deflected, or the call was cut short), treat it like `no_answer` (step 6). If the answer is vague, or raises a new question, ask one follow-up clarification. Don't stretch the answer to cover the gap.
-6. **`no_answer`, `failed` or `canceled`:** tell the engineer, leave the TODO in place, and ask whether to retry, switch channel (text instead of call, or the other way round) or try someone else. A text stuck at `waiting_reply` for a long time works the same way. Never fill in the rule yourself.
+6. **`no_answer`, `failed` or `canceled`:** tell the engineer, and leave the TODO in place. A failed text: retry once as a call. Anything else: ask whether to retry, switch channel or try someone else. A text stuck at `waiting_reply` for a long time works the same way. Never fill in the rule yourself.
 
 ## Asking good questions
 
