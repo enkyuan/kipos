@@ -1,0 +1,4 @@
+CREATE TABLE waitlist_entries (
+  email TEXT NOT NULL PRIMARY KEY COLLATE NOCASE,
+  joined_at TEXT NOT NULL
+) STRICT;

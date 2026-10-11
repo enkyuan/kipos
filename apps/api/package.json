@@ -1,0 +1,25 @@
+{
+  "name": "@ouro/api",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/app.ts",
+      "default": "./src/app.ts"
+    }
+  },
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun src/server.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "bun test src"
+  },
+  "dependencies": {
+    "elysia": "1.4.30"
+  },
+  "devDependencies": {
+    "@ouro/tsconfig": "workspace:*"
+  }
+}
