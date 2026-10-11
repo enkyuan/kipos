@@ -1,11 +1,8 @@
 import { expect, test } from "bun:test";
 import { createClaudeAnalyzer } from "./analyzer";
 
-const config = {
-  apiKey: "bedrock-test-key",
-  region: "us-east-1",
-  model: "us.anthropic.claude-sonnet-4-6",
-};
+const profile = { region: "us-east-1", model: "us.anthropic.claude-sonnet-4-6" };
+const config = { ...profile, auth: { apiKey: "bedrock-test-key" } };
 
 const answering = (status: number, body: unknown) =>
   (async () => Response.json(body, { status })) as unknown as typeof fetch;
@@ -39,6 +36,24 @@ test("forces a single structured tool answer from the inference profile on Bedro
   expect(body.tool_choice).toEqual({ type: "tool", name: "record_analysis" });
   expect(body.tools.map((tool: { name: string }) => tool.name)).toEqual(["record_analysis"]);
   expect(body.messages).toEqual([{ role: "user", content: "prompt" }]);
+});
+
+test("signs with an IAM access key pair, including a temporary session token", async () => {
+  let headers: Headers | undefined;
+  const send = (async (_url: string | URL, init: RequestInit) => {
+    headers = new Headers(init.headers);
+    return Response.json({
+      content: [{ type: "tool_use", id: "t", name: "record_analysis", input: {} }],
+      stop_reason: "tool_use",
+    });
+  }) as unknown as typeof fetch;
+  const auth = { accessKeyId: "AKIDEXAMPLE", secretAccessKey: "secret", sessionToken: "session" };
+
+  await createClaudeAnalyzer({ ...profile, auth }, send)("prompt");
+
+  expect(headers!.get("authorization")).toStartWith("AWS4-HMAC-SHA256 Credential=AKIDEXAMPLE/");
+  expect(headers!.get("authorization")).toContain("/us-east-1/bedrock/aws4_request");
+  expect(headers!.get("x-amz-security-token")).toBe("session");
 });
 
 test("fails loudly when the model does not answer with the tool, or Bedrock refuses", async () => {

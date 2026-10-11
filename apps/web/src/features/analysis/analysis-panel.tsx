@@ -98,7 +98,7 @@ export function AnalysisPanel({ meetingId }: { meetingId: string }) {
           <Alert role="note">
             <AlertTitle>Analysis is off</AlertTitle>
             <AlertDescription>
-              Set AWS_BEARER_TOKEN_BEDROCK on the API to extract requirements and gaps.
+              Add Amazon Bedrock credentials to the API to extract requirements and gaps.
             </AlertDescription>
           </Alert>
         ) : (

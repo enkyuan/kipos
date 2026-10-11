@@ -15,8 +15,13 @@ for Claude Sonnet 4.6 through the US cross-region inference profile
   `@anthropic-ai/bedrock-sdk` (pinned exactly), which calls Bedrock's
   InvokeModel. InvokeModel is the path that takes inference profile IDs;
   on-demand base model IDs are refused for this model.
-- Configuration: analysis is on exactly when `AWS_BEARER_TOKEN_BEDROCK` (a
-  Bedrock API key, sent as a bearer token) is set. `AWS_REGION` defaults to
+- Configuration: analysis is on when the API has Bedrock credentials:
+  `AWS_BEARER_TOKEN_BEDROCK` (a Bedrock API key, sent as a bearer token), or
+  an IAM pair `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY` (plus
+  `AWS_SESSION_TOKEN` when temporary; requests are SigV4-signed). The API key
+  wins when both are set; half a pair fails startup rather than silently
+  leaving analysis off. The pair's principal needs `bedrock:InvokeModel` on
+  the inference profile and on the model in every region it routes to. `AWS_REGION` defaults to
   `us-east-1`, `ANALYSIS_MODEL` to `us.anthropic.claude-sonnet-4-6`.
   `ANTHROPIC_API_KEY` no longer enables anything in `apps/api`.
 - The key and region reach the client from `server.ts`'s configuration

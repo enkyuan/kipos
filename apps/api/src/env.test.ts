@@ -15,16 +15,37 @@ describe("readEnv", () => {
 
   test("enables analysis with a Bedrock key, on Sonnet 4.6 in us-east-1 unless told otherwise", () => {
     expect(readEnv({ ...vexa, AWS_BEARER_TOKEN_BEDROCK: "bk" }).analysis).toEqual({
-      apiKey: "bk",
+      auth: { apiKey: "bk" },
       region: "us-east-1",
       model: "us.anthropic.claude-sonnet-4-6",
     });
     const custom = { AWS_BEARER_TOKEN_BEDROCK: "bk", AWS_REGION: "us-west-2", ANALYSIS_MODEL: "m" };
     expect(readEnv({ ...vexa, ...custom }).analysis).toEqual({
-      apiKey: "bk",
+      auth: { apiKey: "bk" },
       region: "us-west-2",
       model: "m",
     });
+  });
+
+  test("enables analysis with an IAM access key pair, and a session token when given", () => {
+    const pair = { AWS_ACCESS_KEY_ID: "AKID", AWS_SECRET_ACCESS_KEY: "secret" };
+    expect(readEnv({ ...vexa, ...pair }).analysis?.auth).toEqual({
+      accessKeyId: "AKID",
+      secretAccessKey: "secret",
+      sessionToken: null,
+    });
+    expect(readEnv({ ...vexa, ...pair, AWS_SESSION_TOKEN: "tok" }).analysis?.auth).toMatchObject({
+      sessionToken: "tok",
+    });
+    // A Bedrock API key, when present, is the one used.
+    expect(readEnv({ ...vexa, ...pair, AWS_BEARER_TOKEN_BEDROCK: "bk" }).analysis?.auth).toEqual({
+      apiKey: "bk",
+    });
+  });
+
+  test("refuses to start with half an access key pair", () => {
+    expect(() => readEnv({ ...vexa, AWS_ACCESS_KEY_ID: "AKID" })).toThrow(/AWS_SECRET_ACCESS_KEY/);
+    expect(() => readEnv({ ...vexa, AWS_SECRET_ACCESS_KEY: "s" })).toThrow(/AWS_ACCESS_KEY_ID/);
   });
 
   test("ignores the Anthropic API key: analysis runs only on Bedrock", () => {

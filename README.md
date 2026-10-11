@@ -8,7 +8,7 @@ TanStack Start workspace, styled with coss/ui primitives on StyleX.
 
 ```bash
 bun install
-cp apps/api/.env.example apps/api/.env   # VEXA_API_KEY, AWS_BEARER_TOKEN_BEDROCK
+cp apps/api/.env.example apps/api/.env   # VEXA_API_KEY, Bedrock credentials
 bun run dev        # web http://localhost:3000 · api http://localhost:3001
 bun run verify     # the full gate: check + test + build
 ```
