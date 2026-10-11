@@ -84,6 +84,31 @@ Must not modify: API, migrations.
   can render before StyleX's dev CSS includes that route's styles; a reload
   fixes it. Production ships one compiled stylesheet.
 
+## Follow-up: analysis panel hierarchy
+
+- Question-first, chosen by the person from three mockups. Header: title
+  with a compact live status (Updated hh:mm, Analyzing, Waiting for talk,
+  Retrying, Off; the dot/spinner blur-swaps with `motion`). Lead: the next
+  question as the headline of the brand card ("Ask next", priority), then
+  who to ask and the gap, why it matters, evidence, actions. Empty: a
+  dashed "Nothing to ask yet" box. Then collapsible rows with counts (Also
+  open, Requirements, Resolved and dismissed), closed by default.
+- Rows use a new `@ouro/ui/collapsible` (coss collapsible on Base UI): the
+  panel animates its height with the strong ease-out, instantly under
+  reduced motion; items indent under the row label. A new lead question
+  leaves in 120 ms and the next settles in (`motion`, ADR 0005), never on
+  first render.
+- List issue cards drop the redundant "Open" badge; priority reads "High
+  priority".
+- The panel "in the main column" seen at 1920 px was a stale dev
+  stylesheet (cached modules across branch switches); the layout puts it
+  in the right column at `lg` and up. Adding the collapsible also made Vite
+  re-optimize deps mid-session (an "Invalid hook call" until reload).
+- Verified (gstack headless, 1920×1080, scratch copy of the dev DB with
+  seeded gaps and requirements, Vexa and Bedrock unreachable): card at
+  x=1192, 384 px wide; row opens 0 → 372 → 577 → 616 px over ~150 ms; no
+  console errors.
+
 ## Remaining
 
 Adversarial review. Live check of the requested → recording transition in

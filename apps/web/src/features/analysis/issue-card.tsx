@@ -20,15 +20,41 @@ const styles = stylex.create({
     backgroundColor: color.brandSurface,
   },
   badges: { display: "flex", flexWrap: "wrap", gap: space.s1 },
+  eyebrowRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: space.s2,
+  },
+  eyebrow: {
+    color: color.brandText,
+    fontSize: fontSize.xs,
+    fontWeight: fontWeight.semibold,
+    letterSpacing: "0.04em",
+    textTransform: "uppercase",
+  },
   title: {
     fontSize: fontSize.sm,
     fontWeight: fontWeight.semibold,
     lineHeight: lineHeight.sm,
     textWrap: "balance",
   },
-  prominentTitle: { fontSize: fontSize.base },
+  head: { display: "flex", flexDirection: "column", gap: space.s1 },
+  // The lead issue's headline is the question itself: what the FDE says next.
+  leadQuestion: {
+    fontSize: fontSize.base,
+    fontWeight: fontWeight.semibold,
+    lineHeight: lineHeight.sm,
+    textWrap: "balance",
+  },
+  context: {
+    color: color.mutedForeground,
+    fontSize: fontSize.xs,
+    lineHeight: lineHeight.xs,
+    textWrap: "pretty",
+  },
   label: { color: color.mutedForeground, fontSize: fontSize.xs },
-  impact: { fontSize: fontSize.sm, lineHeight: lineHeight.sm },
+  impact: { fontSize: fontSize.sm, lineHeight: lineHeight.sm, textWrap: "pretty" },
   question: {
     margin: 0,
     paddingInlineStart: space.s3,
@@ -38,6 +64,7 @@ const styles = stylex.create({
     fontSize: fontSize.sm,
     fontWeight: fontWeight.medium,
     lineHeight: lineHeight.sm,
+    textWrap: "pretty",
   },
   actions: { display: "flex", gap: space.s2 },
 });
@@ -57,6 +84,12 @@ const TYPE_LABEL: Record<CandidateIssue["type"], string> = {
   external_dependency: "External dependency",
 };
 
+const PRIORITY_LABEL: Record<CandidateIssue["priority"], string> = {
+  high: "High priority",
+  medium: "Medium priority",
+  low: "Low priority",
+};
+
 const STATUS: Record<CandidateIssue["status"], { label: string; variant: BadgeVariant }> = {
   open: { label: "Open", variant: "outline" },
   dismissed: { label: "Dismissed", variant: "secondary" },
@@ -66,37 +99,73 @@ const STATUS: Record<CandidateIssue["status"], { label: string; variant: BadgeVa
 type IssueCardProps = {
   issue: CandidateIssue;
   lines: Map<number, EvidenceLine>;
-  prominent?: boolean;
+  /** Set for the panel's lead issue: it stands out, under this label. */
+  eyebrow?: string;
   onAction: (action: "dismiss" | "save") => void;
 };
 
+/** Priority, then what a reader of a list needs: status once closed, saved, type. */
+function IssueBadges({ issue, eyebrow }: { issue: CandidateIssue; eyebrow?: string }) {
+  const priority = (
+    <Badge variant={PRIORITY[issue.priority]}>{PRIORITY_LABEL[issue.priority]}</Badge>
+  );
+  if (eyebrow) {
+    return (
+      <div {...stylex.props(styles.eyebrowRow)}>
+        <span {...stylex.props(styles.eyebrow)}>{eyebrow}</span>
+        {priority}
+      </div>
+    );
+  }
+  return (
+    <div {...stylex.props(styles.badges)}>
+      {priority}
+      {issue.status !== "open" && (
+        <Badge variant={STATUS[issue.status].variant}>{STATUS[issue.status].label}</Badge>
+      )}
+      {issue.savedAt && <Badge variant="info">Saved</Badge>}
+      <Badge variant="secondary">{TYPE_LABEL[issue.type]}</Badge>
+    </div>
+  );
+}
+
 /** One candidate issue: what is missing, why it matters, what to ask, and where it came from. */
-export function IssueCard({ issue, lines, prominent = false, onAction }: IssueCardProps) {
+export function IssueCard({ issue, lines, eyebrow, onAction }: IssueCardProps) {
+  const prominent = eyebrow !== undefined;
   const headingId = `issue-${issue.id}`;
   return (
     <article
       aria-labelledby={headingId}
       {...stylex.props(styles.card, prominent && styles.prominent)}
     >
-      <div {...stylex.props(styles.badges)}>
-        <Badge variant={PRIORITY[issue.priority]}>{issue.priority} priority</Badge>
-        <Badge variant={STATUS[issue.status].variant}>{STATUS[issue.status].label}</Badge>
-        {issue.savedAt && <Badge variant="info">Saved</Badge>}
-        <Badge variant="secondary">{TYPE_LABEL[issue.type]}</Badge>
-      </div>
-      <h3 id={headingId} {...stylex.props(styles.title, prominent && styles.prominentTitle)}>
-        {issue.summary}
-      </h3>
+      <IssueBadges issue={issue} eyebrow={eyebrow} />
+      {prominent ? (
+        <div {...stylex.props(styles.head)}>
+          <h3 id={headingId} {...stylex.props(styles.leadQuestion)}>
+            {issue.suggestedQuestion}
+          </h3>
+          <p {...stylex.props(styles.context)}>
+            {issue.suggestedOwner && `Ask ${issue.suggestedOwner} · `}
+            {issue.summary}
+          </p>
+        </div>
+      ) : (
+        <h3 id={headingId} {...stylex.props(styles.title)}>
+          {issue.summary}
+        </h3>
+      )}
       <div>
         <span {...stylex.props(styles.label)}>Why it matters</span>
         <p {...stylex.props(styles.impact)}>{issue.implementationImpact}</p>
       </div>
-      <div>
-        <span {...stylex.props(styles.label)}>
-          Ask{issue.suggestedOwner ? ` ${issue.suggestedOwner}` : ""}
-        </span>
-        <blockquote {...stylex.props(styles.question)}>{issue.suggestedQuestion}</blockquote>
-      </div>
+      {!prominent && (
+        <div>
+          <span {...stylex.props(styles.label)}>
+            Ask{issue.suggestedOwner ? ` ${issue.suggestedOwner}` : ""}
+          </span>
+          <blockquote {...stylex.props(styles.question)}>{issue.suggestedQuestion}</blockquote>
+        </div>
+      )}
       <EvidenceLinks label="Raised by" ids={issue.evidenceUtteranceIds} lines={lines} />
       <EvidenceLinks label="Answered by" ids={issue.resolutionUtteranceIds} lines={lines} />
       {issue.status === "open" && (

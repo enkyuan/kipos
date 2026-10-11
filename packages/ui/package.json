@@ -33,6 +33,10 @@
       "types": "./src/primitives/checkbox.tsx",
       "default": "./src/primitives/checkbox.tsx"
     },
+    "./collapsible": {
+      "types": "./src/primitives/collapsible.tsx",
+      "default": "./src/primitives/collapsible.tsx"
+    },
     "./dialog": {
       "types": "./src/primitives/dialog.tsx",
       "default": "./src/primitives/dialog.tsx"
