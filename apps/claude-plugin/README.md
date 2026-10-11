@@ -15,7 +15,7 @@ Claude Code ── this plugin: MCP server (dist/server.mjs) + skill + SessionSt
 ```bash
 bun install && bun run --cwd apps/claude-plugin build      # only after changing src/
 claude plugin marketplace add "$(pwd)/apps/claude-plugin"
-claude plugin install superpower@ouro
+claude plugin install superpower@superpower
 ```
 
 Claude Code asks for `api_url` (default: the deployed dial service), `api_token` (ask the team; it's a secret), `engagement_id` (`acme` for the demo) and your name. Change them later with `/plugin`. For a quick trial without installing: `claude --plugin-dir apps/claude-plugin`.

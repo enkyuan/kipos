@@ -33,7 +33,7 @@ describe("createVexaClient().sendBot", () => {
     expect(JSON.parse(call!.init.body as string)).toEqual({
       platform: "google_meet",
       native_meeting_id: "abc-defg-hij",
-      bot_name: "Ouro notetaker",
+      bot_name: "Superpower notetaker",
       language: "en",
       transcribe_enabled: true,
       recording_enabled: false,

@@ -46,7 +46,7 @@ export function WorkspaceLayout({
     <>
       <header {...stylex.props(styles.header, styles[width])}>
         <Link to="/" {...stylex.props(styles.wordmark)}>
-          ouro
+          superpower
         </Link>
       </header>
       <main {...stylex.props(styles.main, styles[width])}>{children}</main>

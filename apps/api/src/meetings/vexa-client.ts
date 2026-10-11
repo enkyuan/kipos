@@ -6,7 +6,7 @@ export type VexaConfig = {
   apiUrl: string;
 };
 
-const BOT_NAME = "Ouro notetaker";
+const BOT_NAME = "Superpower notetaker";
 const REQUEST_TIMEOUT_MS = 15_000;
 // Vexa ends a bot's meeting once it hears no remote audio for this long.
 // Its default is 10 minutes, which kept the notetaker in an ended call; two

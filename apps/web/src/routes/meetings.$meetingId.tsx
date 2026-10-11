@@ -4,7 +4,7 @@ import { MeetingView } from "#features/meetings/meeting-view";
 import { WorkspaceLayout } from "#features/workspace/workspace-layout";
 
 export const Route = createFileRoute("/meetings/$meetingId")({
-  head: () => ({ meta: [{ title: "Meeting · Ouro" }] }),
+  head: () => ({ meta: [{ title: "Meeting · Superpower" }] }),
   component: Meeting,
 });
 

@@ -5,7 +5,7 @@ Status: accepted
 
 ## Context
 
-Ouro needs a small backend and a public web surface that can change quickly
+Superpower needs a small backend and a public web surface that can change quickly
 without losing correctness, built by humans and agents in parallel.
 
 ## Decision

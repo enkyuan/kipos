@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Ouro is an AI copilot for Forward Deployed Engineers, in early development: a
+Superpower is an AI copilot for Forward Deployed Engineers, in early development: a
 Bun + Elysia API and a TanStack Start workspace. It shadows a Google Meet
 through a Vexa notetaker, shows the live transcript, and keeps the client's
 requirements and implementation gaps current as the meeting runs.

@@ -42,7 +42,8 @@ const COPY: Record<MeetingStatus, StatusCopy> = {
   },
   waiting_room: {
     label: "Waiting to be admitted",
-    detail: "The host must admit “Ouro notetaker” in Google Meet. Nothing is recorded until then.",
+    detail:
+      "The host must admit “Superpower notetaker” in Google Meet. Nothing is recorded until then.",
     variant: "warning",
   },
   needs_help: {

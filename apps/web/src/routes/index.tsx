@@ -3,7 +3,7 @@ import { MeetingGrid } from "#features/meetings/meeting-grid";
 import { WorkspaceLayout } from "#features/workspace/workspace-layout";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Meetings · Ouro" }] }),
+  head: () => ({ meta: [{ title: "Meetings · Superpower" }] }),
   component: Workspace,
 });
 

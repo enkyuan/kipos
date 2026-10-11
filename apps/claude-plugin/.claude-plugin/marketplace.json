@@ -1,7 +1,7 @@
 {
-  "name": "ouro",
-  "owner": { "name": "Ouro team" },
-  "metadata": { "description": "Ouro's Claude Code plugins" },
+  "name": "superpower",
+  "owner": { "name": "Superpower team" },
+  "metadata": { "description": "Superpower's Claude Code plugins" },
   "plugins": [
     {
       "name": "superpower",
