@@ -12,12 +12,28 @@ browser ──▶ apps/web (TanStack Start, SSR)        :3000
                   SQLite (bun:sqlite, WAL)        apps/api/data/ouro.sqlite
 ```
 
-| Package             | Owns                                                              |
-| ------------------- | ----------------------------------------------------------------- |
-| `apps/api`          | The HTTP API: validation, product rules, persistence, migrations. |
-| `apps/web`          | Pages, routing, server rendering, the typed API client.           |
-| `packages/ui`       | Design tokens and accessible primitives (coss/ui on StyleX).      |
-| `packages/tsconfig` | Shared compiler options.                                          |
+| Package              | Owns                                                                 |
+| -------------------- | -------------------------------------------------------------------- |
+| `apps/api`           | The HTTP API: validation, product rules, persistence, migrations.    |
+| `apps/web`           | Pages, routing, server rendering, the typed API client.              |
+| `packages/ui`        | Design tokens and accessible primitives (coss/ui on StyleX).         |
+| `apps/claude-plugin` | Claude Code plugin: MCP tools for client context and clarifications. |
+| `apps/dial-service`  | Vercel functions: Dial calls and texts to client stakeholders.       |
+| `packages/tsconfig`  | Shared compiler options.                                             |
+
+## Claude Code integration
+
+```text
+Claude Code ──▶ apps/claude-plugin (MCP over stdio, bundled in dist/)
+                   │  HTTPS, bearer token, engagement_id
+                   ▼
+               apps/dial-service (Vercel) ──▶ Dial API ──▶ phone call / SMS
+                   ▲                              │
+                   └──── signed webhook ◀─────────┘
+```
+
+Neither app imports the other or any other workspace; they share only the
+HTTP contract in `apps/claude-plugin/README.md`.
 
 ## Dependency direction
 
