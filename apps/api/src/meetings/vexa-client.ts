@@ -8,6 +8,11 @@ export type VexaConfig = {
 
 const BOT_NAME = "Ouro notetaker";
 const REQUEST_TIMEOUT_MS = 15_000;
+// Vexa ends a bot's meeting once it hears no remote audio for this long.
+// Its default is 10 minutes, which kept the notetaker in an ended call; two
+// minutes leaves soon after everyone goes, at the cost of also leaving a
+// meeting that falls fully silent for that long.
+const LEFT_ALONE_MS = 2 * 60_000;
 
 /** Vexa's REST API: send a bot, read a meeting's transcript record. */
 export function createVexaClient(config: VexaConfig, send: typeof fetch = fetch) {
@@ -38,6 +43,7 @@ export function createVexaClient(config: VexaConfig, send: typeof fetch = fetch)
             language: "en",
             transcribe_enabled: true,
             recording_enabled: false,
+            automatic_leave: { max_time_left_alone: LEFT_ALONE_MS },
           }),
         });
         return await readBotResponse(response);
