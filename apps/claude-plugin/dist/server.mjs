@@ -35046,6 +35046,7 @@ server.registerTool("request_clarification", {
   }
 }, tool(async ({ why_it_matters, ...ask }) => {
   const channel = ask.channel ?? "call";
+  const company = (await knowledge().catch(() => null))?.company?.name;
   const c = await request(settings, `${settings.apiUrl}/clarifications`, {
     method: "POST",
     body: {
@@ -35053,7 +35054,8 @@ server.registerTool("request_clarification", {
       channel,
       context: why_it_matters,
       requested_by: settings.requester,
-      request_id: randomUUID()
+      request_id: randomUUID(),
+      company
     }
   });
   const placed = `${channel === "sms" ? "Text sent" : "Call placed"}. Keep working on parts that do not depend on this answer; isolate the unknown behind one clearly marked TODO. Then call wait_for_clarification (or check_clarification) with this id.`;

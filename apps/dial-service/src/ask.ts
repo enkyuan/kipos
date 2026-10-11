@@ -19,6 +19,8 @@ export type AskBody = {
   follow_ups?: string[];
   requested_by?: string;
   request_id?: string;
+  // The client's name as the knowledge backend knows it; said on the call.
+  company?: string;
 };
 
 // An ask that cannot be placed, with the HTTP status that says why.
@@ -73,7 +75,7 @@ export async function askStakeholder(engagementId: string, body: AskBody): Promi
     context: body.context,
     followUps: body.follow_ups,
     stakeholder,
-    company: MOCK_KNOWLEDGE[engagementId]?.company.name ?? "the client",
+    company: body.company ?? MOCK_KNOWLEDGE[engagementId]?.company.name ?? "the client",
     requester: body.requested_by ?? "the engineering team",
   };
   if (channel === "sms") {
