@@ -4,6 +4,7 @@ import { Button } from "@ouro/ui/button";
 import { color, fontSize, fontWeight, space } from "@ouro/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
+import { DevAnnotations } from "../dev-annotations";
 
 const styles = stylex.create({
   // Base UI portals render into <body>; isolating the app keeps every popup
@@ -46,7 +47,7 @@ function NotFound() {
       <h1 {...stylex.props(styles.notFoundTitle)}>Page not found</h1>
       <p {...stylex.props(styles.notFoundText)}>There's nothing at this address.</p>
       <Button variant="outline" render={<a href="/" />}>
-        Back to the home page
+        Back to the workspace
       </Button>
     </main>
   );
@@ -60,6 +61,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body>
         <div {...stylex.props(styles.root)}>{children}</div>
+        <DevAnnotations />
         <Scripts />
       </body>
     </html>
