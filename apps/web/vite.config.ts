@@ -20,16 +20,11 @@ const stylexCss = {
 };
 
 // The browser calls the API on its own origin under /api (src/api/client.ts);
-// development and preview forward it to apps/api. Production puts the same
-// rule in front of both apps (docs/architecture.md).
+// development and preview forward it, path unchanged, to apps/api, which
+// serves the same /api paths. Production puts the same rule in front of
+// both apps (docs/architecture.md).
 function apiProxy(apiOrigin: string): Record<string, ProxyOptions> {
-  return {
-    "/api": {
-      target: apiOrigin,
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, ""),
-    },
-  };
+  return { "/api": { target: apiOrigin, changeOrigin: true } };
 }
 
 // Plugin order is load-bearing: StyleX and Start both run before the React

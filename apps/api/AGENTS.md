@@ -21,7 +21,8 @@ src/errors.ts         the one error shape (`apiErrorSchema`, `apiError`) and
                       the boundary that maps failures to it
 src/<feature>/
   routes.ts           an Elysia plugin: schemas, handlers, and the store
-                      interface the routes consume
+                      interface the routes consume (a feature may have more
+                      than one routes file, e.g. meetings/webhook-routes.ts)
   store.ts            the SQLite implementation of that interface
   *.test.ts           guarantees, through createApp(...).handle(request)
 migrations/           <UTC timestamp>_<name>.sql, immutable once merged
@@ -47,8 +48,19 @@ Adding a feature: follow `docs/playbooks/add-api-feature.md`.
   status and fail with `throw status(code, apiError(...))`. Never return raw
   SQL, stack traces, or an unexpected error's message; `errors.ts` logs the
   cause once.
-- **Versioned paths.** Product endpoints live under `/v1/`; operational ones
-  (`/health`) do not.
+- **Public paths.** Product endpoints live under `/api/`, the same path the
+  browser (through the web proxy) and providers (through a tunnel) use;
+  operational ones (`/health`) do not.
+- **Provider webhooks** verify the signature over the raw body
+  (`parse: "none"`) before reading anything, store the delivery, acknowledge,
+  and process afterwards (`meetings/webhook-routes.ts`, `meetings/ingest.ts`).
+- **External services sit behind an interface** declared by their consumer
+  (`Notetaker`, `Analyzer`, `TranscriptReader`), built in `server.ts`, and
+  replaced by a fake in tests. Their credentials never leave `server.ts`'s
+  configuration.
+- **Model output is untrusted input.** Validate it against its schema, then
+  apply it through code that enforces the invariants (`analysis/plan.ts`);
+  never write a model's answer directly.
 - **Uniqueness and integrity belong to the database** where it can prove them
   (primary keys, `UNIQUE`, `CHECK`, `STRICT` tables), not only to code.
 - **Migrations are append-only.** Never edit a merged migration; add a new
