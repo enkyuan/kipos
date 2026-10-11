@@ -19,7 +19,12 @@ const IDLE_MS = 6 * 60 * 60_000;
 
 /** Meeting sessions, their status reports and transcripts in SQLite. */
 export function createMeetingStore(db: Database) {
-  return { ...sessionQueries(db), ...statusQueries(db), ...transcriptQueries(db) };
+  return {
+    ...sessionQueries(db),
+    ...listQueries(db),
+    ...statusQueries(db),
+    ...transcriptQueries(db),
+  };
 }
 
 function finder(db: Database) {
@@ -99,16 +104,6 @@ function sessionQueries(db: Database) {
       return mustFind(id);
     },
 
-    /** Sessions still waiting on the provider: watched again after a restart. */
-    liveSessions(): { id: string; meetingUrl: string }[] {
-      return db
-        .query<{ id: string; meetingUrl: string }, []>(
-          `SELECT id, meeting_url AS meetingUrl FROM meeting_sessions
-           WHERE status NOT IN ('ended', 'failed')`,
-        )
-        .all();
-    },
-
     /**
      * The session a webhook is about: by provider record id when it names
      * one (and nothing else), else the meeting's latest session.
@@ -127,6 +122,28 @@ function sessionQueries(db: Database) {
           "SELECT id FROM meeting_sessions WHERE meeting_url = ? ORDER BY started_at DESC LIMIT 1",
         )
         .get(meetingUrl);
+    },
+  };
+}
+
+function listQueries(db: Database) {
+  return {
+    /** Every session, newest first. */
+    list(): MeetingSession[] {
+      return db
+        .query<MeetingSession, []>(
+          `SELECT ${SESSION_COLUMNS} FROM meeting_sessions ORDER BY started_at DESC, rowid DESC`,
+        )
+        .all();
+    },
+    /** Sessions still waiting on the provider: watched again after a restart. */
+    liveSessions(): { id: string; meetingUrl: string }[] {
+      return db
+        .query<{ id: string; meetingUrl: string }, []>(
+          `SELECT id, meeting_url AS meetingUrl FROM meeting_sessions
+           WHERE status NOT IN ('ended', 'failed')`,
+        )
+        .all();
     },
   };
 }

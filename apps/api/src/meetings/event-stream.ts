@@ -4,6 +4,14 @@ import type { LiveEvent, LiveFeed } from "../live-feed";
 // open between utterances.
 const HEARTBEAT_MS = 5_000;
 
+/** Response headers for a `meetingEventStream` body. */
+export const EVENT_STREAM_HEADERS = {
+  "content-type": "text/event-stream; charset=utf-8",
+  "cache-control": "no-cache, no-transform",
+  // Proxies (nginx and friends) must not buffer the stream.
+  "x-accel-buffering": "no",
+};
+
 type EventStreamSource = {
   sessionId: string;
   feed: Pick<LiveFeed, "subscribe">;

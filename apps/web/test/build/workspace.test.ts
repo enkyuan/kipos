@@ -13,15 +13,15 @@ const clientDir = new URL("../../dist/client/", import.meta.url);
 const render = async (path: string) => server.fetch(new Request(`http://localhost${path}`));
 
 describe("FDE workspace (production build)", () => {
-  test("server-renders the start form with the recording notice and consent control", async () => {
+  test("server-renders the meetings grid with its New meeting control", async () => {
     const response = await render("/");
     expect(response.status).toBe(200);
     const html = await response.text();
-    expect(html).toContain("Shadow a meeting");
-    expect(html).toContain("Google Meet link");
-    expect(html).toContain("Recording notice");
-    expect(html).toContain('role="checkbox"');
-    expect(html).toContain("Start shadowing");
+    expect(html).toContain("<h1");
+    expect(html).toContain("Meetings");
+    expect(html).toMatch(/<button[^>]+aria-label="New meeting"/);
+    // The list itself loads in the browser.
+    expect(html).toContain("Loading your meetings");
   });
 
   test("renders a meeting page shell that loads its session in the browser", async () => {

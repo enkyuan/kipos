@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { MeetingSession, MeetingStatus } from "#api/client";
 import { Alert, AlertDescription, AlertTitle } from "@ouro/ui/alert";
-import { Badge, type BadgeVariant } from "@ouro/ui/badge";
+import { Badge, type BadgeSize, type BadgeVariant } from "@ouro/ui/badge";
 import { color, fontSize, motion, radius, space } from "@ouro/ui/tokens.stylex";
 import type { Connection } from "./use-meeting";
 
@@ -67,6 +67,16 @@ const CONNECTION_COPY: Record<Connection, string> = {
   reconnecting: "Live updates interrupted. Reconnecting…",
 };
 
+/** The session's status as a badge; a recording session pulses. */
+export function StatusBadge({ status, size }: { status: MeetingStatus; size?: BadgeSize }) {
+  return (
+    <Badge variant={COPY[status].variant} size={size}>
+      {status === "recording" && <span aria-hidden {...stylex.props(styles.dot)} />}
+      {COPY[status].label}
+    </Badge>
+  );
+}
+
 /** The meeting's actual state, as last reported by the provider. */
 export function MeetingStatusPanel({
   session,
@@ -80,10 +90,7 @@ export function MeetingStatusPanel({
   return (
     <section aria-label="Notetaker status" {...stylex.props(styles.panel)}>
       <output {...stylex.props(styles.row)}>
-        <Badge variant={copy.variant} size="lg">
-          {session.status === "recording" && <span aria-hidden {...stylex.props(styles.dot)} />}
-          {copy.label}
-        </Badge>
+        <StatusBadge status={session.status} size="lg" />
         {copy.detail && <span {...stylex.props(styles.detail)}>{copy.detail}</span>}
       </output>
       {!finished && <span {...stylex.props(styles.detail)}>{CONNECTION_COPY[connection]}</span>}

@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button } from "@ouro/ui/button";
-import { Card, CardDescription, CardHeader, CardPanel, CardTitle } from "@ouro/ui/card";
 import { Checkbox } from "@ouro/ui/checkbox";
 import { Field, FieldError, FieldLabel } from "@ouro/ui/field";
 import { Form } from "@ouro/ui/form";
@@ -17,7 +16,7 @@ const styles = stylex.create({
     fontWeight: fontWeight.regular,
     lineHeight: lineHeight.sm,
   },
-  actions: { display: "flex", justifyContent: "flex-start" },
+  actions: { display: "flex", justifyContent: "flex-end" },
   unavailable: { color: color.destructiveForeground, fontSize: fontSize.sm },
 });
 
@@ -26,7 +25,7 @@ type FormState = { kind: "idle" | "submitting" } | Exclude<StartOutcome, { kind:
 const required = (message: string) => (value: unknown) => (value ? null : message);
 
 /**
- * The workspace's start control: a Google Meet link and the person's
+ * The start control: a Google Meet link and the person's
  * explicit confirmation that participants agreed to be recorded. Nothing is
  * sent to the meeting until both are given.
  */
@@ -43,51 +42,38 @@ export function StartShadowingForm({ onStarted }: { onStarted: (meetingId: strin
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle render={<h1 />}>Shadow a meeting</CardTitle>
-        <CardDescription>
-          Send a notetaker to a Google Meet and follow the transcript here as people speak.
-        </CardDescription>
-      </CardHeader>
-      <CardPanel>
-        <Form<{ meetingUrl: string }>
-          errors={state.kind === "invalid" ? { [state.field]: state.message } : undefined}
-          onFormSubmit={submit}
-        >
-          <Field name="meetingUrl" validate={required("Paste the Google Meet link.")}>
-            <FieldLabel>Google Meet link</FieldLabel>
-            <Input
-              inputMode="url"
-              autoComplete="off"
-              spellCheck={false}
-              placeholder="https://meet.google.com/abc-defg-hij"
-            />
-            <FieldError />
-          </Field>
-          <ConsentNotice />
-          <Field
-            name="authorized"
-            validate={required("Confirm that everyone agreed before starting.")}
-          >
-            <FieldLabel xstyle={styles.consentLabel}>
-              <Checkbox checked={authorized} onCheckedChange={setAuthorized} />
-              Everyone in this meeting has agreed to be recorded and transcribed.
-            </FieldLabel>
-            <FieldError />
-          </Field>
-          <div {...stylex.props(styles.actions)}>
-            <Button type="submit" loading={state.kind === "submitting"}>
-              Start shadowing
-            </Button>
-          </div>
-          {state.kind === "unavailable" && (
-            <p role="alert" {...stylex.props(styles.unavailable)}>
-              {state.message}
-            </p>
-          )}
-        </Form>
-      </CardPanel>
-    </Card>
+    <Form<{ meetingUrl: string }>
+      errors={state.kind === "invalid" ? { [state.field]: state.message } : undefined}
+      onFormSubmit={submit}
+    >
+      <Field name="meetingUrl" validate={required("Paste the Google Meet link.")}>
+        <FieldLabel>Google Meet link</FieldLabel>
+        <Input
+          inputMode="url"
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="https://meet.google.com/abc-defg-hij"
+        />
+        <FieldError />
+      </Field>
+      <ConsentNotice />
+      <Field name="authorized" validate={required("Confirm that everyone agreed before starting.")}>
+        <FieldLabel xstyle={styles.consentLabel}>
+          <Checkbox checked={authorized} onCheckedChange={setAuthorized} />
+          Everyone in this meeting has agreed to be recorded and transcribed.
+        </FieldLabel>
+        <FieldError />
+      </Field>
+      <div {...stylex.props(styles.actions)}>
+        <Button type="submit" loading={state.kind === "submitting"}>
+          Start shadowing
+        </Button>
+      </div>
+      {state.kind === "unavailable" && (
+        <p role="alert" {...stylex.props(styles.unavailable)}>
+          {state.message}
+        </p>
+      )}
+    </Form>
   );
 }

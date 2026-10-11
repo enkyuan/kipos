@@ -7,7 +7,7 @@ import {
   type TranscriptUtterance,
 } from "./contract";
 import type { LiveEvent, LiveFeed } from "../live-feed";
-import { meetingEventStream } from "./event-stream";
+import { EVENT_STREAM_HEADERS, meetingEventStream } from "./event-stream";
 import { canonicalMeetUrl } from "./meeting-url";
 
 /** What the meeting routes need from storage. */
@@ -18,6 +18,8 @@ export interface MeetingStore {
   fail(id: string, message: string, at: string): MeetingSession;
   noteUnconfirmed(id: string, message: string): MeetingSession;
   find(id: string): MeetingSession | null;
+  /** Every session, newest first. */
+  list(): MeetingSession[];
   transcript(id: string): TranscriptUtterance[];
 }
 
@@ -92,6 +94,9 @@ export function meetingRoutes({ meetings, notetaker, feed, snapshotExtras }: Mee
         response: { 200: meetingSessionSchema, 201: meetingSessionSchema, 422: apiErrorSchema },
       },
     )
+    .get("/api/meetings", () => meetings.list(), {
+      response: { 200: t.Array(meetingSessionSchema) },
+    })
     .get(
       "/api/meetings/:id",
       ({ params, status }) => meetings.find(params.id) ?? status(404, notFound),
@@ -118,14 +123,7 @@ export function meetingRoutes({ meetings, notetaker, feed, snapshotExtras }: Mee
           ];
         };
         const body = meetingEventStream({ sessionId: params.id, feed, snapshot }, request.signal);
-        return new Response(body, {
-          headers: {
-            "content-type": "text/event-stream; charset=utf-8",
-            "cache-control": "no-cache, no-transform",
-            // Proxies (nginx and friends) must not buffer the stream.
-            "x-accel-buffering": "no",
-          },
-        });
+        return new Response(body, { headers: EVENT_STREAM_HEADERS });
       },
       { response: sessionResponses },
     );

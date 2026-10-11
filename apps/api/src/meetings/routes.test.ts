@@ -107,6 +107,30 @@ describe("POST /api/meetings: when the provider does not confirm", () => {
   });
 });
 
+describe("GET /api/meetings", () => {
+  const list = async (context: ReturnType<typeof createTestApp>) =>
+    (await (
+      await context.app.handle(new Request("http://test/api/meetings"))
+    ).json()) as MeetingSession[];
+
+  test("lists no meetings before any start", async () => {
+    expect(await list(createTestApp())).toEqual([]);
+  });
+
+  test("lists every session, newest first, including ended and failed ones", async () => {
+    const context = createTestApp({ ok: false, outcome: "refused", message: "Vexa said no" });
+    const refused = await start(context);
+    const retried = await start(context);
+    const other = await start(context, "https://meet.google.com/xyz-abcd-efg");
+    expect((await list(context)).map((session) => session.id)).toEqual([
+      other.id,
+      retried.id,
+      refused.id,
+    ]);
+    expect((await list(context))[2]).toMatchObject({ meetingUrl: MEET, status: "failed" });
+  });
+});
+
 describe("GET /api/meetings/:id and /transcript", () => {
   test("answers an unknown session with 404", async () => {
     const { app } = createTestApp();

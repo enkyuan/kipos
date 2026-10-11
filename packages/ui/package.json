@@ -33,6 +33,10 @@
       "types": "./src/primitives/checkbox.tsx",
       "default": "./src/primitives/checkbox.tsx"
     },
+    "./dialog": {
+      "types": "./src/primitives/dialog.tsx",
+      "default": "./src/primitives/dialog.tsx"
+    },
     "./field": {
       "types": "./src/primitives/field.tsx",
       "default": "./src/primitives/field.tsx"

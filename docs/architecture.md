@@ -40,6 +40,9 @@ apps/web ──types only──▶ apps/api ──▶ elysia, bun:sqlite, Vexa, 
 ## Request flow
 
 1. The browser loads a page from `apps/web`; Start renders it on the server.
+   `/` is the meetings grid (`GET /api/meetings`, newest first) with a "New
+   meeting" tile whose dialog starts shadowing; `/meetings/$meetingId` is one
+   meeting's live status and transcript.
 2. Client code calls the API on the page's own origin under `/api`
    (`apiClient().api.meetings.post(...)` → `POST /api/meetings`).
 3. In development and `vite preview`, Vite proxies `/api/*` to `API_ORIGIN`
