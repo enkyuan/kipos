@@ -150,6 +150,9 @@ server.registerTool(
   },
   tool(async ({ why_it_matters, ...ask }: Ask) => {
     const channel = ask.channel ?? "call";
+    // The caller introduces the project by the client's name; a knowledge
+    // outage must not block the call, so it falls back to the service default.
+    const company = (await knowledge().catch(() => null))?.company?.name;
     const c = await request<Record<string, unknown>>(
       settings,
       `${settings.apiUrl}/clarifications`,
@@ -161,6 +164,7 @@ server.registerTool(
           context: why_it_matters,
           requested_by: settings.requester,
           request_id: randomUUID(),
+          company,
         },
       },
     );
