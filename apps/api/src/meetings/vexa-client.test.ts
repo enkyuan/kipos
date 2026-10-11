@@ -21,7 +21,7 @@ const quietly = <T>(run: () => Promise<T>) => {
 };
 
 describe("createVexaClient().sendBot", () => {
-  test("asks for a passive, named bot with English transcription and no audio kept", async () => {
+  test("asks for a passive, named bot that keeps no audio and leaves an emptied call", async () => {
     const { calls, send } = recording(201, { id: 812, status: "requested" });
     expect(await createVexaClient(config, send).sendBot("abc-defg-hij")).toEqual({
       ok: true,
@@ -37,6 +37,7 @@ describe("createVexaClient().sendBot", () => {
       language: "en",
       transcribe_enabled: true,
       recording_enabled: false,
+      automatic_leave: { max_time_left_alone: 120_000 },
     });
   });
 

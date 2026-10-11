@@ -15,6 +15,10 @@ keys, and the smallest stack that does it.
 1. **A Vexa bot per session** (`POST /bots`: `google_meet`, the meeting
    code, `bot_name: "Ouro notetaker"`, `language: "en"`,
    `recording_enabled: false`). The bot asks to join; the host admits it.
+   It leaves after 2 minutes without remote audio
+   (`automatic_leave.max_time_left_alone`; Vexa's default of 10 minutes
+   kept it in ended calls), so a meeting that falls fully silent that
+   long also loses it.
    It never speaks or chats.
 2. **Pull, not push, for the transcript.** The API holds one WebSocket
    subscription to Vexa's `/ws` per live session (authenticated with the
