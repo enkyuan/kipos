@@ -4,7 +4,7 @@ import { readEnv } from "./env";
 const vexa = { VEXA_API_KEY: "key" };
 
 describe("readEnv", () => {
-  test("uses development defaults, the hosted Vexa API, and no analysis without a model key", () => {
+  test("uses development defaults, the hosted Vexa API, and no analysis without a Bedrock key", () => {
     expect(readEnv(vexa)).toEqual({
       port: 3001,
       databasePath: "./data/ouro.sqlite",
@@ -13,14 +13,22 @@ describe("readEnv", () => {
     });
   });
 
-  test("enables analysis with a model key, on the default model unless one is named", () => {
-    expect(readEnv({ ...vexa, ANTHROPIC_API_KEY: "sk" }).analysis).toEqual({
-      apiKey: "sk",
-      model: "claude-sonnet-5-5",
+  test("enables analysis with a Bedrock key, on Sonnet 4.6 in us-east-1 unless told otherwise", () => {
+    expect(readEnv({ ...vexa, AWS_BEARER_TOKEN_BEDROCK: "bk" }).analysis).toEqual({
+      apiKey: "bk",
+      region: "us-east-1",
+      model: "us.anthropic.claude-sonnet-4-6",
     });
-    expect(readEnv({ ...vexa, ANTHROPIC_API_KEY: "sk", ANALYSIS_MODEL: "m" }).analysis?.model).toBe(
-      "m",
-    );
+    const custom = { AWS_BEARER_TOKEN_BEDROCK: "bk", AWS_REGION: "us-west-2", ANALYSIS_MODEL: "m" };
+    expect(readEnv({ ...vexa, ...custom }).analysis).toEqual({
+      apiKey: "bk",
+      region: "us-west-2",
+      model: "m",
+    });
+  });
+
+  test("ignores the Anthropic API key: analysis runs only on Bedrock", () => {
+    expect(readEnv({ ...vexa, ANTHROPIC_API_KEY: "sk" }).analysis).toBeNull();
   });
 
   test("refuses to start without a Vexa key", () => {

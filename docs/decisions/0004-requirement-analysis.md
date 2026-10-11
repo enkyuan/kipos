@@ -20,8 +20,8 @@ untrusted.
 2. **Bounded context.** Each cycle sends the recorded requirements and
    issues, the 30 utterances before the batch, and the batch; never the
    whole transcript.
-3. **Structured output by forced tool use.** Claude (`ANALYSIS_MODEL`,
-   default `claude-sonnet-5-5`) must answer through one tool,
+3. **Structured output by forced tool use.** Claude (`ANALYSIS_MODEL`, on
+   Amazon Bedrock since 0006) must answer through one tool,
    `record_analysis`, whose schema is the TypeBox `modelOutputSchema`. The
    tool has no effect; its input is validated with the same schema.
 4. **The model proposes; code decides** (`analysis/plan.ts`):
@@ -48,8 +48,8 @@ untrusted.
 
 ## Consequences
 
-- Analysis needs `ANTHROPIC_API_KEY`; without it the transcript works and
-  the panel says analysis is off.
+- Analysis needs a model key (`AWS_BEARER_TOKEN_BEDROCK` since 0006);
+  without it the transcript works and the panel says analysis is off.
 - Word-similarity dedupe is a backstop for the model's own `ref`s; it can
   miss paraphrases with little word overlap.
 - The lock is in-process: one API process per database.

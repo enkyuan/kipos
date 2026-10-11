@@ -3,13 +3,16 @@ export type Env = {
   port: number;
   databasePath: string;
   vexa: { apiKey: string; apiUrl: string; webhookSecret: string };
-  /** Null when no model key is set: transcripts still work, analysis is off. */
-  analysis: { apiKey: string; model: string } | null;
+  /** Null without a Bedrock API key: transcripts still work, analysis is off. */
+  analysis: { apiKey: string; region: string; model: string } | null;
 };
 
 type Source = Record<string, string | undefined>;
 
-const DEFAULT_ANALYSIS_MODEL = "claude-sonnet-5-5";
+// Claude Sonnet 4.6 through the US cross-region inference profile on Amazon
+// Bedrock (docs/decisions/0006-analysis-on-bedrock.md).
+const DEFAULT_ANALYSIS_MODEL = "us.anthropic.claude-sonnet-4-6";
+const DEFAULT_AWS_REGION = "us-east-1";
 
 /**
  * Parses configuration from environment variables. Local paths and ports
@@ -49,8 +52,9 @@ function readVexa(source: Source): Env["vexa"] {
 }
 
 function readAnalysis(source: Source): Env["analysis"] {
-  const apiKey = source.ANTHROPIC_API_KEY?.trim();
+  const apiKey = source.AWS_BEARER_TOKEN_BEDROCK?.trim();
   if (!apiKey) return null;
+  const region = source.AWS_REGION?.trim() || DEFAULT_AWS_REGION;
   const model = source.ANALYSIS_MODEL?.trim() || DEFAULT_ANALYSIS_MODEL;
-  return { apiKey, model };
+  return { apiKey, region, model };
 }

@@ -33,9 +33,10 @@ proves the pipeline. No seeded, inserted or hardcoded transcript counts.
 1. **Vexa key.** Sign in at https://vexa.ai/signin (Google account) and copy
    the API key from https://vexa.ai/account (free credit, no card), or
    self-host and point `VEXA_API_URL` at the gateway.
-2. **Model key** (for analysis): an Anthropic API key.
+2. **Model key** (for analysis): an Amazon Bedrock API key for an account
+   with access to Claude Sonnet 4.6 in `us-east-1`.
 3. `cp apps/api/.env.example apps/api/.env`; set `VEXA_API_KEY` and
-   `ANTHROPIC_API_KEY`.
+   `AWS_BEARER_TOKEN_BEDROCK`.
 4. Optional signed webhooks: `cloudflared tunnel --url http://localhost:3001`,
    set `VEXA_WEBHOOK_SECRET`, and register the URL with `PUT /user/webhook`
    (command in `.env.example`).
