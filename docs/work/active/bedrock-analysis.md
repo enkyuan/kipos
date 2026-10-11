@@ -1,7 +1,7 @@
 # Requirement analysis through Amazon Bedrock
 
 State: REVIEW
-Branch: feat/meeting-ingestion
+Branch: feat/meeting-ingestion (Bedrock API key); feat/bedrock-access-keys (IAM pair)
 Worktree: primary checkout
 Base SHA: 70bf5ed
 Head SHA: see branch
@@ -57,6 +57,12 @@ no `ANTHROPIC_API_KEY` fallback (deleted, not kept for compatibility).
       (placeholder added, empty), then restart `bun run dev` and watch the
       startup line say `analysis on (us.anthropic.claude-sonnet-4-6)`.
 
+- [x] IAM access key pair (feat/bedrock-access-keys): `analyzer.test.ts`
+      signs with SigV4 (`AWS4-HMAC-SHA256 Credential=<id>/…/us-east-1/bedrock/aws4_request`,
+      `x-amz-security-token` for a session token); `env.test.ts` covers the
+      pair, the API key winning when both are set, and half a pair failing
+      startup.
+
 ## Remaining
 
-Live call with the person's key; adversarial review.
+Live call with real credentials; adversarial review.

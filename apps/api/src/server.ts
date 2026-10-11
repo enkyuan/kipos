@@ -65,7 +65,9 @@ const app = createApp({
 
 console.info(`api listening on ${app.server?.url.href} · Vexa at ${env.vexa.apiUrl}`);
 console.info(
-  analysis ? `analysis on (${env.analysis?.model})` : "analysis off: set AWS_BEARER_TOKEN_BEDROCK",
+  analysis
+    ? `analysis on (${env.analysis?.model})`
+    : "analysis off: set Bedrock credentials (.env.example)",
 );
 
 async function shutDown(): Promise<void> {

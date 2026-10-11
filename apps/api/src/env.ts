@@ -1,10 +1,19 @@
+/**
+ * How the API signs in to Amazon Bedrock: a Bedrock API key (sent as a
+ * bearer token), or an IAM access key pair (requests are SigV4-signed),
+ * with a session token when the pair is temporary.
+ */
+export type BedrockAuth =
+  | { apiKey: string }
+  | { accessKeyId: string; secretAccessKey: string; sessionToken: string | null };
+
 /** Process configuration, read once at startup by `server.ts`. */
 export type Env = {
   port: number;
   databasePath: string;
   vexa: { apiKey: string; apiUrl: string; webhookSecret: string };
-  /** Null without a Bedrock API key: transcripts still work, analysis is off. */
-  analysis: { apiKey: string; region: string; model: string } | null;
+  /** Null without Bedrock credentials: transcripts still work, analysis is off. */
+  analysis: { auth: BedrockAuth; region: string; model: string } | null;
 };
 
 type Source = Record<string, string | undefined>;
@@ -51,10 +60,25 @@ function readVexa(source: Source): Env["vexa"] {
   return { apiKey, apiUrl: apiUrl.origin, webhookSecret: source.VEXA_WEBHOOK_SECRET?.trim() ?? "" };
 }
 
+const present = (value: string | undefined) => value?.trim() || null;
+
+/** A Bedrock API key wins over an access key pair; half a pair fails startup. */
+function readBedrockAuth(source: Source): BedrockAuth | null {
+  const apiKey = present(source.AWS_BEARER_TOKEN_BEDROCK);
+  if (apiKey) return { apiKey };
+  const accessKeyId = present(source.AWS_ACCESS_KEY_ID);
+  const secretAccessKey = present(source.AWS_SECRET_ACCESS_KEY);
+  if (!accessKeyId && !secretAccessKey) return null;
+  if (!accessKeyId || !secretAccessKey) {
+    throw new Error("Set both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY, or neither.");
+  }
+  return { accessKeyId, secretAccessKey, sessionToken: present(source.AWS_SESSION_TOKEN) };
+}
+
 function readAnalysis(source: Source): Env["analysis"] {
-  const apiKey = source.AWS_BEARER_TOKEN_BEDROCK?.trim();
-  if (!apiKey) return null;
-  const region = source.AWS_REGION?.trim() || DEFAULT_AWS_REGION;
-  const model = source.ANALYSIS_MODEL?.trim() || DEFAULT_ANALYSIS_MODEL;
-  return { apiKey, region, model };
+  const auth = readBedrockAuth(source);
+  if (!auth) return null;
+  const region = present(source.AWS_REGION) ?? DEFAULT_AWS_REGION;
+  const model = present(source.ANALYSIS_MODEL) ?? DEFAULT_ANALYSIS_MODEL;
+  return { auth, region, model };
 }
