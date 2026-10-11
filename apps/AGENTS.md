@@ -12,8 +12,11 @@ apps/web      TanStack Start (SSR) + TanStack Router (file routes) + React 19
 packages/ui   coss/ui primitives on Base UI, translated to StyleX
 ```
 
+`motion` animates elements that mount and unmount (presence), and nothing
+else: state transitions stay CSS (`docs/decisions/0005-motion-for-presence.md`).
+
 Adopt another framework, state layer, or data library (TanStack Query, a
-form library, Motion) only when it removes concrete complexity from accepted
+form library) only when it removes concrete complexity from accepted
 product behavior, and record the decision in `docs/decisions/`.
 
 ## Filesystem

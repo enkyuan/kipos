@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { MeetingSession, MeetingStatus } from "#api/client";
 import { Alert, AlertDescription, AlertTitle } from "@ouro/ui/alert";
 import { Badge, type BadgeSize, type BadgeVariant } from "@ouro/ui/badge";
+import { Spinner } from "@ouro/ui/spinner";
 import { color, fontSize, motion, radius, space } from "@ouro/ui/tokens.stylex";
 import type { Connection } from "./use-meeting";
 
@@ -20,6 +21,8 @@ const styles = stylex.create({
     animationIterationCount: "infinite",
     animationTimingFunction: motion.ease,
   },
+  // Sized to the badge's text, like the dot.
+  spinner: { width: "1em", height: "1em" },
   detail: { color: color.mutedForeground, fontSize: fontSize.sm },
 });
 
@@ -29,7 +32,7 @@ type StatusCopy = { label: string; detail: string; variant: BadgeVariant };
 const COPY: Record<MeetingStatus, StatusCopy> = {
   requested: {
     label: "Requesting notetaker",
-    detail: "Asking Vexa to send the notetaker to the meeting.",
+    detail: "",
     variant: "outline",
   },
   joining: {
@@ -67,10 +70,11 @@ const CONNECTION_COPY: Record<Connection, string> = {
   reconnecting: "Live updates interrupted. Reconnecting…",
 };
 
-/** The session's status as a badge; a recording session pulses. */
+/** The session's status as a badge: spinning while requested, pulsing while recording. */
 export function StatusBadge({ status, size }: { status: MeetingStatus; size?: BadgeSize }) {
   return (
     <Badge variant={COPY[status].variant} size={size}>
+      {status === "requested" && <Spinner xstyle={styles.spinner} />}
       {status === "recording" && <span aria-hidden {...stylex.props(styles.dot)} />}
       {COPY[status].label}
     </Badge>
