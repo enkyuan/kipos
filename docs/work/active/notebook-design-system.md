@@ -44,7 +44,7 @@ Must not modify: `apps/api`.
 
 - [x] targeted tests: `packages/ui/test/tokens.test.ts` checks every
       documented contrast pair in both themes (text 4.5:1; focus ring and
-      control outlines 3:1) and the radius ladder's insets;
+      field outlines (`input`) 3:1) and the radius ladder's insets;
       `apps/web/test/build/shell.test.ts` checks the compiled stylesheet and
       rendered kit (no EB Garamond, fine-pointer-only hover, declared font
       faces, base-layer colors equal tokens, pill buttons, page-colored focus

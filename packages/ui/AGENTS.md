@@ -30,7 +30,8 @@ src/fonts/             Glide and Glide Mono (woff2, OFL.txt), declared in
                        zodiak-variable.woff2, which is gitignored: place the
                        unmodified Fontshare file there; never commit it
 src/primitives/        one file per component, exported as `@ouro/ui/<name>`
-test/                  public-export contract
+test/                  public-export contract; color-role contrast and the
+                       radius ladder (tokens.test.ts)
 ```
 
 `tokens → primitives`. There is no other layer. The package imports no app,
