@@ -13,8 +13,8 @@ explicit and lives beside the store that owns it.
 src/server.ts         the only module that reads the environment or opens
                       resources; it composes and listens
 src/app.ts            createApp(deps) → Elysia; exports `type App` for Eden
-src/stores.ts         createStores(db): every feature's real store (used by
-                      server.ts and tests alike)
+src/stores.ts         (with the first store) createStores(db): every
+                      feature's real store, used by server.ts and tests
 src/env.ts            configuration parsing; invalid values fail startup
 src/database.ts       opens SQLite and applies migrations/
 src/errors.ts         the one error shape (`apiErrorSchema`, `apiError`) and
@@ -22,7 +22,7 @@ src/errors.ts         the one error shape (`apiErrorSchema`, `apiError`) and
 src/<feature>/
   routes.ts           an Elysia plugin: schemas, handlers, and the store
                       interface the routes consume (a feature may have more
-                      than one routes file, e.g. meetings/webhook-routes.ts)
+                      than one routes file, e.g. webhook-routes.ts)
   store.ts            the SQLite implementation of that interface
   *.test.ts           guarantees, through createApp(...).handle(request)
 migrations/           <UTC timestamp>_<name>.sql, immutable once merged
@@ -53,14 +53,14 @@ Adding a feature: follow `docs/playbooks/add-api-feature.md`.
   operational ones (`/health`) do not.
 - **Provider webhooks** verify the signature over the raw body
   (`parse: "none"`) before reading anything, store the delivery, acknowledge,
-  and process afterwards (`meetings/webhook-routes.ts`, `meetings/ingest.ts`).
+  and process afterwards.
 - **External services sit behind an interface** declared by their consumer
-  (`Notetaker`, `Analyzer`, `TranscriptReader`), built in `server.ts`, and
+  (a `Notetaker`, an `Analyzer`), built in `server.ts`, and
   replaced by a fake in tests. Their credentials never leave `server.ts`'s
   configuration.
 - **Model output is untrusted input.** Validate it against its schema, then
-  apply it through code that enforces the invariants (`analysis/plan.ts`);
-  never write a model's answer directly.
+  apply it through code that enforces the invariants; never write a model's
+  answer directly.
 - **Uniqueness and integrity belong to the database** where it can prove them
   (primary keys, `UNIQUE`, `CHECK`, `STRICT` tables), not only to code.
 - **Migrations are append-only.** Never edit a merged migration; add a new

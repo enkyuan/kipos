@@ -4,7 +4,7 @@ import * as stylex from "@stylexjs/stylex";
  * Primitive colors, as OKLCH. Only `tokens.stylex.ts` reads these;
  * components consume semantic roles.
  *
- * - Tailwind v4 shades: the ones coss/ui's base theme is built from.
+ * - Tailwind v4 shades: the ones the semantic theme is built from.
  * - Brand ramps: the optimus brand guide's primary palette, each named by its
  *   nearest CSS named color. The brand swatch itself sits unchanged at the
  *   step nearest its lightness (marked below); the other steps keep its hue

@@ -5,62 +5,57 @@ package; this file is only the design-system delta.
 
 ## What this is
 
-coss/ui (<https://coss.com/ui>) — Base UI primitives with coss's base theme —
-translated from Tailwind classes to StyleX. Behavior and accessibility come
-from Base UI; geometry, color, and states come from coss, class by class.
+Base UI (<https://base-ui.com>) primitives styled with StyleX tokens. Base UI
+owns behavior and accessibility (focus, keyboard, ARIA, disabled semantics,
+the `render` prop); this package owns how they look and exposes a small,
+typed API (`variant`, `size`, `xstyle`).
 
 ## Layers
 
 ```text
 src/tokens/
   palette.stylex.ts    primitive OKLCH colors, read only by tokens.stylex.ts:
-                       the Tailwind shades coss's theme uses, and the brand
-                       ramps (darkSalmon, lightPink, lavenderBlush 50–950)
-  tokens.stylex.ts     coss's semantic variables plus brand roles as StyleX
-                       tokens: color, radius, font (vars); space, fontSize,
+                       Tailwind neutral/status shades and the brand ramps
+                       (darkSalmon, lightPink, lavenderBlush 50–950)
+  tokens.stylex.ts     semantic roles plus brand roles as StyleX tokens:
+                       color, radius, font (vars); space, fontSize,
                        lineHeight, fontWeight, tracking, shadow, motion,
                        media (consts)
-  base.css             coss's base layer: fonts, borders, body, the
-                       descendant rules StyleX cannot express, and toast
-                       stacking (arithmetic on Base UI's per-toast CSS
-                       variables under compound state selectors). It sits
-                       below StyleX's layers, so it cannot override a
-                       property a primitive sets.
-src/primitives/        one file per coss component, exported as
-                       `@ouro/ui/<name>`
+  base.css             the base layer: font faces, borders, body, and the
+                       descendant rules StyleX cannot express. It sits below
+                       StyleX's layers, so it cannot override a property a
+                       primitive sets.
+src/fonts/             Glide and Glide Mono (woff2, OFL.txt), declared in
+                       base.css
+src/primitives/        one file per component, exported as `@ouro/ui/<name>`
 test/                  public-export contract
 ```
 
 `tokens → primitives`. There is no other layer. The package imports no app,
 router, or server code (oxlint enforces it).
 
-## Translating a coss component
+## Adding a primitive
 
-1. Fetch the source: `packages/ui/src/components/<name>.tsx` in
-   `github.com/cosscom/coss`, and read the matching guide in the `coss` skill.
-2. Keep coss's public API: component and part names, `variant` and `size`
-   values, defaults, and `data-slot` attributes.
-3. Translate classes to `stylex.create` using the token names, which mirror
-   coss's variables and Tailwind's scale:
+1. Start from the Base UI part (`@base-ui/react/<component>`) and its
+   anatomy (`Root`, `Trigger`, `Portal`, `Positioner`, `Popup`, ...). Read the
+   component's page on base-ui.com or the `base-ui` skill.
+2. Wrap each part you style; keep Base UI's part names and props, and add
+   only `variant`/`size` where a design needs them. Set `data-slot` on the
+   root so `base.css` can reach descendants.
+3. Style with `stylex.create` from tokens. Style states through Base UI's
+   data attributes and native pseudo-classes:
 
    ```text
-   bg-primary            → backgroundColor: color.primary
-   text-muted-foreground → color: color.mutedForeground
-   p-6 / px-2.5          → padding: space.s6 / paddingInline: space.s2_5
-   rounded-lg            → borderRadius: radius.lg
-   h-9 sm:h-8            → height: { default: "2.25rem", [media.sm]: "2rem" }
-   hover:bg-primary/90   → ":hover": `color-mix(in srgb, ${color.primary} 90%, transparent)`
-   has-focus-visible:…   → [":has(:focus-visible)"]: …
-   before:shadow-[…]     → "::before": { content: "''", …, boxShadow: color.highlight }
-   dark:…                → [media.dark] condition, or a dark value in tokens
+   [data-popup-open], [data-highlighted], [data-checked], [data-disabled]
+   :hover under media.hover, :focus-visible, :disabled
+   enter/exit: [data-starting-style] / [data-ending-style] + transitions
    ```
 
-4. Descendant selectors (`[&_svg]:size-4`, `*:data-[slot=x]:…`) cannot be
-   expressed in StyleX. Put them in `base.css`, keyed on `data-slot`, or
-   restructure (the card owns its rhythm with `gap` instead of sibling
-   selectors).
-5. Replace `className` with an `xstyle?: stylex.StyleXStyles` prop, applied
-   last so callers win. Accept Base UI's `render` prop where coss does.
+4. Descendant selectors (`svg` inside a button) cannot be expressed in
+   StyleX. Put them in `base.css`, keyed on `data-slot`, or restructure.
+5. Replace `className`/`style` with an `xstyle?: stylex.StyleXStyles` prop,
+   applied last so callers win. Pass `render` through; a non-button element
+   rendered by a button-like part needs `nativeButton={false}`.
 6. Add the subpath to `package.json` `exports`. `test/exports.test.ts` fails
    until you do.
 
@@ -76,10 +71,10 @@ router, or server code (oxlint enforces it).
   nearest CSS named color and documented in an ADR
   (`docs/decisions/0002-brand-typography-and-palette.md`).
 - Typography: `font.heading` (EB Garamond) for headings and the wordmark,
-  with `tracking.heading`; `font.sans` (Inter) for everything else.
+  with `tracking.heading`; `font.sans` (Glide) for everything else;
+  `font.mono` (Glide Mono) for code.
 - StyleX evaluates styles at build time: values must be literals, token
   references, or template strings of them — no runtime computation.
 - `base.css` repeats a handful of token values in plain CSS (it cannot read
   StyleX variables). Change both together.
-- Do not add a primitive until an app needs it; port it from coss when it
-  does.
+- Do not add a primitive until an app needs it.

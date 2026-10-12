@@ -11,14 +11,14 @@
    feature's folder.
 3. **Store**: `apps/api/src/<feature>/store.ts` exports
    `create<Feature>Store(db)` implementing that interface with SQL.
-4. **Compose**: add the dependency to `AppDependencies` and `.use(...)` the
-   plugin in `src/app.ts`; construct its store in `src/stores.ts`.
+4. **Compose**: give `createApp` the dependency (an `AppDependencies`
+   type once there is one) and `.use(...)` the plugin in `src/app.ts`;
+   construct its store in `src/stores.ts` (create it with the first store).
 5. **Test**: `src/<feature>/routes.test.ts` through
-   `createApp({ ...createStores(openDatabase(":memory:")), ... }).handle(request)`, with fakes for external services (see `apps/api/src/meetings/fixtures.ts`). Cover
+   `createApp({ ...createStores(openDatabase(":memory:")), ... }).handle(request)`, with fakes for external services. Cover
    the success path, each failure state, and the durable state after each.
 6. **Use it from the web**: call `apiClient().api.<path>` inside a feature
-   function that maps the outcome to what a person sees (see
-   `apps/web/src/features/meetings/start-shadowing.ts`).
+   function that maps the outcome to what a person sees.
 7. **Record**: update `docs/invariants.md` if the feature adds a guarantee.
 
 `bun run verify` must pass.

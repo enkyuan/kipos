@@ -1,6 +1,6 @@
 # 0005 — Motion for enter/exit (presence) animations
 
-Status: accepted (2026-10-11)
+Status: superseded by 0007-base-ui-design-kit.md (2026-10-11)
 
 ## Context
 

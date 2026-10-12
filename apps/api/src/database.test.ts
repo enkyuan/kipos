@@ -22,11 +22,18 @@ const appliedIds = (path: string, migrations?: string) => {
 };
 
 describe("openDatabase", () => {
-  test("applies each migration once, even across reopen", () => {
-    const path = join(dir, "nested", "test.sqlite");
-    const first = appliedIds(path);
-    expect(first.length).toBeGreaterThan(0);
-    expect(appliedIds(path)).toEqual(first);
+  test("opens with the repository's own migrations", () => {
+    expect(() => appliedIds(join(dir, "nested", "test.sqlite"))).not.toThrow();
+  });
+
+  test("applies each migration once, in filename order, even across reopen", () => {
+    const migrations = join(dir, "migrations");
+    const path = join(dir, "test.sqlite");
+    mkdirSync(migrations);
+    writeFileSync(join(migrations, "002_b.sql"), "ALTER TABLE a ADD COLUMN y INTEGER;");
+    writeFileSync(join(migrations, "001_a.sql"), "CREATE TABLE a (x INTEGER);");
+    expect(appliedIds(path, migrations)).toEqual(["001_a.sql", "002_b.sql"]);
+    expect(appliedIds(path, migrations)).toEqual(["001_a.sql", "002_b.sql"]);
   });
 
   test("rolls back a failing migration entirely and does not record it", () => {

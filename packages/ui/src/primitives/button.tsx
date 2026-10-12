@@ -1,6 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { mergeProps } from "@base-ui/react/merge-props";
-import { useRender } from "@base-ui/react/use-render";
+import { Button as BaseButton } from "@base-ui/react/button";
 import type { ReactElement } from "react";
 import {
   color,
@@ -13,13 +12,13 @@ import {
   space,
 } from "../tokens/tokens.stylex";
 
-// coss button (packages/ui/src/components/button.tsx), translated class by
-// class. Controls are a step larger below the `sm` breakpoint so touch
-// targets stay comfortable. Hover sits under `media.hover`, as Tailwind v4's
-// `hover:` does, so a tap never leaves a button looking hovered. Icons inside
-// are sized by base.css (`[data-slot=button] svg`), since StyleX cannot
-// style descendants. One addition to coss: a pressed button shrinks
-// slightly, so a click is felt before its result arrives.
+// Base UI's Button (behavior, disabled semantics, `render` for links) with
+// the design system's look. Controls are a step larger below the `sm`
+// breakpoint so touch targets stay comfortable. Hover sits under
+// `media.hover`, so a tap never leaves a button looking hovered. Icons
+// inside are sized by base.css (`[data-slot=button] svg`), since StyleX
+// cannot style descendants. A pressed button shrinks slightly, so a click
+// is felt before its result arrives.
 
 const focusRing = `0 0 0 ${shadow.focusOffset} ${color.background}, 0 0 0 ${shadow.focusWidth} ${color.ring}`;
 const spin = stylex.keyframes({ to: { rotate: "360deg" } });
@@ -219,7 +218,7 @@ const spinnerTone = stylex.create({
 export type ButtonVariant = keyof typeof variants;
 export type ButtonSize = keyof typeof sizes;
 
-export type ButtonProps = Omit<useRender.ComponentProps<"button">, "className" | "style"> & {
+export type ButtonProps = Omit<BaseButton.Props, "className" | "style"> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
   /** Keeps the button's size, hides its label and shows a spinner. */
@@ -227,35 +226,36 @@ export type ButtonProps = Omit<useRender.ComponentProps<"button">, "className" |
   xstyle?: stylex.StyleXStyles;
 };
 
-/** `import { Button } from "@ouro/ui/button"`. Pass `render={<a />}` for a link. */
+/**
+ * `import { Button } from "@ouro/ui/button"`. For a link, pass
+ * `render={<a href="..." />}` and `nativeButton={false}`.
+ */
 export function Button({
   variant = "default",
   size = "default",
   loading = false,
   disabled,
-  render,
   children,
   xstyle,
   ...props
 }: ButtonProps): ReactElement {
-  const ownProps = {
-    ...stylex.props(styles.base, sizes[size], variants[variant], loading && styles.loading, xstyle),
-    children: (
-      <>
-        {children}
-        {loading && <span aria-hidden {...stylex.props(styles.spinner, spinnerTone[variant])} />}
-      </>
-    ),
-    disabled: loading || disabled,
-    "aria-busy": loading || undefined,
-    "data-loading": loading ? "" : undefined,
-    "data-slot": "button",
-    // A rendered <a> or custom element must not get a button type.
-    type: render ? undefined : ("button" as const),
-  };
-  return useRender({
-    defaultTagName: "button",
-    render,
-    props: mergeProps<"button">(ownProps, props),
-  });
+  return (
+    <BaseButton
+      {...props}
+      {...stylex.props(
+        styles.base,
+        sizes[size],
+        variants[variant],
+        loading && styles.loading,
+        xstyle,
+      )}
+      disabled={loading || disabled}
+      aria-busy={loading || undefined}
+      data-loading={loading ? "" : undefined}
+      data-slot="button"
+    >
+      {children}
+      {loading && <span aria-hidden {...stylex.props(styles.spinner, spinnerTone[variant])} />}
+    </BaseButton>
+  );
 }

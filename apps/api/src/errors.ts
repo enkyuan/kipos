@@ -4,6 +4,8 @@ import { Elysia, t, type Static } from "elysia";
  * The one error shape every non-2xx response carries. Routes declare it per
  * failure status (`response: { 422: apiErrorSchema }`), so the Eden client
  * types each failure and a mismatched body fails response validation.
+ *
+ * @public for the first feature route; the health route has no failures.
  */
 export const apiErrorSchema = t.Object({
   error: t.Object({ code: t.String(), message: t.String() }),
