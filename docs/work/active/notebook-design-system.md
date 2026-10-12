@@ -59,8 +59,10 @@ Must not modify: `apps/api`.
 
 ## Known limitations
 
-- Zodiak is not in git. CI and fresh clones render the fallback serif; a
-  deploy needs a private step that places the Fontshare file before building.
+- Zodiak is not in git. CI and fresh clones render the fallback serif and
+  request `/fonts/zodiak-variable.woff2` on each load (answered by the 404
+  page). A deploy needs a private step that places the Fontshare file before
+  building and fails without it; none exists yet.
 
 - Motion values for select, unfold and fold live in 0008 until a primitive
   needs them.

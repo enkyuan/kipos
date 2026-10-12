@@ -47,9 +47,10 @@ export const color = stylex.defineVars({
   warning: palette.amber500,
   warningForeground: { default: palette.amber700, [DARK]: palette.amber400 },
   border: { default: palette.warm920, [DARK]: palette.warm280 },
-  // Control outlines: 3:1 on paper, so a field or outline button is findable
-  // (3.12:1 light; 3.49:1 on `background`, 3.25:1 on `card`, dark).
-  input: { default: palette.warm660, [DARK]: palette.warm520 },
+  // Field outlines: 3:1 on every surface a field can sit on, paper, graphite
+  // and the washes (3.17:1 or better light, 3.15:1 or better dark). Outline
+  // buttons are identified by their label and keep the hairline `border`.
+  input: { default: palette.warm600, [DARK]: palette.warm590 },
   // Solid, so the focus ring holds 3:1 on every surface: 6.08:1 on
   // `background` (light), 11.14:1 (dark).
   ring: { default: palette.peachInk, [DARK]: palette.peachInkDark },
@@ -60,7 +61,6 @@ export const color = stylex.defineVars({
   insetLight: `inset 0 1px oklch(1 0 0 / 16%)`,
   insetDark: `inset 0 1px oklch(0 0 0 / 8%)`,
   white: palette.white,
-  black: palette.black,
 
   brand: { default: palette.peach, [DARK]: palette.peachDark },
   brandForeground: palette.onPeach,

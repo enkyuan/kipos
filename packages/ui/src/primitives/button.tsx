@@ -116,9 +116,9 @@ const sizes = stylex.create({
   },
 });
 
-// Filled hovers darken toward the label's own side: peach (dark label) mixes
-// toward its label color and red (white label) toward black, so the hover is
-// visible in both themes and the label never loses contrast. Secondary mixes
+// Filled hovers darken in both themes, so the change is visible by day and at
+// night: peach mixes toward its dark label and stays above 7.5:1, red mixes
+// toward black and gains contrast with its white label. Secondary mixes
 // toward the page text: darker by day, lighter at night.
 const variants = stylex.create({
   default: {
@@ -144,7 +144,7 @@ const variants = stylex.create({
       default: color.destructive,
       ":hover": {
         default: null,
-        [media.hover]: `color-mix(in oklch, ${color.destructive} 92%, ${color.black})`,
+        [media.hover]: `color-mix(in oklch, ${color.destructive} 92%, black)`,
       },
     },
     color: color.white,
@@ -156,7 +156,7 @@ const variants = stylex.create({
     },
   },
   outline: {
-    borderColor: color.input,
+    borderColor: color.border,
     backgroundColor: {
       default: color.popover,
       ":hover": {

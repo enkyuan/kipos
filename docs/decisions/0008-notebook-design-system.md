@@ -39,9 +39,10 @@ are noted beside each role in `tokens.stylex.ts`.
 Garamond for headings and the wordmark; Glide and Glide Mono are unchanged.
 Zodiak is the unmodified Fontshare woff2 (the FFL forbids converting or
 subsetting it), self-hosted from `packages/ui/src/fonts/zodiak-variable.woff2`.
-The file is gitignored: this repository is public, and the FFL forbids making
-the font available through a repository or public server. Without the file
-the build still succeeds and headings fall back to Iowan Old Style, then
+The file is gitignored: the FFL allows embedding the font through
+`@font-face` in ouro's own app, but not redistributing the file, and this
+repository is public. Without the file the build still succeeds (Vite warns
+that the URL is unresolved) and headings fall back to Iowan Old Style, then
 Georgia. Headings
 without a weight take the browser's bold (700), too heavy for Zodiak, so every
 heading style sets `fontWeight` (400 or 500). The `@font-face` declares the
@@ -68,13 +69,18 @@ filled with the page color.
   its contrast pairs noted.
 - On white, `card` and `popover` match `background`; a raised surface needs
   a shadow to separate. At night they step one shade lighter.
-- The FFL does not allow serving Zodiak to third parties as a font service
-  (for example a hosted design tool), or committing it to this public
-  repository. Self-hosting it in ouro's own deployed app is permitted.
-- A machine without the file (CI, a fresh clone) renders the fallback serif.
-  Place the font from Fontshare at `packages/ui/src/fonts/zodiak-variable.woff2`
-  to see Zodiak locally; a deploy needs a private step that supplies the same
-  file before the build.
+- The FFL does not allow redistributing Zodiak as a file, serving it to third
+  parties as a font service (for example a hosted design tool), or committing
+  it to this public repository. Embedding it in ouro's own deployed app is
+  permitted.
+- A machine without the file (CI, a fresh clone) renders the fallback serif,
+  and every page load requests `/fonts/zodiak-variable.woff2`, which the app
+  answers with its 404 page. Place the font from Fontshare at
+  `packages/ui/src/fonts/zodiak-variable.woff2` to see Zodiak locally. Nothing
+  enforces it yet: a deploy needs a private step that supplies the file before
+  the build, and should fail without it.
+- Field outlines (`input`) hold 3:1 on every surface; outline buttons use the
+  hairline `border`, since their label identifies them.
 - The student-facing parts of the design system (message bubbles, practice
   cards, Blobatar motion states) become primitives only when a screen needs
   them.

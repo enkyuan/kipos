@@ -85,7 +85,7 @@ const PAIRS: { on: string; surfaces: string[]; minimum: number }[] = [
   { on: "brandText", surfaces: ["background", "brandSurface"], minimum: 4.5 },
   { on: "white", surfaces: ["destructive"], minimum: 4.5 },
   { on: "ring", surfaces: [...PAPER, ...GRAPHITE, ...WASHES], minimum: 3 },
-  { on: "input", surfaces: PAPER, minimum: 3 },
+  { on: "input", surfaces: [...PAPER, ...GRAPHITE, ...WASHES], minimum: 3 },
 ];
 
 describe("color roles", () => {
