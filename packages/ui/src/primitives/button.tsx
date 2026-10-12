@@ -13,12 +13,14 @@ import {
 } from "../tokens/tokens.stylex";
 
 // Base UI's Button (behavior, disabled semantics, `render` for links) with
-// the design system's look. Controls are a step larger below the `sm`
-// breakpoint so touch targets stay comfortable. Hover sits under
-// `media.hover`, so a tap never leaves a button looking hovered. Icons
-// inside are sized by base.css (`[data-slot=button] svg`), since StyleX
-// cannot style descendants. A pressed button shrinks slightly, so a click
-// is felt before its result arrives.
+// the design system's look: a pill, so it never nests a corner it cannot
+// match. Controls are a step larger below the `sm` breakpoint so touch
+// targets stay comfortable. Hover sits under `media.hover`, so a tap never
+// leaves a button looking hovered. Icons inside are sized by base.css
+// (`[data-slot=button] svg`), since StyleX cannot style descendants. A
+// pressed button shrinks to `motion.press` over `motion.pressDuration`, so a
+// click is felt before its result arrives; colors change over the slower
+// hover duration.
 
 const focusRing = `0 0 0 ${shadow.focusOffset} ${color.background}, 0 0 0 ${shadow.focusWidth} ${color.ring}`;
 const spin = stylex.keyframes({ to: { rotate: "360deg" } });
@@ -35,7 +37,7 @@ const styles = stylex.create({
     whiteSpace: "nowrap",
     borderWidth: 1,
     borderStyle: "solid",
-    borderRadius: radius.lg,
+    borderRadius: radius.full,
     fontFamily: "inherit",
     fontSize: { default: fontSize.base, [media.sm]: fontSize.sm },
     fontWeight: fontWeight.medium,
@@ -44,8 +46,8 @@ const styles = stylex.create({
     cursor: "pointer",
     outline: "none",
     transitionProperty: "box-shadow, background-color, scale",
-    transitionDuration: motion.fast,
-    transitionTimingFunction: motion.ease,
+    transitionDuration: `${motion.fast}, ${motion.fast}, ${motion.pressDuration}`,
+    transitionTimingFunction: `${motion.ease}, ${motion.ease}, ${motion.easeOut}`,
     scale: { default: null, ":active": { default: motion.press, [media.reducedMotion]: null } },
     opacity: { default: null, ":disabled": 0.64 },
     pointerEvents: { default: null, ":disabled": "none" },
@@ -54,7 +56,7 @@ const styles = stylex.create({
       content: "''",
       position: "absolute",
       inset: 0,
-      borderRadius: `calc(${radius.lg} - 1px)`,
+      borderRadius: radius.full,
       pointerEvents: "none",
     },
   },
@@ -100,9 +102,7 @@ const sizes = stylex.create({
     height: { default: "1.75rem", [media.sm]: "1.5rem" },
     gap: space.s1,
     paddingInline: `calc(${space.s2} - 1px)`,
-    borderRadius: radius.md,
     fontSize: { default: fontSize.sm, [media.sm]: fontSize.xs },
-    "::before": { borderRadius: `calc(${radius.md} - 1px)` },
   },
   icon: {
     width: { default: "2.25rem", [media.sm]: "2rem" },
@@ -113,11 +113,13 @@ const sizes = stylex.create({
     width: { default: "1.75rem", [media.sm]: "1.5rem" },
     height: { default: "1.75rem", [media.sm]: "1.5rem" },
     padding: 0,
-    borderRadius: radius.md,
-    "::before": { borderRadius: `calc(${radius.md} - 1px)` },
   },
 });
 
+// Filled hovers darken toward the label's own side: peach (dark label) mixes
+// toward its label color and red (white label) toward black, so the hover is
+// visible in both themes and the label never loses contrast. Secondary mixes
+// toward the page text: darker by day, lighter at night.
 const variants = stylex.create({
   default: {
     borderColor: color.primary,
@@ -125,7 +127,7 @@ const variants = stylex.create({
       default: color.primary,
       ":hover": {
         default: null,
-        [media.hover]: `color-mix(in srgb, ${color.primary} 90%, transparent)`,
+        [media.hover]: `color-mix(in oklch, ${color.primary} 92%, ${color.primaryForeground})`,
       },
     },
     color: color.primaryForeground,
@@ -142,7 +144,7 @@ const variants = stylex.create({
       default: color.destructive,
       ":hover": {
         default: null,
-        [media.hover]: `color-mix(in srgb, ${color.destructive} 90%, transparent)`,
+        [media.hover]: `color-mix(in oklch, ${color.destructive} 92%, ${color.black})`,
       },
     },
     color: color.white,
@@ -178,9 +180,9 @@ const variants = stylex.create({
       default: color.secondary,
       ":hover": {
         default: null,
-        [media.hover]: `color-mix(in srgb, ${color.secondary} 90%, transparent)`,
+        [media.hover]: `color-mix(in oklch, ${color.secondary} 95%, ${color.foreground})`,
       },
-      ":active": `color-mix(in srgb, ${color.secondary} 80%, transparent)`,
+      ":active": `color-mix(in oklch, ${color.secondary} 90%, ${color.foreground})`,
     },
     color: color.secondaryForeground,
     boxShadow: { default: null, ":focus-visible": focusRing },

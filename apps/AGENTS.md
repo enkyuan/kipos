@@ -61,9 +61,14 @@ Imports across folders go through the package aliases (`#api/*`,
   `style`.
 - Read values from `@ouro/ui/tokens.stylex` (`color`, `space`, `fontSize`,
   `radius`, `media`, ...). No raw hex, rgb, or pixel spacing in app code.
-- Brand: headings and the wordmark use `font.heading` (EB Garamond) with
-  `tracking.heading`; body and UI text stay Glide; code is Glide Mono. Brand color comes from
-  roles (`color.brandSurface`, `brandText`, ...); `primary` stays neutral.
+- Brand: headings and the wordmark use `font.heading` (Zodiak) with
+  `tracking.heading` and an explicit `fontWeight` (400 or 500; headings
+  otherwise take the browser's bold, too heavy for Zodiak); body and UI text
+  stay Glide; code is Glide Mono.
+- Color follows 60 / 30 / 10 (`docs/decisions/0008-notebook-design-system.md`):
+  paper roles (`background`, `card`) fill most of a view, graphite
+  (`secondary`, `muted`) about a third, and colour (`primary`, `brand*`) a
+  tenth. One `primary` (peach) action per view.
 - Responsive and state values are conditions on the property
   (`{ default: ..., [media.sm]: ... }`), not separate rules.
 - Light and dark follow the system preference through the tokens; app code

@@ -17,3 +17,8 @@ apps/api/data/
 
 # Claude Code harness state (machine-local).
 .claude/*.lock
+
+# Zodiak (Fontshare FFL) may be self-hosted but not redistributed, and this
+# repository is public: keep the font and its license out of git.
+packages/ui/src/fonts/zodiak-variable.woff2
+packages/ui/src/fonts/Zodiak-FFL.txt

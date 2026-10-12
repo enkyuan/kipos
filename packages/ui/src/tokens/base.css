@@ -6,8 +6,6 @@
  * Plain CSS cannot read StyleX variables, so the few values here repeat
  * tokens.stylex.ts (border, ring, background, foreground, font families).
  */
-@import "@fontsource-variable/eb-garamond";
-
 /*
  * Glide (OFL, fonts/OFL.txt): variable weight 100–950 and optical size, so
  * one file per style covers every weight. `font-optical-sizing: auto` (the
@@ -29,6 +27,21 @@
   src: url("../fonts/glide-variable-italic.woff2") format("woff2");
 }
 
+/*
+ * Zodiak (Indian Type Foundry, Fontshare FFL): the unmodified Fontshare file,
+ * self-hosted as the license allows; it forbids converting, subsetting or
+ * redistributing it, so the file is gitignored and a machine without it
+ * renders the fallback serif. The weight range must stay declared: without
+ * it the variable file renders at its default coordinate, 900.
+ */
+@font-face {
+  font-family: "Zodiak";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/zodiak-variable.woff2") format("woff2");
+}
+
 @font-face {
   font-family: "Glide Mono";
   font-style: normal;
@@ -42,8 +55,8 @@
   *::before,
   *::after {
     box-sizing: border-box;
-    border: 0 solid oklch(0 0 0 / 8%);
-    outline-color: oklch(0.708 0 0 / 50%);
+    border: 0 solid oklch(0.92 0.004 60);
+    outline-color: oklch(0.51 0.13 42);
   }
 
   html {
@@ -56,7 +69,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: oklch(1 0 0);
-    color: oklch(0.269 0 0);
+    color: oklch(0.2 0.006 50);
   }
 
   body {
@@ -103,13 +116,13 @@
     *,
     *::before,
     *::after {
-      border-color: oklch(1 0 0 / 6%);
-      outline-color: oklch(0.556 0 0 / 50%);
+      border-color: oklch(0.28 0.005 50);
+      outline-color: oklch(0.83 0.1 55);
     }
 
     html {
-      background-color: color-mix(in srgb, oklch(0.145 0 0) 96%, oklch(1 0 0));
-      color: oklch(0.97 0 0);
+      background-color: oklch(0.165 0.004 50);
+      color: oklch(0.95 0.003 60);
     }
   }
 }

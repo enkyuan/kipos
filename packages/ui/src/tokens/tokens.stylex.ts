@@ -10,36 +10,35 @@ import { palette } from "./palette.stylex";
 
 const DARK = "@media (prefers-color-scheme: dark)";
 
-const darkBackground = `color-mix(in srgb, ${palette.neutral950} 96%, ${palette.white})`;
-
+/**
+ * The 60 / 30 / 10 split (docs/decisions/0008-notebook-design-system.md):
+ * paper (`background`, `card`, `popover`) fills most of a view, graphite
+ * (`secondary`, `muted`, `accent`) about a third, and colour (`primary`,
+ * `brand*`) a tenth. Status colors are signals, outside the split. Every
+ * foreground meets WCAG AA on the surfaces paired with it, in both themes.
+ */
 export const color = stylex.defineVars({
-  background: { default: palette.white, [DARK]: darkBackground },
-  foreground: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  card: {
-    default: palette.white,
-    [DARK]: `color-mix(in srgb, ${darkBackground} 98%, ${palette.white})`,
-  },
-  cardForeground: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  popover: {
-    default: palette.white,
-    [DARK]: `color-mix(in srgb, ${darkBackground} 96%, ${palette.white})`,
-  },
-  popoverForeground: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  primary: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  primaryForeground: { default: palette.neutral50, [DARK]: palette.neutral800 },
-  secondary: { default: "oklch(0 0 0 / 4%)", [DARK]: "oklch(1 0 0 / 4%)" },
-  secondaryForeground: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  muted: { default: "oklch(0 0 0 / 4%)", [DARK]: "oklch(1 0 0 / 4%)" },
-  mutedForeground: {
-    default: `color-mix(in srgb, ${palette.neutral500} 90%, ${palette.black})`,
-    [DARK]: `color-mix(in srgb, ${palette.neutral500} 90%, ${palette.white})`,
-  },
-  accent: { default: "oklch(0 0 0 / 4%)", [DARK]: "oklch(1 0 0 / 4%)" },
-  accentForeground: { default: palette.neutral800, [DARK]: palette.neutral100 },
-  destructive: {
-    default: palette.red500,
-    [DARK]: `color-mix(in srgb, ${palette.red500} 90%, ${palette.white})`,
-  },
+  background: { default: palette.white, [DARK]: palette.warm165 },
+  foreground: { default: palette.warm200, [DARK]: palette.warm950 },
+  // On white, raised surfaces match the page and separate by shadow; at night
+  // they step one shade lighter.
+  card: { default: palette.white, [DARK]: palette.warm205 },
+  cardForeground: { default: palette.warm200, [DARK]: palette.warm950 },
+  popover: { default: palette.white, [DARK]: palette.warm205 },
+  popoverForeground: { default: palette.warm200, [DARK]: palette.warm950 },
+  // The one colored action per view: peach with dark text (9.73:1 light,
+  // 8.94:1 dark).
+  primary: { default: palette.peach, [DARK]: palette.peachDark },
+  primaryForeground: palette.onPeach,
+  secondary: { default: palette.warm955, [DARK]: palette.warm240 },
+  secondaryForeground: { default: palette.warm200, [DARK]: palette.warm950 },
+  muted: { default: palette.warm955, [DARK]: palette.warm240 },
+  // 6.0:1 on `muted` and 6.84:1 on `background` (light); 7.66:1 and 8.97:1 (dark).
+  mutedForeground: { default: palette.warm470, [DARK]: palette.warm760 },
+  accent: { default: palette.warm955, [DARK]: palette.warm240 },
+  accentForeground: { default: palette.warm200, [DARK]: palette.warm950 },
+  // White labels read at 4.76:1 in both themes.
+  destructive: palette.red600,
   destructiveForeground: { default: palette.red700, [DARK]: palette.red400 },
   info: palette.blue500,
   infoForeground: { default: palette.blue700, [DARK]: palette.blue400 },
@@ -47,9 +46,13 @@ export const color = stylex.defineVars({
   successForeground: { default: palette.emerald700, [DARK]: palette.emerald400 },
   warning: palette.amber500,
   warningForeground: { default: palette.amber700, [DARK]: palette.amber400 },
-  border: { default: "oklch(0 0 0 / 8%)", [DARK]: "oklch(1 0 0 / 6%)" },
-  input: { default: "oklch(0 0 0 / 10%)", [DARK]: "oklch(1 0 0 / 8%)" },
-  ring: { default: palette.neutral400, [DARK]: palette.neutral500 },
+  border: { default: palette.warm920, [DARK]: palette.warm280 },
+  // Control outlines: 3:1 on paper, so a field or outline button is findable
+  // (3.12:1 light; 3.49:1 on `background`, 3.25:1 on `card`, dark).
+  input: { default: palette.warm660, [DARK]: palette.warm520 },
+  // Solid, so the focus ring holds 3:1 on every surface: 6.08:1 on
+  // `background` (light), 11.14:1 (dark).
+  ring: { default: palette.peachInk, [DARK]: palette.peachInkDark },
   // A 1px highlight on raised surfaces (drawn on `::before`):
   // a shade under the top edge in light, a light line above it in dark.
   highlight: { default: `0 1px oklch(0 0 0 / 4%)`, [DARK]: `0 -1px oklch(1 0 0 / 6%)` },
@@ -57,42 +60,48 @@ export const color = stylex.defineVars({
   insetLight: `inset 0 1px oklch(1 0 0 / 16%)`,
   insetDark: `inset 0 1px oklch(0 0 0 / 8%)`,
   white: palette.white,
+  black: palette.black,
 
-  // Brand roles from the optimus palette (palette.stylex.ts). Pairs are
-  // chosen for WCAG AA text contrast: brandText on background 6.3:1 (light)
-  // and 8.2:1 (dark); brandForeground on brand 6.7:1.
-  brand: palette.darkSalmon400,
-  brandForeground: palette.neutral800,
-  brandText: { default: palette.darkSalmon700, [DARK]: palette.darkSalmon300 },
-  // Tinted page bands: lavender blush in light, a deep dusty rose in dark.
-  brandSurface: { default: palette.lavenderBlush50, [DARK]: palette.lavenderBlush950 },
-  brandSurfaceStrong: { default: palette.lightPink100, [DARK]: palette.lightPink950 },
+  brand: { default: palette.peach, [DARK]: palette.peachDark },
+  brandForeground: palette.onPeach,
+  // Peach as text: 6.08:1 on `background` and 5.31:1 on `brandSurface`
+  // (light); 11.14:1 and 8.65:1 (dark).
+  brandText: { default: palette.peachInk, [DARK]: palette.peachInkDark },
+  // Colour-tier washes: peach for status and success moments, petal for the
+  // highlighter mark. `foreground` reads on both at 11:1 or better.
+  brandSurface: { default: palette.peachWash, [DARK]: palette.peachWashDark },
+  brandSurfaceStrong: { default: palette.petalWash, [DARK]: palette.petalWashDark },
 });
 
-/** A 0.625rem base radius and the steps derived from it. */
+/**
+ * A concentric ladder: each step is the one below plus the inset between
+ * them (4px from sm to md, 6px above), so a child inset by that much keeps
+ * its corners parallel to its parent's.
+ */
 export const radius = stylex.defineVars({
-  sm: "calc(0.625rem - 4px)",
-  md: "calc(0.625rem - 2px)",
-  lg: "0.625rem",
-  xl: "calc(0.625rem + 4px)",
-  xxl: "1rem",
+  sm: "0.625rem",
+  md: "0.875rem",
+  lg: "1.25rem",
+  xl: "1.625rem",
+  xxl: "2rem",
   full: "9999px",
 });
 
 /**
- * Brand pairing (docs/decisions/0002-brand-typography-and-palette.md):
- * EB Garamond sets headings and the wordmark; Glide sets everything else,
- * and Glide Mono sets code. base.css declares the faces.
+ * Brand pairing (docs/decisions/0008-notebook-design-system.md): Zodiak sets
+ * headings and the wordmark; Glide sets everything else, and Glide Mono sets
+ * code. base.css declares the faces. Every Zodiak style sets `fontWeight`
+ * (400 or 500): headings otherwise take the browser's bold, too heavy for it.
  */
 export const font = stylex.defineVars({
   sans: "'Glide', ui-sans-serif, system-ui, sans-serif",
-  heading: "'EB Garamond Variable', ui-serif, Georgia, serif",
+  heading: "'Zodiak', 'Iowan Old Style', Georgia, serif",
   mono: "'Glide Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
 });
 
-/** The brand guide's EB Garamond setting: "Spacing -2" (−2%). */
+/** Zodiak's display sizes tighten slightly; it is already compact. */
 export const tracking = stylex.defineConsts({
-  heading: "-0.02em",
+  heading: "-0.01em",
 });
 
 /** Tailwind's spacing scale by step name: `p-6` → `space.s6`, `px-2.5` → `space.s2_5`. */
@@ -147,19 +156,29 @@ export const shadow = stylex.defineConsts({
   xs: "0 1px 2px 0 oklch(0 0 0 / 5%)",
   // Tailwind `shadow-lg/5`: raised overlays (toasts).
   lg: "0 10px 15px -3px oklch(0 0 0 / 5%), 0 4px 6px -4px oklch(0 0 0 / 5%)",
-  // Focus: `ring-2 ring-ring ring-offset-1 ring-offset-background`.
-  focusOffset: "1px",
-  focusWidth: "3px",
+  // Focus: a 2px ring at a 2px offset, the offset filled with the page color
+  // so the ring separates from any fill it surrounds. `focusWidth` is the
+  // ring's outer edge (offset + ring), the spread of the second shadow.
+  focusOffset: "2px",
+  focusWidth: "4px",
 });
 
+/**
+ * One duration per interaction, not ranges. Exits are faster than entrances,
+ * and anything driven from the keyboard or repeated many times an hour does
+ * not animate. 0008 lists the values a new primitive adds here (select,
+ * unfold, fold).
+ */
 export const motion = stylex.defineConsts({
+  // Hover and color changes.
   fast: "150ms",
   ease: "cubic-bezier(0.4, 0, 0.2, 1)",
-  // Entrances and exits: moves at once, then settles. Built-in `ease-out`
-  // starts too slowly to read as a response to the click.
-  easeOut: "cubic-bezier(0.23, 1, 0.32, 1)",
-  // Press feedback: the pressed control shrinks this much.
+  // Press feedback: the pressed control shrinks to `press` in `pressDuration`.
   press: "0.96",
+  pressDuration: "120ms",
+  // Entrances, exits and presses: moves at once, then settles. Built-in
+  // `ease-out` starts too slowly to read as a response to the click.
+  easeOut: "cubic-bezier(0.23, 1, 0.32, 1)",
 });
 
 export const media = stylex.defineConsts({
@@ -167,7 +186,8 @@ export const media = stylex.defineConsts({
   sm: "@media (min-width: 40rem)",
   md: "@media (min-width: 48rem)",
   lg: "@media (min-width: 64rem)",
-  hover: "@media (hover: hover)",
+  // Hover only where a fine pointer can hover: a tap never leaves a hover.
+  hover: "@media (hover: hover) and (pointer: fine)",
   dark: "@media (prefers-color-scheme: dark)",
   reducedMotion: "@media (prefers-reduced-motion: reduce)",
 });
