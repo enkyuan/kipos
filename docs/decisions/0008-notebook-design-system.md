@@ -76,9 +76,11 @@ filled with the page color.
 - A machine without the file (CI, a fresh clone) renders the fallback serif,
   and every page load requests `/fonts/zodiak-variable.woff2`, which the app
   answers with its 404 page. Place the font from Fontshare at
-  `packages/ui/src/fonts/zodiak-variable.woff2` to see Zodiak locally. Nothing
-  enforces it yet: a deploy needs a private step that supplies the file before
-  the build, and should fail without it.
+  `packages/ui/src/fonts/zodiak-variable.woff2` to see Zodiak locally. A
+  deploy supplies the file in a private step and builds with
+  `REQUIRE_BRAND_FONTS=1`, which fails the build when the file is missing.
+  `.gitignore` excludes any Zodiak or FFL file in `src/fonts/`, and a structure
+  check fails if one is ever tracked.
 - Field outlines (`input`) hold 3:1 on every surface; outline buttons use the
   hairline `border`, since their label identifies them.
 - The student-facing parts of the design system (message bubbles, practice

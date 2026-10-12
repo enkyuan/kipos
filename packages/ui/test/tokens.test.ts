@@ -71,7 +71,7 @@ const GRAPHITE = ["secondary", "muted", "accent"];
 const WASHES = ["brandSurface", "brandSurfaceStrong"];
 
 // The pairs tokens.stylex.ts and ADR 0008 document: text roles need WCAG AA
-// for body text (4.5:1); the focus ring and control outlines are non-text UI
+// for body text (4.5:1); the focus ring and field outlines (`input`) are non-text UI
 // and need 3:1 on the surfaces they sit on.
 const PAIRS: { on: string; surfaces: string[]; minimum: number }[] = [
   { on: "foreground", surfaces: [...PAPER, ...GRAPHITE, ...WASHES], minimum: 4.5 },
@@ -89,7 +89,7 @@ const PAIRS: { on: string; surfaces: string[]; minimum: number }[] = [
 ];
 
 describe("color roles", () => {
-  // Each documented role pair meets WCAG (text 4.5:1, focus ring and control outlines 3:1) in both
+  // Each documented role pair meets WCAG (text 4.5:1, focus ring and field outlines (`input`) 3:1) in both
   // themes. Fails when a retheme or palette tweak drops a pair below its minimum.
   test("meets its WCAG minimum on every surface it pairs with, in both themes", () => {
     const failing: string[] = [];
