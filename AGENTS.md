@@ -2,10 +2,10 @@
 
 ## Purpose
 
-Ouro is an AI copilot for Forward Deployed Engineers, in early development: a
-Bun + Elysia API and a TanStack Start workspace. It shadows a Google Meet
-through a Vexa notetaker, shows the live transcript, and keeps the client's
-requirements and implementation gaps current as the meeting runs.
+Ouro is an AI copilot for Forward Deployed Engineers, at its base scaffold:
+a Bun + Elysia API and a TanStack Start web app, with a design system of Base
+UI primitives on StyleX. `docs/product.md` records what exists and where it
+is going.
 
 This repository is set up for iteration at high speed: small vertical slices,
 fast local feedback, and a gate that catches drift mechanically so review can
@@ -20,7 +20,7 @@ Scoped instructions extend this file and never override it:
 ```text
 apps/api/AGENTS.md      backend delta (Elysia, persistence, HTTP contract)
 apps/AGENTS.md          frontend delta (apps/web)
-packages/ui/AGENTS.md   design-system delta (coss/ui on StyleX)
+packages/ui/AGENTS.md   design-system delta (Base UI on StyleX)
 ```
 
 ## Engineering standard
@@ -60,11 +60,11 @@ A strong change is easy to locate, explain, test, and delete.
 │   └── web/                 # @ouro/web — TanStack Start + React + StyleX
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
-│       │   ├── features/    # product concepts (workspace, meetings, analysis)
+│       │   ├── features/    # product concepts (one folder each)
 │       │   └── api/         # the typed Eden client to apps/api
 │       └── test/            # tests against the production build
 ├── packages/
-│   ├── ui/                  # @ouro/ui — coss/ui primitives on StyleX
+│   ├── ui/                  # @ouro/ui — Base UI primitives on StyleX
 │   └── tsconfig/            # shared compiler options
 ├── docs/
 │   ├── product.md           # what / who / non-goals
@@ -143,9 +143,9 @@ If the answers are weak, do not add it.
 ## Naming
 
 Names are architecture. Files name the owned concept (`routes.ts`, `store.ts`,
-`start-shadowing.ts`, `meeting-view.tsx`); functions read as actions
-(`createApp`, `openDatabase`, `startShadowing`); types name domain concepts
-(`MeetingStore`, `StartOutcome`), not implementation accidents.
+`start-review.ts`, `requirement-list.tsx`); functions read as actions
+(`createApp`, `openDatabase`, `startReview`); types name domain concepts
+(`RequirementStore`, `StartOutcome`), not implementation accidents.
 
 Filenames are kebab-case. Tests sit beside the code they prove
 (`routes.test.ts`), except `apps/web/test/`, which runs against the build.
@@ -163,7 +163,7 @@ record.
 
 ```bash
 bun install
-bun run dev            # api on :3001 (watch; needs apps/api/.env), web on :3000 (HMR, /api proxied)
+bun run dev            # api on :3001 (watch), web on :3000 (HMR, /api proxied)
 bun run check          # format, lint, typecheck, knip — seconds
 bun run test           # unit, route, SSR-build, and structure tests
 bun run verify         # check + test + build: the full gate CI runs

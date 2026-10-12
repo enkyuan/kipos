@@ -5,8 +5,10 @@
    commit it.
 2. **Feature**: put the page's sections in `apps/web/src/features/<concept>/`.
    Routes compose features; features do not import each other.
-3. **UI**: use `@ouro/ui` primitives. If coss has a component you need that
-   `@ouro/ui` lacks, port it first (`packages/ui/AGENTS.md`).
+3. **UI**: use `@ouro/ui` primitives. If Base UI has a component you need
+   that `@ouro/ui` lacks, add it first (`packages/ui/AGENTS.md`). Icons come
+   from `blode-icons-react`, avatars from `@blobatar/react`; register values
+   you are tuning with `useDialKit` and adjust them in the dev panel.
 4. **Styles**: `stylex.create` beside the component, values from
    `@ouro/ui/tokens.stylex`.
 5. **Head**: set the page's `title` and `description` in the route's `head`.

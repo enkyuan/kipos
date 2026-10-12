@@ -47,5 +47,9 @@ export default defineConfig(({ mode }) => {
     server: { port, strictPort: true, proxy: apiProxy(apiOrigin) },
     preview: { port, strictPort: true, proxy: apiProxy(apiOrigin) },
     build: { target: browserFloor },
+    // blode-icons-react's ESM entry imports `./all-icons` without an
+    // extension, which Node's resolver refuses when the dev server loads it
+    // externally during SSR; bundling it through Vite resolves the path.
+    ssr: { noExternal: ["blode-icons-react"] },
   };
 });

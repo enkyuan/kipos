@@ -1,7 +1,7 @@
 # 0002 — Brand typography and palette
 
 Date: 2026-10-11
-Status: accepted
+Status: accepted; typography amended 2026-10-11 (Glide replaces Inter, see below)
 
 ## Context
 
@@ -45,5 +45,14 @@ Components consume brand roles, never ramp steps: `color.brand`,
 
 - White text on dark salmon measures 2.2:1, so the brand orange never
   carries white text; `brandForeground` (neutral 800, 6.7:1) does.
-- coss's neutral `primary` stays the main action color, matching the
+- The neutral `primary` stays the main action color, matching the
   guide's charcoal slides; the brand colors tint surfaces and accents.
+
+## Amendment (2026-10-11): Glide
+
+Glide (Matthew Blode, OFL) replaces Inter as the sans, and Glide Mono
+replaces the system monospace for code. Glide is a variable UI sans (weight
+100–950, optical size) whose text design at small sizes keeps UI copy
+legible beside Garamond, in one file per style. The faces ship as woff2 in
+`packages/ui/src/fonts/` and are declared in `base.css`. EB Garamond is
+unchanged.

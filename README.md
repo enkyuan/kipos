@@ -1,27 +1,25 @@
 # Ouro
 
-An AI copilot for Forward Deployed Engineers. It shadows a Google Meet
-through a Vexa notetaker, shows the live, speaker-attributed transcript, and
-keeps the client's requirements and implementation gaps (with suggested
-questions) current in a private side panel. A Bun + Elysia API and a
-TanStack Start workspace, styled with coss/ui primitives on StyleX.
+An AI copilot for Forward Deployed Engineers, at its base scaffold: a Bun +
+Elysia API and a TanStack Start web app, styled with Base UI primitives on
+StyleX.
 
 ```bash
 bun install
-cp apps/api/.env.example apps/api/.env   # VEXA_API_KEY, Bedrock credentials
 bun run dev        # web http://localhost:3000 · api http://localhost:3001
 bun run verify     # the full gate: check + test + build
 ```
 
-In development, the Agentation toolbar (bottom right) annotates elements of
-the running app for agents. Live acceptance steps:
-[docs/testing.md](docs/testing.md#live-acceptance).
+The home page is the design kit: type (EB Garamond, Glide, Glide Mono),
+buttons, Blode icons, Blobatar avatars and Motion springs. In development,
+the Agentation toolbar annotates elements for agents and the DialKit panel
+tunes the values a component registers with `useDialKit`.
 
 | Path          | What                                                                |
 | ------------- | ------------------------------------------------------------------- |
-| `apps/api`    | HTTP API (Elysia, SQLite), Vexa and Anthropic integrations          |
-| `apps/web`    | FDE workspace (TanStack Start, StyleX)                              |
-| `packages/ui` | Design system: coss/ui on Base UI + StyleX                          |
+| `apps/api`    | HTTP API (Elysia, SQLite)                                           |
+| `apps/web`    | Web app (TanStack Start, StyleX)                                    |
+| `packages/ui` | Design system: Base UI + StyleX, tokens, fonts                      |
 | `docs/`       | Product, architecture, invariants, testing, decisions, work records |
 
 Start with [AGENTS.md](AGENTS.md): it is the working agreement for humans and

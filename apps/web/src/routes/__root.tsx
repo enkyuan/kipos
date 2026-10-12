@@ -1,11 +1,10 @@
 import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-router";
 import * as stylex from "@stylexjs/stylex";
 import { Button } from "@ouro/ui/button";
-import { ToastProvider } from "@ouro/ui/toast";
 import { color, fontSize, fontWeight, space } from "@ouro/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
-import { DevAnnotations } from "../dev-annotations";
+import { DevTools } from "../dev-tools";
 
 const styles = stylex.create({
   // Base UI portals render into <body>; isolating the app keeps every popup
@@ -47,8 +46,8 @@ function NotFound() {
     <main {...stylex.props(styles.notFound)}>
       <h1 {...stylex.props(styles.notFoundTitle)}>Page not found</h1>
       <p {...stylex.props(styles.notFoundText)}>There's nothing at this address.</p>
-      <Button variant="outline" render={<Link to="/" />}>
-        Back to meetings
+      <Button variant="outline" nativeButton={false} render={<Link to="/" />}>
+        Back home
       </Button>
     </main>
   );
@@ -61,10 +60,8 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ToastProvider>
-          <div {...stylex.props(styles.root)}>{children}</div>
-        </ToastProvider>
-        <DevAnnotations />
+        <div {...stylex.props(styles.root)}>{children}</div>
+        <DevTools />
         <Scripts />
       </body>
     </html>
