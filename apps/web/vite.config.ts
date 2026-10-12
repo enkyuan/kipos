@@ -2,7 +2,8 @@
 import stylex from "@stylexjs/unplugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { defineConfig, loadEnv, type ProxyOptions } from "vite";
+import { existsSync } from "node:fs";
+import { defineConfig, loadEnv, type Plugin, type ProxyOptions } from "vite";
 
 // One browser floor for JS and CSS (Chrome/Edge 111, Firefox 121, Safari
 // 16.4): every one supports oklch(), color-mix() and :has(), which the
@@ -27,6 +28,22 @@ function apiProxy(apiOrigin: string): Record<string, ProxyOptions> {
   return { "/api": { target: apiOrigin, changeOrigin: true } };
 }
 
+// Zodiak's file is gitignored (its license forbids redistribution), so CI and
+// fresh clones build with the fallback serif. A deploy sets
+// REQUIRE_BRAND_FONTS=1 so a build without the file fails instead of shipping
+// that fallback and a 404 per page load.
+const zodiak = new URL("../../packages/ui/src/fonts/zodiak-variable.woff2", import.meta.url);
+function requireBrandFonts(required: boolean): Plugin {
+  return {
+    name: "require-brand-fonts",
+    buildStart() {
+      if (required && !existsSync(zodiak)) {
+        this.error(`REQUIRE_BRAND_FONTS=1 but ${zodiak.pathname} is missing`);
+      }
+    },
+  };
+}
+
 // Plugin order is load-bearing: StyleX and Start both run before the React
 // plugin (StyleX to keep Fast Refresh, Start per its setup guide).
 export default defineConfig(({ mode }) => {
@@ -37,6 +54,7 @@ export default defineConfig(({ mode }) => {
   const port = Number(env.WEB_PORT || 3000);
   return {
     plugins: [
+      requireBrandFonts(env.REQUIRE_BRAND_FONTS === "1"),
       // The package's types declare only the default export, so the named
       // `vite` export the linter suggests does not typecheck.
       // oxlint-disable-next-line import/no-named-as-default-member

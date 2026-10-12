@@ -10,7 +10,7 @@ bun run dev        # web http://localhost:3000 · api http://localhost:3001
 bun run verify     # the full gate: check + test + build
 ```
 
-The home page is the design kit: type (EB Garamond, Glide, Glide Mono),
+The home page is the design kit: type (Zodiak, Glide, Glide Mono),
 buttons, Blode icons, Blobatar avatars and Motion springs. In development,
 the Agentation toolbar annotates elements for agents and the DialKit panel
 tunes the values a component registers with `useDialKit`.

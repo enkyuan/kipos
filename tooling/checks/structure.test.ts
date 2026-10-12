@@ -79,6 +79,15 @@ describe("workspaces", () => {
   });
 });
 
+describe("licensed assets", () => {
+  // Zodiak (Fontshare FFL) may be embedded but not redistributed, and this
+  // repository is public: no tracked path may carry it, whatever its case.
+  test("keeps Fontshare font files out of git", () => {
+    const tracked = Bun.spawnSync(["git", "ls-files"], { cwd: root }).stdout.toString().split("\n");
+    expect(tracked.filter((path) => /zodiak|(^|\/)[^/]*ffl[^/]*$/i.test(path))).toEqual([]);
+  });
+});
+
 describe("task records", () => {
   const states = ["SCOPED", "IMPLEMENTING", "REVIEW", "VERIFY", "DONE", "BLOCKED"];
 

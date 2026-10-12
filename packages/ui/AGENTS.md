@@ -15,8 +15,8 @@ typed API (`variant`, `size`, `xstyle`).
 ```text
 src/tokens/
   palette.stylex.ts    primitive OKLCH colors, read only by tokens.stylex.ts:
-                       Tailwind neutral/status shades and the brand ramps
-                       (darkSalmon, lightPink, lavenderBlush 50–950)
+                       warm neutrals (warm<lightness>), peach and petal,
+                       and Tailwind status shades
   tokens.stylex.ts     semantic roles plus brand roles as StyleX tokens:
                        color, radius, font (vars); space, fontSize,
                        lineHeight, fontWeight, tracking, shadow, motion,
@@ -26,9 +26,12 @@ src/tokens/
                        StyleX's layers, so it cannot override a property a
                        primitive sets.
 src/fonts/             Glide and Glide Mono (woff2, OFL.txt), declared in
-                       base.css
+                       base.css. base.css also declares Zodiak at
+                       zodiak-variable.woff2, which is gitignored: place the
+                       unmodified Fontshare file there; never commit it
 src/primitives/        one file per component, exported as `@ouro/ui/<name>`
-test/                  public-export contract
+test/                  public-export contract; color-role contrast and the
+                       radius ladder (tokens.test.ts)
 ```
 
 `tokens → primitives`. There is no other layer. The package imports no app,
@@ -66,13 +69,19 @@ router, or server code (oxlint enforces it).
 - `defineVars` for the groups a theme may override (`color`, `radius`,
   `font`), even where a value is the same in light and dark; everything else
   is `defineConsts`, inlined at build time.
-- Brand colors reach components as roles (`color.brand`, `brandText`,
-  `brandSurface`, ...), never ramp steps. A new ramp is named by its
-  nearest CSS named color and documented in an ADR
-  (`docs/decisions/0002-brand-typography-and-palette.md`).
-- Typography: `font.heading` (EB Garamond) for headings and the wordmark,
-  with `tracking.heading`; `font.sans` (Glide) for everything else;
-  `font.mono` (Glide Mono) for code.
+- Color follows 60 / 30 / 10 (`docs/decisions/0008-notebook-design-system.md`):
+  paper (`background`, `card`, `popover`), graphite (`secondary`, `muted`,
+  `accent`), colour (`primary`, `brand*`). Status roles sit outside it.
+  Brand colors reach components as roles, never palette entries; a new role
+  notes its contrast pairs in both themes beside its value.
+- Typography: `font.heading` (Zodiak) for headings and the wordmark, with
+  `tracking.heading` and an explicit `fontWeight` (400 or 500: headings
+  otherwise take the browser's bold, too heavy for Zodiak); `font.sans` (Glide)
+  for everything else; `font.mono`
+  (Glide Mono) for code. Never convert or subset the Zodiak file.
+- Radii form a concentric ladder (sm 10, md 14, lg 20, xl 26, xxl 32 px): a
+  child inset by the step between two radii takes the smaller one. Buttons
+  are pills.
 - StyleX evaluates styles at build time: values must be literals, token
   references, or template strings of them — no runtime computation.
 - `base.css` repeats a handful of token values in plain CSS (it cannot read

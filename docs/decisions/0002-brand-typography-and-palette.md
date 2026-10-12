@@ -1,7 +1,7 @@
 # 0002 — Brand typography and palette
 
 Date: 2026-10-11
-Status: accepted; typography amended 2026-10-11 (Glide replaces Inter, see below)
+Status: superseded by 0008-notebook-design-system.md (2026-10-11); typography amended 2026-10-11 (Glide replaces Inter, see below)
 
 ## Context
 

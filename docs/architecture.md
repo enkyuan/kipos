@@ -62,10 +62,11 @@ appended to `apps/web/src/app.css` in production and served from
 always wins over a base rule.
 
 Light and dark themes follow `prefers-color-scheme` through the color tokens.
-Typography pairs EB Garamond (headings, wordmark) with Glide (everything
-else) and Glide Mono (code); brand colors are OKLCH ramps exposed through
-brand roles (`docs/decisions/0002-brand-typography-and-palette.md`). The
-design kit is recorded in `docs/decisions/0007-base-ui-design-kit.md`.
+Typography pairs Zodiak (headings, wordmark) with Glide (everything else)
+and Glide Mono (code). Color follows a 60 / 30 / 10 split of paper, graphite
+and peach in OKLCH, exposed through semantic roles
+(`docs/decisions/0008-notebook-design-system.md`). The design kit is recorded
+in `docs/decisions/0007-base-ui-design-kit.md`.
 
 In development, the root shell mounts `src/dev-tools.tsx`: Agentation (a
 toolbar for annotating elements for agents) and the DialKit panel (live

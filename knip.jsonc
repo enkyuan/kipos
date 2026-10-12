@@ -21,8 +21,6 @@
       // so each exported module is an entry point.
       "entry": ["src/**/*.{ts,tsx}", "test/**/*.test.ts"],
       "project": ["src/**/*.{ts,tsx}", "test/**/*.ts"],
-      // Loaded from base.css, which Knip does not parse.
-      "ignoreDependencies": ["@fontsource-variable/eb-garamond"],
     },
     "packages/tsconfig": {
       // Consumed through tsconfig `extends`, which is not an import graph.

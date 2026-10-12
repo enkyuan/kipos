@@ -1,7 +1,7 @@
 # 0007 — Base UI design kit
 
 Date: 2026-10-11
-Status: accepted
+Status: accepted; palette and heading face superseded by 0008-notebook-design-system.md
 
 ## Context
 
