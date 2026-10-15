@@ -2,7 +2,7 @@
 import stylex from "@stylexjs/unplugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { defineConfig, loadEnv, type ProxyOptions } from "vite";
+import { defineConfig, loadEnv } from "vite";
 
 // One browser floor for JS and CSS (Chrome/Edge 111, Firefox 121, Safari
 // 16.4): every one supports oklch(), color-mix() and :has(), which the
@@ -19,21 +19,12 @@ const stylexCss = {
   },
 };
 
-// The browser calls the API on its own origin under /api (src/api/client.ts);
-// development and preview forward it, path unchanged, to apps/api, which
-// serves the same /api paths. Production puts the same rule in front of
-// both apps (docs/architecture.md).
-function apiProxy(apiOrigin: string): Record<string, ProxyOptions> {
-  return { "/api": { target: apiOrigin, changeOrigin: true } };
-}
-
 // Plugin order is load-bearing: StyleX and Start both run before the React
 // plugin (StyleX to keep Fast Refresh, Start per its setup guide).
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const apiOrigin = env.API_ORIGIN || "http://localhost:3001";
   // strictPort: a busy port fails loudly instead of moving the app to a port
-  // nobody is looking at (or proxying to).
+  // nobody is looking at.
   const port = Number(env.WEB_PORT || 3000);
   return {
     plugins: [
@@ -44,8 +35,8 @@ export default defineConfig(({ mode }) => {
       tanstackStart(),
       viteReact(),
     ],
-    server: { port, strictPort: true, proxy: apiProxy(apiOrigin) },
-    preview: { port, strictPort: true, proxy: apiProxy(apiOrigin) },
+    server: { port, strictPort: true },
+    preview: { port, strictPort: true },
     build: { target: browserFloor },
   };
 });

@@ -7,6 +7,7 @@ const styles = stylex.create({
   header: {
     display: "flex",
     alignItems: "baseline",
+    maxWidth: "48rem",
     marginInline: "auto",
     paddingBlock: space.s5,
     paddingInline: { default: space.s4, [media.sm]: space.s6 },
@@ -19,37 +20,27 @@ const styles = stylex.create({
     letterSpacing: tracking.heading,
     textDecoration: "none",
   },
-  narrow: { maxWidth: "48rem" },
-  wide: { maxWidth: "80rem" },
   main: {
     display: "flex",
     flexDirection: "column",
     gap: space.s6,
+    maxWidth: "48rem",
     marginInline: "auto",
     paddingBottom: space.s16,
     paddingInline: { default: space.s4, [media.sm]: space.s6 },
   },
 });
 
-/**
- * The FDE workspace frame: the wordmark and a centered column of work,
- * `wide` for pages with a side panel.
- */
-export function WorkspaceLayout({
-  children,
-  width = "narrow",
-}: {
-  children: ReactNode;
-  width?: "narrow" | "wide";
-}) {
+/** The page frame: the wordmark and a centered column of content. */
+export function PageFrame({ children }: { children: ReactNode }) {
   return (
     <>
-      <header {...stylex.props(styles.header, styles[width])}>
+      <header {...stylex.props(styles.header)}>
         <Link to="/" {...stylex.props(styles.wordmark)}>
           kipos
         </Link>
       </header>
-      <main {...stylex.props(styles.main, styles[width])}>{children}</main>
+      <main {...stylex.props(styles.main)}>{children}</main>
     </>
   );
 }

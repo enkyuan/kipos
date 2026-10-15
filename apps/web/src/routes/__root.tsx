@@ -1,8 +1,9 @@
 import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-router";
+import garamondUrl from "@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2?url";
+import interUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import * as stylex from "@stylexjs/stylex";
 import { Button } from "@kipos/ui/button";
-import { ToastProvider } from "@kipos/ui/toast";
-import { color, fontSize, fontWeight, space } from "@kipos/ui/tokens.stylex";
+import { color, font, fontSize, fontWeight, space, tracking } from "@kipos/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
 import { DevAnnotations } from "../dev-annotations";
@@ -21,7 +22,12 @@ const styles = stylex.create({
     padding: space.s6,
     textAlign: "center",
   },
-  notFoundTitle: { fontSize: fontSize.xxl, fontWeight: fontWeight.semibold },
+  notFoundTitle: {
+    fontFamily: font.heading,
+    fontSize: fontSize.xxl,
+    fontWeight: fontWeight.medium,
+    letterSpacing: tracking.heading,
+  },
   notFoundText: { color: color.mutedForeground },
 });
 
@@ -33,6 +39,15 @@ export const Route = createRootRoute({
       { title: "Kipos" },
     ],
     links: [
+      // The latin files base.css loads: preloading them lets text paint in its
+      // own font instead of swapping after the stylesheet is parsed.
+      ...[garamondUrl, interUrl].map((href) => ({
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href,
+        crossOrigin: "anonymous" as const,
+      })),
       { rel: "stylesheet", href: appCss },
       ...(import.meta.env.DEV ? [{ rel: "stylesheet", href: "/virtual:stylex.css" }] : []),
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -48,7 +63,7 @@ function NotFound() {
       <h1 {...stylex.props(styles.notFoundTitle)}>Page not found</h1>
       <p {...stylex.props(styles.notFoundText)}>There's nothing at this address.</p>
       <Button variant="outline" render={<Link to="/" />}>
-        Back to meetings
+        Back home
       </Button>
     </main>
   );
@@ -61,9 +76,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <ToastProvider>
-          <div {...stylex.props(styles.root)}>{children}</div>
-        </ToastProvider>
+        <div {...stylex.props(styles.root)}>{children}</div>
         <DevAnnotations />
         <Scripts />
       </body>

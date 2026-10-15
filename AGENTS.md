@@ -2,10 +2,9 @@
 
 ## Purpose
 
-Kipos is an AI copilot for Forward Deployed Engineers, in early development: a
-Bun + Elysia API and a TanStack Start workspace. It shadows a Google Meet
-through a Vexa notetaker, shows the live transcript, and keeps the client's
-requirements and implementation gaps current as the meeting runs.
+Kipos is a Grok bot for students, in early development: a Bun + Elysia API
+and a TanStack Start web app. Nothing of the product is built yet beyond the
+shell; `docs/product.md` records what exists.
 
 This repository is set up for iteration at high speed: small vertical slices,
 fast local feedback, and a gate that catches drift mechanically so review can
@@ -54,14 +53,14 @@ A strong change is easy to locate, explain, test, and delete.
 │   │   ├── migrations/      # SQLite migrations, applied in filename order
 │   │   └── src/
 │   │       ├── server.ts    # process composition: env, resources, listen
-│   │       ├── app.ts       # createApp(deps): the HTTP surface; exports `App`
+│   │       ├── app.ts       # createApp(): the HTTP surface; exports `App`
+│   │       ├── health/      # liveness route
 │   │       ├── <feature>/   # one folder per product concept (routes, store)
 │   │       └── *.ts         # cross-feature primitives (env, database, errors)
 │   └── web/                 # @kipos/web — TanStack Start + React + StyleX
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
-│       │   ├── features/    # product concepts (workspace, meetings, analysis)
-│       │   └── api/         # the typed Eden client to apps/api
+│       │   └── features/    # product concepts (page-frame)
 │       └── test/            # tests against the production build
 ├── packages/
 │   ├── ui/                  # @kipos/ui — coss/ui primitives on StyleX
@@ -105,7 +104,8 @@ Rules (enforced by `tooling/oxlint.json` and `tooling/checks/`):
 - `packages/ui` never imports an app, a router, or a server framework.
 - `apps/api` never imports `@kipos/ui`, `@kipos/web`, or React.
 - `apps/web` imports `@kipos/api` with `import type` only, and only in
-  `src/api/client.ts`; it never imports API source or Bun built-ins.
+  `src/api/client.ts` (created with the first API call); it never imports
+  API source or Bun built-ins.
 - Feature folders never import each other, in either app.
 - `apps/web` consumes `@kipos/ui` through its package exports only.
 - Components read semantic tokens (`@kipos/ui/tokens.stylex`), never palette
@@ -143,9 +143,9 @@ If the answers are weak, do not add it.
 ## Naming
 
 Names are architecture. Files name the owned concept (`routes.ts`, `store.ts`,
-`start-shadowing.ts`, `meeting-view.tsx`); functions read as actions
-(`createApp`, `openDatabase`, `startShadowing`); types name domain concepts
-(`MeetingStore`, `StartOutcome`), not implementation accidents.
+`app.ts`, `page-frame.tsx`); functions read as actions
+(`createApp`, `openDatabase`, `readEnv`); types name domain concepts
+(`Env`, `ApiError`), not implementation accidents.
 
 Filenames are kebab-case. Tests sit beside the code they prove
 (`routes.test.ts`), except `apps/web/test/`, which runs against the build.
@@ -163,7 +163,7 @@ record.
 
 ```bash
 bun install
-bun run dev            # api on :3001 (watch; needs apps/api/.env), web on :3000 (HMR, /api proxied)
+bun run dev            # api on :3001 (watch; apps/api/.env is optional), web on :3000 (HMR)
 bun run check          # format, lint, typecheck, knip — seconds
 bun run test           # unit, route, SSR-build, and structure tests
 bun run verify         # check + test + build: the full gate CI runs
@@ -173,9 +173,9 @@ Work in the smallest vertical slice that a person could use or a test could
 prove: an endpoint plus its test, a section plus its build assertion. Run
 `bun run check` continuously; run `bun run verify` before handing off.
 
-Because `apps/web` type-checks against `App` from `apps/api`, an API contract
-change breaks `bun run typecheck` at every call site. Let the type error be the
-to-do list.
+Once `apps/web` has its Eden client (added with the first API call), it
+type-checks against `App` from `apps/api`, so an API contract change breaks
+`bun run typecheck` at every call site. Let the type error be the to-do list.
 
 ## Stateful task records
 
@@ -209,7 +209,7 @@ Keep the primary checkout clean on `main`. Concurrent tasks get isolated
 worktrees outside it:
 
 ```bash
-git worktree add ../kipos-wt/feat-requirement-extraction -b feat/requirement-extraction origin/main
+git worktree add ../kipos-wt/feat-study-sessions -b feat/study-sessions origin/main
 ```
 
 One owner controls one worktree at a time. Plan parallel work around conflict
@@ -286,10 +286,9 @@ without need? Behavior must not change during this pass.
 ## Testing
 
 Tests describe guarantees, not implementation details:
-`treats a repeat join, in any letter case, as the same entry`, not
-`calls insert twice`.
+`answers an unknown route with the typed 404`, not `calls the error handler`.
 
-- API features test through `createApp(deps).handle(request)` with a real
+- API features test through `createApp(...).handle(request)` with a real
   SQLite database (`openDatabase(":memory:")`), asserting durable state as well
   as the response.
 - Web tests run against the production build (`dist/`), the artifact a
