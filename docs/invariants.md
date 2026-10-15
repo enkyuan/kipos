@@ -79,7 +79,7 @@ Proven in `apps/api/src/analysis/*.test.ts`.
 ## Boundaries
 
 - **No API runtime in the web bundle.** Only `apps/web/src/api/client.ts`
-  imports `@ouro/api`, and with `import type` only. Proven in
+  imports `@kipos/api`, and with `import type` only. Proven in
   `tooling/checks/structure.test.ts`.
 - **Features never import each other**, in either app. Enforced by
   `tooling/oxlint.json`.

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { AnalysisState } from "#api/client";
-import { Spinner } from "@ouro/ui/spinner";
-import { color, fontSize, radius, space } from "@ouro/ui/tokens.stylex";
+import { Spinner } from "@kipos/ui/spinner";
+import { color, fontSize, radius, space } from "@kipos/ui/tokens.stylex";
 import { AnimatePresence, motion } from "motion/react";
 
 const styles = stylex.create({

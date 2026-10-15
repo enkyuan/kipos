@@ -50,9 +50,9 @@ Imports across folders go through the package aliases (`#api/*`,
 ## Styling
 
 - Style with `stylex.create` beside the component. Pass styles down through a
-  component's `xstyle` prop; `@ouro/ui` primitives take no `className` or
+  component's `xstyle` prop; `@kipos/ui` primitives take no `className` or
   `style`.
-- Read values from `@ouro/ui/tokens.stylex` (`color`, `space`, `fontSize`,
+- Read values from `@kipos/ui/tokens.stylex` (`color`, `space`, `fontSize`,
   `radius`, `media`, ...). No raw hex, rgb, or pixel spacing in app code.
 - Brand: headings and the wordmark use `font.heading` (EB Garamond) with
   `tracking.heading`; body and UI text stay Inter. Brand color comes from
@@ -61,7 +61,7 @@ Imports across folders go through the package aliases (`#api/*`,
   (`{ default: ..., [media.sm]: ... }`), not separate rules.
 - Light and dark follow the system preference through the tokens; app code
   never branches on color scheme.
-- Global CSS is limited to `app.css`, which imports `@ouro/ui/base.css`.
+- Global CSS is limited to `app.css`, which imports `@kipos/ui/base.css`.
 
 ## Data
 

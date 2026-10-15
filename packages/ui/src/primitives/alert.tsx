@@ -59,7 +59,7 @@ export type AlertVariant = keyof typeof variants;
 type Styled<Props> = Omit<Props, "className" | "style"> & { xstyle?: stylex.StyleXStyles };
 
 /**
- * `import { Alert, AlertTitle, AlertDescription } from "@ouro/ui/alert"`.
+ * `import { Alert, AlertTitle, AlertDescription } from "@kipos/ui/alert"`.
  * It is `role="alert"` by default, as in coss; pass `role="note"` (or
  * `"status"`) for standing information that should not interrupt.
  */

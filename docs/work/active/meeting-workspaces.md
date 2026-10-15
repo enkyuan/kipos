@@ -2,7 +2,7 @@
 
 State: REVIEW
 Branch: feat/meeting-workspaces
-Worktree: ../ouro-wt/feat-meeting-workspaces
+Worktree: ../kipos-wt/feat-meeting-workspaces
 Base SHA: db4e01b
 Head SHA: see branch
 Depends on: meeting-ingestion (same base branch)

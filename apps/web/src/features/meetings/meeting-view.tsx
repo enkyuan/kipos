@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@ouro/ui/button";
-import { Spinner } from "@ouro/ui/spinner";
-import { color, font, fontSize, fontWeight, media, space, tracking } from "@ouro/ui/tokens.stylex";
+import { Button } from "@kipos/ui/button";
+import { Spinner } from "@kipos/ui/spinner";
+import { color, font, fontSize, fontWeight, media, space, tracking } from "@kipos/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import { MeetingLink } from "./meeting-link";
 import { MeetingStatusPanel } from "./meeting-status";

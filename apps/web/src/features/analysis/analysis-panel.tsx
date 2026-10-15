@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
 import type { CandidateIssue } from "#api/client";
-import { Alert, AlertDescription, AlertTitle } from "@ouro/ui/alert";
-import { Badge } from "@ouro/ui/badge";
-import { Card, CardHeader, CardPanel, CardTitle } from "@ouro/ui/card";
-import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@ouro/ui/collapsible";
+import { Alert, AlertDescription, AlertTitle } from "@kipos/ui/alert";
+import { Badge } from "@kipos/ui/badge";
+import { Card, CardHeader, CardPanel, CardTitle } from "@kipos/ui/card";
+import { Collapsible, CollapsiblePanel, CollapsibleTrigger } from "@kipos/ui/collapsible";
 import {
   color,
   fontSize,
@@ -13,7 +13,7 @@ import {
   motion as timing,
   radius,
   space,
-} from "@ouro/ui/tokens.stylex";
+} from "@kipos/ui/tokens.stylex";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useState, type ReactNode } from "react";
 import { IssueCard } from "./issue-card";

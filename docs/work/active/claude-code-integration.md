@@ -2,7 +2,7 @@
 
 State: REVIEW
 Branch: feat/claude-code-integration
-Worktree: ../ouro-wt/feat-claude-code-integration
+Worktree: ../kipos-wt/feat-claude-code-integration
 Base SHA: 52e8cc3
 Head SHA: (see branch)
 Depends on: none

@@ -1,5 +1,5 @@
 import { treaty } from "@elysiajs/eden";
-import type { App } from "@ouro/api";
+import type { App } from "@kipos/api";
 
 export type {
   AnalysisState,
@@ -9,7 +9,7 @@ export type {
   MeetingSession,
   MeetingStatus,
   TranscriptUtterance,
-} from "@ouro/api";
+} from "@kipos/api";
 
 /**
  * The typed boundary to apps/api. Routes, bodies and responses come from

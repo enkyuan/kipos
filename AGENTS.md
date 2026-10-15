@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Ouro is an AI copilot for Forward Deployed Engineers, in early development: a
+Kipos is an AI copilot for Forward Deployed Engineers, in early development: a
 Bun + Elysia API and a TanStack Start workspace. It shadows a Google Meet
 through a Vexa notetaker, shows the live transcript, and keeps the client's
 requirements and implementation gaps current as the meeting runs.
@@ -49,7 +49,7 @@ A strong change is easy to locate, explain, test, and delete.
 ├── AGENTS.md
 ├── apps/
 │   ├── AGENTS.md            # frontend delta
-│   ├── api/                 # @ouro/api — Bun + Elysia HTTP API
+│   ├── api/                 # @kipos/api — Bun + Elysia HTTP API
 │   │   ├── AGENTS.md
 │   │   ├── migrations/      # SQLite migrations, applied in filename order
 │   │   └── src/
@@ -57,14 +57,14 @@ A strong change is easy to locate, explain, test, and delete.
 │   │       ├── app.ts       # createApp(deps): the HTTP surface; exports `App`
 │   │       ├── <feature>/   # one folder per product concept (routes, store)
 │   │       └── *.ts         # cross-feature primitives (env, database, errors)
-│   └── web/                 # @ouro/web — TanStack Start + React + StyleX
+│   └── web/                 # @kipos/web — TanStack Start + React + StyleX
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
 │       │   ├── features/    # product concepts (workspace, meetings, analysis)
 │       │   └── api/         # the typed Eden client to apps/api
 │       └── test/            # tests against the production build
 ├── packages/
-│   ├── ui/                  # @ouro/ui — coss/ui primitives on StyleX
+│   ├── ui/                  # @kipos/ui — coss/ui primitives on StyleX
 │   └── tsconfig/            # shared compiler options
 ├── docs/
 │   ├── product.md           # what / who / non-goals
@@ -103,12 +103,12 @@ packages/ui            bun:sqlite, elysia
 Rules (enforced by `tooling/oxlint.json` and `tooling/checks/`):
 
 - `packages/ui` never imports an app, a router, or a server framework.
-- `apps/api` never imports `@ouro/ui`, `@ouro/web`, or React.
-- `apps/web` imports `@ouro/api` with `import type` only, and only in
+- `apps/api` never imports `@kipos/ui`, `@kipos/web`, or React.
+- `apps/web` imports `@kipos/api` with `import type` only, and only in
   `src/api/client.ts`; it never imports API source or Bun built-ins.
 - Feature folders never import each other, in either app.
-- `apps/web` consumes `@ouro/ui` through its package exports only.
-- Components read semantic tokens (`@ouro/ui/tokens.stylex`), never palette
+- `apps/web` consumes `@kipos/ui` through its package exports only.
+- Components read semantic tokens (`@kipos/ui/tokens.stylex`), never palette
   shades.
 - Circular imports are forbidden.
 
@@ -209,7 +209,7 @@ Keep the primary checkout clean on `main`. Concurrent tasks get isolated
 worktrees outside it:
 
 ```bash
-git worktree add ../ouro-wt/feat-requirement-extraction -b feat/requirement-extraction origin/main
+git worktree add ../kipos-wt/feat-requirement-extraction -b feat/requirement-extraction origin/main
 ```
 
 One owner controls one worktree at a time. Plan parallel work around conflict

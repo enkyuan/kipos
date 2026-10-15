@@ -227,7 +227,7 @@ export type ButtonProps = Omit<useRender.ComponentProps<"button">, "className" |
   xstyle?: stylex.StyleXStyles;
 };
 
-/** `import { Button } from "@ouro/ui/button"`. Pass `render={<a />}` for a link. */
+/** `import { Button } from "@kipos/ui/button"`. Pass `render={<a />}` for a link. */
 export function Button({
   variant = "default",
   size = "default",

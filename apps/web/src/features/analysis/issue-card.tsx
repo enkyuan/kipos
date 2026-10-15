@@ -1,8 +1,8 @@
 import * as stylex from "@stylexjs/stylex";
 import type { CandidateIssue } from "#api/client";
-import { Badge, type BadgeVariant } from "@ouro/ui/badge";
-import { Button } from "@ouro/ui/button";
-import { color, fontSize, fontWeight, lineHeight, radius, space } from "@ouro/ui/tokens.stylex";
+import { Badge, type BadgeVariant } from "@kipos/ui/badge";
+import { Button } from "@kipos/ui/button";
+import { color, fontSize, fontWeight, lineHeight, radius, space } from "@kipos/ui/tokens.stylex";
 import { EvidenceLinks } from "./evidence-links";
 import type { EvidenceLine } from "./use-analysis";
 

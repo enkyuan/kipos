@@ -1,5 +1,5 @@
 {
-  "extends": "@ouro/tsconfig/base.json",
+  "extends": "@kipos/tsconfig/base.json",
   "compilerOptions": {
     "types": ["vite/client"],
     "paths": {

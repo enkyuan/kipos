@@ -27,7 +27,7 @@ src/tokens/
                        below StyleX's layers, so it cannot override a
                        property a primitive sets.
 src/primitives/        one file per coss component, exported as
-                       `@ouro/ui/<name>`
+                       `@kipos/ui/<name>`
 test/                  public-export contract
 ```
 

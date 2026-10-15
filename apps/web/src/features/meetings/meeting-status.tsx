@@ -1,9 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
 import type { MeetingSession, MeetingStatus } from "#api/client";
-import { Alert, AlertDescription, AlertTitle } from "@ouro/ui/alert";
-import { Badge, type BadgeSize, type BadgeVariant } from "@ouro/ui/badge";
-import { Spinner } from "@ouro/ui/spinner";
-import { color, fontSize, motion, radius, space } from "@ouro/ui/tokens.stylex";
+import { Alert, AlertDescription, AlertTitle } from "@kipos/ui/alert";
+import { Badge, type BadgeSize, type BadgeVariant } from "@kipos/ui/badge";
+import { Spinner } from "@kipos/ui/spinner";
+import { color, fontSize, motion, radius, space } from "@kipos/ui/tokens.stylex";
 import type { Connection } from "./use-meeting";
 
 const pulse = stylex.keyframes({ "50%": { opacity: 0.3 } });
@@ -42,7 +42,7 @@ const COPY: Record<MeetingStatus, StatusCopy> = {
   },
   waiting_room: {
     label: "Waiting to be admitted",
-    detail: "The host must admit “Ouro notetaker” in Google Meet. Nothing is recorded until then.",
+    detail: "The host must admit “Kipos notetaker” in Google Meet. Nothing is recorded until then.",
     variant: "warning",
   },
   needs_help: {

@@ -187,7 +187,7 @@ export type ToastProviderProps = Omit<Toast.Provider.Props, "toastManager"> & {
 };
 
 /**
- * `import { ToastProvider, toastManager } from "@ouro/ui/toast"`. Render
+ * `import { ToastProvider, toastManager } from "@kipos/ui/toast"`. Render
  * once around the app; toasts stack in one corner and expand on hover.
  */
 export function ToastProvider({

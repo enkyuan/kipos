@@ -64,7 +64,7 @@ export type CheckboxProps = Omit<BaseCheckbox.Root.Props, "className" | "style">
 };
 
 /**
- * `import { Checkbox } from "@ouro/ui/checkbox"`. Inside `Field` it takes
+ * `import { Checkbox } from "@kipos/ui/checkbox"`. Inside `Field` it takes
  * the field's label and validity; with `name` it submits with its form.
  */
 export function Checkbox({ xstyle, ...props }: CheckboxProps): ReactElement {

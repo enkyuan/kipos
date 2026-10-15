@@ -1,8 +1,8 @@
 import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-router";
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@ouro/ui/button";
-import { ToastProvider } from "@ouro/ui/toast";
-import { color, fontSize, fontWeight, space } from "@ouro/ui/tokens.stylex";
+import { Button } from "@kipos/ui/button";
+import { ToastProvider } from "@kipos/ui/toast";
+import { color, fontSize, fontWeight, space } from "@kipos/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
 import { DevAnnotations } from "../dev-annotations";
@@ -30,7 +30,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ouro" },
+      { title: "Kipos" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

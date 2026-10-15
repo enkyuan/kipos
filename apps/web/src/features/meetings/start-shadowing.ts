@@ -28,5 +28,8 @@ export async function startShadowing(
   } catch {
     // A network failure lands here; it reads the same as a 5xx to the person.
   }
-  return { kind: "unavailable", message: "Couldn't reach the Ouro server. Try again in a moment." };
+  return {
+    kind: "unavailable",
+    message: "Couldn't reach the Kipos server. Try again in a moment.",
+  };
 }

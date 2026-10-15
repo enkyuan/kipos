@@ -13,7 +13,7 @@ export type FormProps<Values extends Record<string, unknown>> = Omit<
 > & { xstyle?: stylex.StyleXStyles };
 
 /**
- * `import { Form } from "@ouro/ui/form"`. Base UI validates every `Field`
+ * `import { Form } from "@kipos/ui/form"`. Base UI validates every `Field`
  * on submit, focuses the first invalid one, and calls `onFormSubmit` with
  * the values by field name only when all are valid. Server-side failures
  * go back through `errors` (`{ email: "…" }`) and show in each FieldError.

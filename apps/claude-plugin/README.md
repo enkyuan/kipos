@@ -1,4 +1,4 @@
-# Superpower for Claude Code (`@ouro/claude-plugin`)
+# Superpower for Claude Code (`@kipos/claude-plugin`)
 
 Claude Code does the coding. This plugin gives it the client's business context, and lets it ask a real employee, by **phone call or text (Dial)**, when a business rule is missing, instead of guessing.
 
@@ -15,7 +15,7 @@ Claude Code ── this plugin: MCP server (dist/server.mjs) + skill + SessionSt
 ```bash
 bun install && bun run --cwd apps/claude-plugin build      # only after changing src/
 claude plugin marketplace add "$(pwd)/apps/claude-plugin"
-claude plugin install superpower@ouro
+claude plugin install superpower@kipos
 ```
 
 Claude Code asks for `api_url` (default: the deployed dial service), `api_token` (ask the team; it's a secret), `engagement_id` (`acme` for the demo) and your name. Change them later with `/plugin`. For a quick trial without installing: `claude --plugin-dir apps/claude-plugin`.

@@ -79,7 +79,7 @@ function useCardPart(part: keyof typeof styles, { render, xstyle, ...props }: Pa
 
 /**
  * `import { Card, CardHeader, CardTitle, CardDescription, CardPanel,
- * CardFooter } from "@ouro/ui/card"`. Pass `render={<article />}` for a
+ * CardFooter } from "@kipos/ui/card"`. Pass `render={<article />}` for a
  * self-contained item, and `render={<h3 />}` to make a title a heading.
  */
 export function Card(props: PartProps): ReactElement {

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@ouro/ui/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@ouro/ui/input-group";
-import { color } from "@ouro/ui/tokens.stylex";
+import { Button } from "@kipos/ui/button";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@kipos/ui/input-group";
+import { color } from "@kipos/ui/tokens.stylex";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useEffect, useState, type MouseEvent } from "react";
 

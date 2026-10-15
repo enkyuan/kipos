@@ -25,7 +25,7 @@ dependencies.
 
 - Placed in `apps/` as a deployable, but without a `package.json`: it is a
   static artifact, not a bun workspace, so it stays out of the
-  `--filter '@ouro/*'` fan-out and the workspace structure checks.
+  `--filter '@kipos/*'` fan-out and the workspace structure checks.
 - The dc-runtime React logic was ported to vanilla JS (same tick/step model,
   same timings) instead of adding React as a dependency.
 - Added `prefers-reduced-motion` handling and responsive fixes the source

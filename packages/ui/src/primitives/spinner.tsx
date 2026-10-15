@@ -26,7 +26,7 @@ export type SpinnerProps = Omit<ComponentProps<"svg">, "className" | "style"> & 
 };
 
 /**
- * `import { Spinner } from "@ouro/ui/spinner"`. Decorative: put it beside
+ * `import { Spinner } from "@kipos/ui/spinner"`. Decorative: put it beside
  * text in a status region (`<output>`) that says what is loading.
  */
 export function Spinner({ xstyle, ...props }: SpinnerProps): ReactElement {
