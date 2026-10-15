@@ -41,7 +41,7 @@ working agreement (AGENTS.md) adapted from ryo and kaji.
   layouts render; an invalid email shows the field error with focus kept; a
   valid email shows the confirmation; no console errors.
 - Boundary guards proven by temporary violations, each rejected: vague
-  filename, runtime `@ouro/api` import in web, `@ouro/ui` in the API, palette
+  filename, runtime `@kipos/api` import in web, `@kipos/ui` in the API, palette
   in a primitive, router in ui, unexported primitive, deep import into ui
   source, API route rename (web typecheck), unpinned version, invalid task
   state.

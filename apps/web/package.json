@@ -1,5 +1,5 @@
 {
-  "name": "@ouro/web",
+  "name": "@kipos/web",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@elysiajs/eden": "1.4.9",
-    "@ouro/ui": "workspace:*",
+    "@kipos/ui": "workspace:*",
     "@stylexjs/stylex": "0.19.1",
     "@tanstack/react-router": "1.170.42",
     "@tanstack/react-start": "1.168.61",
@@ -26,8 +26,8 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "@ouro/api": "workspace:*",
-    "@ouro/tsconfig": "workspace:*",
+    "@kipos/api": "workspace:*",
+    "@kipos/tsconfig": "workspace:*",
     "@stylexjs/unplugin": "0.19.1",
     "@types/node": "26.6.5",
     "@types/react": "19.3.0",

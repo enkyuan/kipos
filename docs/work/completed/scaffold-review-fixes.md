@@ -24,7 +24,7 @@ Resolve the independent modularity review of the initial scaffold.
 - Button hover sits under `media.hover` (as Tailwind's `hover:`); focus ring
   uses the shadow tokens; spinner slows under reduced motion.
 - Footer year removed (hydration risk); the landing route sets its own head.
-- Structure check: only `src/api/client.ts` may import `@ouro/api`, types
+- Structure check: only `src/api/client.ts` may import `@kipos/api`, types
   only, across multi-line and dynamic imports; bare `bun` blocked in web.
 - Migration rollback is now proven by a test.
 

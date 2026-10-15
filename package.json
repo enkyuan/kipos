@@ -1,5 +1,5 @@
 {
-  "name": "@ouro/monorepo",
+  "name": "@kipos/monorepo",
   "private": true,
   "license": "UNLICENSED",
   "workspaces": [
@@ -8,16 +8,16 @@
   ],
   "type": "module",
   "scripts": {
-    "dev": "bun run --filter @ouro/api --filter @ouro/web dev",
+    "dev": "bun run --filter @kipos/api --filter @kipos/web dev",
     "dev:api": "bun run --cwd apps/api dev",
     "dev:web": "bun run --cwd apps/web dev",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint --config tooling/oxlint.json --deny-warnings apps packages tooling",
-    "typecheck": "bun run --sequential --filter '@ouro/*' typecheck",
+    "typecheck": "bun run --sequential --filter '@kipos/*' typecheck",
     "knip": "knip",
-    "test": "bun run --sequential --filter '@ouro/*' test && bun test tooling",
-    "build": "bun run --sequential --filter '@ouro/*' build",
+    "test": "bun run --sequential --filter '@kipos/*' test && bun test tooling",
+    "build": "bun run --sequential --filter '@kipos/*' build",
     "check": "bun run format:check && bun run lint && bun run typecheck && bun run knip",
     "verify": "bun run check && bun run test && bun run build"
   },

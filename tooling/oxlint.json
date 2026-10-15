@@ -46,7 +46,7 @@
           {
             "patterns": [
               {
-                "group": ["@ouro/web", "@ouro/web/*", "@ouro/api", "@ouro/api/*", "**/apps/**"],
+                "group": ["@kipos/web", "@kipos/web/*", "@kipos/api", "@kipos/api/*", "**/apps/**"],
                 "message": "packages/ui never imports an app (docs/architecture.md)."
               },
               {
@@ -76,10 +76,10 @@
             "patterns": [
               {
                 "group": [
-                  "@ouro/web",
-                  "@ouro/web/*",
-                  "@ouro/ui",
-                  "@ouro/ui/*",
+                  "@kipos/web",
+                  "@kipos/web/*",
+                  "@kipos/ui",
+                  "@kipos/ui/*",
                   "react",
                   "react-dom"
                 ],
@@ -91,7 +91,7 @@
       }
     },
     {
-      // apps/web: @ouro/ui through its public exports only, and the API as
+      // apps/web: @kipos/ui through its public exports only, and the API as
       // types only, through the Eden client (#api/client).
       "files": ["**/apps/web/src/**"],
       "rules": {
@@ -100,11 +100,11 @@
           {
             "patterns": [
               {
-                "group": ["@ouro/ui/src/*", "**/packages/ui/**"],
-                "message": "Consume @ouro/ui through its package exports (packages/ui/package.json)."
+                "group": ["@kipos/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @kipos/ui through its package exports (packages/ui/package.json)."
               },
               {
-                "group": ["**/apps/api/**", "@ouro/api/*", "bun", "bun:*"],
+                "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
                 "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
               },
               {
@@ -128,10 +128,10 @@
             "patterns": [
               {
                 "group": [
-                  "@ouro/web",
-                  "@ouro/web/*",
-                  "@ouro/ui",
-                  "@ouro/ui/*",
+                  "@kipos/web",
+                  "@kipos/web/*",
+                  "@kipos/ui",
+                  "@kipos/ui/*",
                   "react",
                   "react-dom"
                 ],
@@ -156,11 +156,11 @@
           {
             "patterns": [
               {
-                "group": ["@ouro/ui/src/*", "**/packages/ui/**"],
-                "message": "Consume @ouro/ui through its package exports (packages/ui/package.json)."
+                "group": ["@kipos/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @kipos/ui through its package exports (packages/ui/package.json)."
               },
               {
-                "group": ["**/apps/api/**", "@ouro/api/*", "bun", "bun:*"],
+                "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
                 "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
               },
               {

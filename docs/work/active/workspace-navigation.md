@@ -49,7 +49,7 @@ Must not modify: API, migrations.
   the back link covers the way out.
 - **Recording notice removed** (dialog alert and meeting-page toast), at
   the person's request. The consent checkbox stays: the API requires it.
-  The toast primitive (`@ouro/ui/toast`, `ToastProvider` in `__root.tsx`)
+  The toast primitive (`@kipos/ui/toast`, `ToastProvider` in `__root.tsx`)
   now has no caller; kept for now, a deletion candidate.
 - **"Requesting notetaker"** shows a spinner inside the badge, like the
   recording dot, and no detail sentence.
@@ -93,7 +93,7 @@ Must not modify: API, migrations.
   who to ask and the gap, why it matters, evidence, actions. Empty: a
   dashed "Nothing to ask yet" box. Then collapsible rows with counts (Also
   open, Requirements, Resolved and dismissed), closed by default.
-- Rows use a new `@ouro/ui/collapsible` (coss collapsible on Base UI): the
+- Rows use a new `@kipos/ui/collapsible` (coss collapsible on Base UI): the
   panel animates its height with the strong ease-out, instantly under
   reduced motion; items indent under the row label. A new lead question
   leaves in 120 ms and the next settles in (`motion`, ADR 0005), never on

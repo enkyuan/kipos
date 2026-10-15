@@ -1,4 +1,4 @@
-# Ouro
+# Kipos
 
 An AI copilot for Forward Deployed Engineers. It shadows a Google Meet
 through a Vexa notetaker, shows the live, speaker-attributed transcript, and

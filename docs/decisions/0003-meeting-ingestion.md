@@ -13,7 +13,7 @@ keys, and the smallest stack that does it.
 ## Decisions
 
 1. **A Vexa bot per session** (`POST /bots`: `google_meet`, the meeting
-   code, `bot_name: "Ouro notetaker"`, `language: "en"`,
+   code, `bot_name: "Kipos notetaker"`, `language: "en"`,
    `recording_enabled: false`). The bot asks to join; the host admits it.
    It leaves after 2 minutes without remote audio
    (`automatic_leave.max_time_left_alone`; Vexa's default of 10 minutes

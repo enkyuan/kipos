@@ -48,7 +48,7 @@ Must not modify: migrations, `apps/web` (display stays as is).
   taken as offsets, as before.
 - **No migration.** No user has data; the only epoch rows are in the local
   dev database. Prefer deletion over compatibility machinery: reset
-  `apps/api/data/ouro.sqlite`, or fix the rows once by hand:
+  `apps/api/data/kipos.sqlite`, or fix the rows once by hand:
 
   ```sql
   UPDATE transcript_utterances AS u

@@ -37,7 +37,7 @@ export function readEnv(source: Source): Env {
   if (!/^\d+$/.test(rawPort) || port < 1 || port > 65_535) {
     throw new Error(`PORT must be an integer from 1 to 65535, got "${source.PORT}".`);
   }
-  const databasePath = source.DATABASE_PATH ?? "./data/ouro.sqlite";
+  const databasePath = source.DATABASE_PATH ?? "./data/kipos.sqlite";
   if (databasePath.trim() === "") {
     throw new Error("DATABASE_PATH must not be empty.");
   }

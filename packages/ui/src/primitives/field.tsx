@@ -29,7 +29,7 @@ const styles = stylex.create({
 
 type Styled<Props> = Omit<Props, "className" | "style"> & { xstyle?: stylex.StyleXStyles };
 
-/** `import { Field, FieldLabel, FieldDescription, FieldError } from "@ouro/ui/field"`. */
+/** `import { Field, FieldLabel, FieldDescription, FieldError } from "@kipos/ui/field"`. */
 export function Field({ xstyle, ...props }: Styled<BaseField.Root.Props>): ReactElement {
   return <BaseField.Root {...stylex.props(styles.root, xstyle)} data-slot="field" {...props} />;
 }

@@ -76,7 +76,7 @@ export type BadgeProps = Omit<useRender.ComponentProps<"span">, "className" | "s
   xstyle?: stylex.StyleXStyles;
 };
 
-/** `import { Badge } from "@ouro/ui/badge"`. A label, never a control. */
+/** `import { Badge } from "@kipos/ui/badge"`. A label, never a control. */
 export function Badge({
   variant = "default",
   size = "default",

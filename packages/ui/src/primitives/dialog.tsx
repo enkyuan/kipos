@@ -116,7 +116,7 @@ const styles = stylex.create({
   },
 });
 
-/** `import { Dialog } from "@ouro/ui/dialog"`: owns the open state. */
+/** `import { Dialog } from "@kipos/ui/dialog"`: owns the open state. */
 export const Dialog: typeof BaseDialog.Root = BaseDialog.Root;
 
 export function DialogTrigger(props: BaseDialog.Trigger.Props): ReactElement {

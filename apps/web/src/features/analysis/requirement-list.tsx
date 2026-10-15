@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { BusinessRequirement } from "#api/client";
-import { Badge, type BadgeVariant } from "@ouro/ui/badge";
-import { color, fontSize, lineHeight, space } from "@ouro/ui/tokens.stylex";
+import { Badge, type BadgeVariant } from "@kipos/ui/badge";
+import { color, fontSize, lineHeight, space } from "@kipos/ui/tokens.stylex";
 import { EvidenceLinks } from "./evidence-links";
 import type { EvidenceLine } from "./use-analysis";
 

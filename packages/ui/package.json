@@ -1,5 +1,5 @@
 {
-  "name": "@ouro/ui",
+  "name": "@kipos/ui",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -81,7 +81,7 @@
     "@stylexjs/stylex": "0.19.1"
   },
   "devDependencies": {
-    "@ouro/tsconfig": "workspace:*",
+    "@kipos/tsconfig": "workspace:*",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "react": "19.3.0",

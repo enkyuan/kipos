@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@ouro/ui/button";
-import { Checkbox } from "@ouro/ui/checkbox";
-import { Field, FieldError, FieldLabel } from "@ouro/ui/field";
-import { Form } from "@ouro/ui/form";
-import { Input } from "@ouro/ui/input";
-import { color, fontSize, fontWeight, lineHeight, space } from "@ouro/ui/tokens.stylex";
+import { Button } from "@kipos/ui/button";
+import { Checkbox } from "@kipos/ui/checkbox";
+import { Field, FieldError, FieldLabel } from "@kipos/ui/field";
+import { Form } from "@kipos/ui/form";
+import { Input } from "@kipos/ui/input";
+import { color, fontSize, fontWeight, lineHeight, space } from "@kipos/ui/tokens.stylex";
 import { useState } from "react";
 import { startShadowing, type StartOutcome } from "./start-shadowing";
 

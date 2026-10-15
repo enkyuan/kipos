@@ -5,7 +5,7 @@ Status: accepted
 
 ## Context
 
-Ouro needs a small backend and a public web surface that can change quickly
+Kipos needs a small backend and a public web surface that can change quickly
 without losing correctness, built by humans and agents in parallel.
 
 ## Decision
@@ -31,5 +31,5 @@ without losing correctness, built by humans and agents in parallel.
 - coss components are translated, not installed: the coss CLI emits Tailwind.
   `packages/ui/AGENTS.md` defines the translation.
 - StyleX cannot express descendant selectors; those few rules live in
-  `@ouro/ui/base.css`, keyed on `data-slot`.
+  `@kipos/ui/base.css`, keyed on `data-slot`.
 - SQLite limits the API to one writer process. That is the current scale.

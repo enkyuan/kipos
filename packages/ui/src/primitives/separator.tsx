@@ -13,7 +13,7 @@ export type SeparatorProps = Omit<BaseSeparator.Props, "className" | "style"> & 
   xstyle?: stylex.StyleXStyles;
 };
 
-/** `import { Separator } from "@ouro/ui/separator"`. A 1px hairline in the border color. */
+/** `import { Separator } from "@kipos/ui/separator"`. A 1px hairline in the border color. */
 export function Separator({
   orientation = "horizontal",
   xstyle,

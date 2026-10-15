@@ -1,4 +1,4 @@
-# Dial service (`@ouro/dial-service`)
+# Dial service (`@kipos/dial-service`)
 
 Vercel functions that let the Claude Code plugin ask client employees questions through [Dial](https://docs.getdial.ai): an AI voice call or an SMS. See `apps/claude-plugin/README.md` for how it is used.
 

@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { Link } from "@tanstack/react-router";
-import { color, font, fontSize, fontWeight, media, space, tracking } from "@ouro/ui/tokens.stylex";
+import { color, font, fontSize, fontWeight, media, space, tracking } from "@kipos/ui/tokens.stylex";
 import type { ReactNode } from "react";
 
 const styles = stylex.create({
@@ -46,7 +46,7 @@ export function WorkspaceLayout({
     <>
       <header {...stylex.props(styles.header, styles[width])}>
         <Link to="/" {...stylex.props(styles.wordmark)}>
-          ouro
+          kipos
         </Link>
       </header>
       <main {...stylex.props(styles.main, styles[width])}>{children}</main>

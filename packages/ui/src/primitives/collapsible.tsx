@@ -22,7 +22,7 @@ const styles = stylex.create({
 
 type Unstyled<P> = Omit<P, "className" | "style"> & { xstyle?: stylex.StyleXStyles };
 
-/** `import { Collapsible, CollapsibleTrigger, CollapsiblePanel } from "@ouro/ui/collapsible"`. */
+/** `import { Collapsible, CollapsibleTrigger, CollapsiblePanel } from "@kipos/ui/collapsible"`. */
 export function Collapsible({
   xstyle,
   ...props

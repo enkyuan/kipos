@@ -47,14 +47,14 @@ proves the pipeline. No seeded, inserted or hardcoded transcript counts.
 
 1. Two consenting people join a new Google Meet. Paste its link, tick the
    consent box, choose Start shadowing.
-2. The page moves to "Waiting to be admitted"; the host admits "Ouro
+2. The page moves to "Waiting to be admitted"; the host admits "Kipos
    notetaker"; "Listening" appears only once Vexa reports `active`.
 3. Speak at least six unscripted sentences across both people; lines
    appear with speaker names as each segment is confirmed.
 4. Refresh: the transcript is still there and no second bot joins.
 5. Duplicates: restart the API mid-meeting (the stream reconnects and the
    catch-up re-reads every segment), then confirm no line is stored twice:
-   `sqlite3 apps/api/data/ouro.sqlite "SELECT dedup_key, COUNT(*) FROM transcript_utterances GROUP BY 1 HAVING COUNT(*) > 1"`
+   `sqlite3 apps/api/data/kipos.sqlite "SELECT dedup_key, COUNT(*) FROM transcript_utterances GROUP BY 1 HAVING COUNT(*) > 1"`
    returns nothing.
 6. Failures: start with an invalid link (inline error, no bot); start
    another session and deny the bot in the waiting room ("Failed: The host

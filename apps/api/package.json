@@ -1,5 +1,5 @@
 {
-  "name": "@ouro/api",
+  "name": "@kipos/api",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -22,6 +22,6 @@
     "elysia": "1.4.30"
   },
   "devDependencies": {
-    "@ouro/tsconfig": "workspace:*"
+    "@kipos/tsconfig": "workspace:*"
   }
 }

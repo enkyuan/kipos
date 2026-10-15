@@ -11,7 +11,7 @@ import {
   radius,
   space,
   tracking,
-} from "@ouro/ui/tokens.stylex";
+} from "@kipos/ui/tokens.stylex";
 import { useEffect, useRef } from "react";
 
 const pulse = stylex.keyframes({ "50%": { opacity: 0.3 } });

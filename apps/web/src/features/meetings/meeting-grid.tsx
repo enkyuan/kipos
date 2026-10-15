@@ -9,7 +9,7 @@ import {
   DialogPopup,
   DialogTitle,
   DialogTrigger,
-} from "@ouro/ui/dialog";
+} from "@kipos/ui/dialog";
 import {
   color,
   font,
@@ -22,7 +22,7 @@ import {
   shadow,
   space,
   tracking,
-} from "@ouro/ui/tokens.stylex";
+} from "@kipos/ui/tokens.stylex";
 import { StatusBadge } from "./meeting-status";
 import { StartShadowingForm } from "./start-shadowing-form";
 import { useMeetings } from "./use-meetings";

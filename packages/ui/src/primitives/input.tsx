@@ -87,7 +87,7 @@ export type InputProps = Omit<BaseInput.Props, "className" | "style" | "size"> &
 };
 
 /**
- * `import { Input } from "@ouro/ui/input"`. Inside `Field.Root` it takes the
+ * `import { Input } from "@kipos/ui/input"`. Inside `Field.Root` it takes the
  * field's label, description and validity automatically.
  */
 export function Input({

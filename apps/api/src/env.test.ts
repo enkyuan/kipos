@@ -7,7 +7,7 @@ describe("readEnv", () => {
   test("uses development defaults, the hosted Vexa API, and no analysis without a Bedrock key", () => {
     expect(readEnv(vexa)).toEqual({
       port: 3001,
-      databasePath: "./data/ouro.sqlite",
+      databasePath: "./data/kipos.sqlite",
       vexa: { apiKey: "key", apiUrl: "https://api.cloud.vexa.ai", webhookSecret: "" },
       analysis: null,
     });

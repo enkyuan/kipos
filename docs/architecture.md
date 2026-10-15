@@ -12,7 +12,7 @@ browser ──▶ apps/web (TanStack Start, SSR)          :3000
                      │  ◀── Vexa: POST /api/webhooks/vexa (optional, signed)
                      │  ──▶ Anthropic: analysis (optional)
                      ▼
-                  SQLite (bun:sqlite, WAL)          apps/api/data/ouro.sqlite
+                  SQLite (bun:sqlite, WAL)          apps/api/data/kipos.sqlite
 ```
 
 | Package              | Owns                                                                                                   |
@@ -47,7 +47,7 @@ apps/web ──types only──▶ apps/api ──▶ elysia, bun:sqlite, Vexa, 
 ```
 
 - `apps/web` imports `type App` (and the meeting record types) from
-  `@ouro/api` and builds an Eden client from it. No API runtime code reaches
+  `@kipos/api` and builds an Eden client from it. No API runtime code reaches
   the web bundle, and no provider key ever leaves `apps/api`.
 - `packages/ui` knows nothing about either app.
 - Enforced by `tooling/oxlint.json` (import boundaries) and
@@ -125,7 +125,7 @@ the model.
 StyleX compiles every `stylex.create` call at build time into atomic CSS,
 appended to `apps/web/src/app.css` in production and served from
 `/virtual:stylex.css` in development. Cascade layers order it: `@layer base`
-(the coss base layer from `@ouro/ui/base.css`) below StyleX's `priority*`
+(the coss base layer from `@kipos/ui/base.css`) below StyleX's `priority*`
 layers, so a component style always wins over a base rule.
 
 Light and dark themes follow `prefers-color-scheme` through the color tokens.

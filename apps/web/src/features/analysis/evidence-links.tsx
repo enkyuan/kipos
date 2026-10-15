@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { color, font, fontSize, lineHeight, radius, space } from "@ouro/ui/tokens.stylex";
+import { color, font, fontSize, lineHeight, radius, space } from "@kipos/ui/tokens.stylex";
 import type { EvidenceLine } from "./use-analysis";
 
 const styles = stylex.create({

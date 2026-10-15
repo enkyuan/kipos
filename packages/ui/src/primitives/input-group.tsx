@@ -86,7 +86,7 @@ type PartProps = Omit<ComponentProps<"div">, "className" | "style"> & {
 
 /**
  * `import { InputGroup, InputGroupAddon, InputGroupInput } from
- * "@ouro/ui/input-group"`. An input with buttons inside its box.
+ * "@kipos/ui/input-group"`. An input with buttons inside its box.
  */
 export function InputGroup({ xstyle, ...props }: PartProps): ReactElement {
   return <div {...stylex.props(styles.group, xstyle)} data-slot="input-group" {...props} />;

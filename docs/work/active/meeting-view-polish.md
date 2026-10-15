@@ -20,7 +20,7 @@ From annotated feedback on `/meetings/$meetingId`:
 5. The recording notice on the meeting page is a toast, not an inline alert,
    three lines of text.
 6. The loading state shows a spinner beside centered text (coss Spinner
-   ported to `@ouro/ui/spinner`, decorative; the `<output>` beside it
+   ported to `@kipos/ui/spinner`, decorative; the `<output>` beside it
    carries the status).
 
 ## Scope
