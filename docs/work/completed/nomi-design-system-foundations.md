@@ -4,7 +4,7 @@ State: DONE
 Branch: feat/nomi-design-system-foundations (stacked on chore/rename-kipos-to-nomi)
 Worktree: .claude/worktrees/rename-kipos-to-nomi-22cf6d
 Base SHA: 3948888
-Head SHA:
+Head SHA: db35454 (see git log for the record commit)
 Depends on: chore/rename-kipos-to-nomi
 
 ## Goal
