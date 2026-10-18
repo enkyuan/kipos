@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { Link } from "@tanstack/react-router";
-import { color, font, fontSize, fontWeight, media, space, tracking } from "@kipos/ui/tokens.stylex";
+import { color, font, fontSize, fontWeight, media, space, tracking } from "@nomi/ui/tokens.stylex";
 import type { ReactNode } from "react";
 
 const styles = stylex.create({
@@ -37,7 +37,7 @@ export function PageFrame({ children }: { children: ReactNode }) {
     <>
       <header {...stylex.props(styles.header)}>
         <Link to="/" {...stylex.props(styles.wordmark)}>
-          kipos
+          nomi
         </Link>
       </header>
       <main {...stylex.props(styles.main)}>{children}</main>

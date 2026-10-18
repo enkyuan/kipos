@@ -1,5 +1,5 @@
 /*
- * coss/ui's base layer, for every app that renders @kipos/ui. Import it once
+ * coss/ui's base layer, for every app that renders @nomi/ui. Import it once
  * from the app's global stylesheet. It sits in `@layer base`, below StyleX's
  * layers, so any component style outranks it.
  *

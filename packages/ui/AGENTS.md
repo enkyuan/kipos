@@ -25,7 +25,7 @@ src/tokens/
                        icon sizing). It sits below StyleX's layers, so it
                        cannot override a property a primitive sets.
 src/primitives/        one file per coss component, exported as
-                       `@kipos/ui/<name>`
+                       `@nomi/ui/<name>`
 test/                  public-export contract
 ```
 

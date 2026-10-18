@@ -27,7 +27,7 @@ apps/web ──types only──▶ apps/api ──▶ elysia, bun:sqlite
    └──▶ packages/ui ──▶ @base-ui/react, @stylexjs/stylex
 ```
 
-- Once `apps/web` calls the API, it imports `type App` from `@kipos/api` and
+- Once `apps/web` calls the API, it imports `type App` from `@nomi/api` and
   builds an Eden client from it (`docs/playbooks/add-api-feature.md`). No API
   runtime code reaches the web bundle, and no secret ever leaves `apps/api`.
 - `packages/ui` knows nothing about either app.
