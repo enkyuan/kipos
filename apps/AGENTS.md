@@ -8,8 +8,8 @@ The root `AGENTS.md` governs this tree; this file is the frontend delta for
 
 ```text
 apps/web      TanStack Start (SSR) + TanStack Router (file routes) + React 19
-              StyleX for every style; no Tailwind, no CSS modules
-packages/ui   coss/ui primitives on Base UI, translated to StyleX
+              Tailwind v4 (@tailwindcss/vite) for every style; no CSS modules
+packages/ui   Base UI primitives, design tokens, and the stylesheet
 ```
 
 Adopt another framework, state layer, or data library (TanStack Query, a
@@ -46,19 +46,21 @@ levels up. The first API call adds `src/api/client.ts` and its `#api/*` alias
 
 ## Styling
 
-- Style with `stylex.create` beside the component. Pass styles down through a
-  component's `xstyle` prop; `@nomi/ui` primitives take no `className` or
-  `style`.
-- Read values from `@nomi/ui/tokens.stylex` (`color`, `space`, `fontSize`,
-  `radius`, `media`, ...). No raw hex, rgb, or pixel spacing in app code.
-- Brand: headings and the wordmark use `font.heading` (EB Garamond) with
-  `tracking.heading`; body and UI text stay Inter. Brand color comes from
-  roles (`color.brandSurface`, `brandText`, ...); `primary` stays neutral.
-- Responsive and state values are conditions on the property
-  (`{ default: ..., [media.sm]: ... }`), not separate rules.
-- Light and dark follow the system preference through the tokens; app code
-  never branches on color scheme.
-- Global CSS is limited to `app.css`, which imports `@nomi/ui/base.css`.
+- Style with Tailwind classes in the component. A `@nomi/ui` primitive takes
+  `className` for layout only (margin, width); its color, type and states
+  come from its variant props.
+- Color comes from roles only: `bg-page`, `text-secondary-foreground`,
+  `border-border-subtle`, `bg-brand-solid`. Never a scale step (`--brand-9`),
+  a hex or oklch value, an arbitrary color (`bg-[#...]`), or Tailwind's own
+  palette (it is removed). Type comes from `text-heading-*`, `text-body-*`,
+  `text-caption-*`, `text-code-*`; radius and shadow from the theme
+  (`rounded-lg`, `shadow-default`).
+- Light and dark are the roles themselves flipping, so app code never uses a
+  `dark:` variant or branches on color scheme. The theme classes (`light`,
+  `dark`) belong on `<html>` only; `features/theme` owns them.
+- Repeated geometry belongs in a component class in
+  `packages/ui/src/styles/components.css`; one-off layout stays inline.
+- Global CSS is limited to `app.css`, which imports `@nomi/ui/styles.css`.
 
 ## Data
 

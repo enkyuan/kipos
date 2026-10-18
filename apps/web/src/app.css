@@ -1,9 +1,8 @@
 /*
- * The only global stylesheet. In production builds @stylexjs/unplugin appends
- * the compiled StyleX rules (in their own layers) to it; in development they
- * load from /virtual:stylex.css (routes/__root.tsx).
+ * The only global stylesheet: the design system (Tailwind, scales, roles,
+ * component classes) plus the few rules that belong to the app alone.
  */
-@import "@nomi/ui/base.css";
+@import "@nomi/ui/styles.css";
 
 @layer base {
   html {

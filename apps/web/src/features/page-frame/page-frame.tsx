@@ -1,46 +1,17 @@
-import * as stylex from "@stylexjs/stylex";
 import { Link } from "@tanstack/react-router";
-import { color, font, fontSize, fontWeight, media, space, tracking } from "@nomi/ui/tokens.stylex";
 import type { ReactNode } from "react";
 
-const styles = stylex.create({
-  header: {
-    display: "flex",
-    alignItems: "baseline",
-    maxWidth: "48rem",
-    marginInline: "auto",
-    paddingBlock: space.s5,
-    paddingInline: { default: space.s4, [media.sm]: space.s6 },
-  },
-  wordmark: {
-    color: color.foreground,
-    fontFamily: font.heading,
-    fontSize: fontSize.xxl,
-    fontWeight: fontWeight.medium,
-    letterSpacing: tracking.heading,
-    textDecoration: "none",
-  },
-  main: {
-    display: "flex",
-    flexDirection: "column",
-    gap: space.s6,
-    maxWidth: "48rem",
-    marginInline: "auto",
-    paddingBottom: space.s16,
-    paddingInline: { default: space.s4, [media.sm]: space.s6 },
-  },
-});
-
-/** The page frame: the wordmark and a centered column of content. */
-export function PageFrame({ children }: { children: ReactNode }) {
+/** The page frame: the wordmark, header controls, and a centered column of content. */
+export function PageFrame({ controls, children }: { controls?: ReactNode; children: ReactNode }) {
   return (
     <>
-      <header {...stylex.props(styles.header)}>
-        <Link to="/" {...stylex.props(styles.wordmark)}>
+      <header className="mx-auto flex max-w-3xl items-center justify-between px-4 py-5 sm:px-6">
+        <Link to="/" className="text-heading-6 font-semibold text-primary-foreground no-underline">
           nomi
         </Link>
+        {controls}
       </header>
-      <main {...stylex.props(styles.main)}>{children}</main>
+      <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 pb-16 sm:px-6">{children}</main>
     </>
   );
 }

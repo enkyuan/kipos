@@ -1,0 +1,203 @@
+/*
+ * Tokens: the second tier. Scales (scales.css) feed these roles, and roles are
+ * the only colors components and pages read. `static` keeps every token in the
+ * output even before a class uses it, since roles are the public vocabulary.
+ * The dark values are re-declared in roles-dark.css.
+ *
+ * Tailwind's theme namespaces generate the helper classes: `--color-*` the
+ * color utilities, `--text-*` the `text-heading-*`, `text-body-*`,
+ * `text-caption-*` and `text-code-*` type styles (size, line height, and for
+ * headings weight and tracking), `--font-weight-*` `font-semimedium`,
+ * `--radius-*`, `--shadow-*` and `--ease-*` theirs.
+ */
+@theme static {
+  /* Clearing the defaults leaves roles as the only colors, radii, shadows,
+     type sizes and fonts: there is no `bg-red-500` to reach for. */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --ease-*: initial;
+
+  --color-white-fill: #fff;
+  --color-black-fill: #000;
+
+  /* Surfaces, outermost to innermost: the app frame, the panel inside it, overlays. */
+  --color-page: var(--color-white-fill);
+  --color-shell: oklch(97.3% 0 0);
+  --color-container: var(--color-white-fill);
+  --color-container-recessed: var(--gray-1);
+  --color-modal: oklch(100% 0 0);
+  --color-card: var(--gray-a2);
+  --color-sunken: var(--black-a1);
+  --color-standout: var(--gray-12);
+  /* Component fills with hover and active states, and the fills that sit on a container. */
+  --color-component: var(--gray-a3);
+  --color-component-hover: var(--gray-a4);
+  --color-component-active: var(--gray-a5);
+  --color-component-on-sunken: var(--color-white-fill);
+  --color-component-on-inverted: var(--white-a2);
+  --color-component-on-container-subtle: var(--color-white-fill);
+  --color-component-on-container-subtle-hover: var(--color-white-fill);
+  --color-component-on-container-strong: var(--color-white-fill);
+  --color-component-on-container-strong-hover: var(--gray-2);
+  --color-transparent-hover: var(--gray-a3);
+  --color-transparent-active: var(--gray-a3);
+  --color-disabled: var(--gray-a3);
+  /* Text. The gray scale is deep enough that tertiary (alpha 9) clears 4.5:1 too. */
+  --color-primary-foreground: var(--gray-a12);
+  --color-secondary-foreground: var(--gray-a11);
+  --color-tertiary-foreground: var(--gray-a9);
+  --color-disabled-foreground: var(--gray-a8);
+  /* Inverted: black fill in light, white in dark (the primary button). */
+  --color-inverted-solid: var(--black-a12);
+  --color-inverted-solid-hover: var(--black-a10);
+  --color-inverted-solid-active: var(--black-a9);
+  --color-on-inverted-foreground: var(--color-white-fill);
+  --color-on-standout-primary-foreground: var(--color-white-fill);
+  --color-on-standout-secondary-foreground: var(--white-a7);
+  --color-border-on-standout: var(--white-a2);
+  /* Intents. Each solid is deep enough for white text; hover is step 10, active step 11. The brand */
+  /* swatch sits at step 8 and the solid below it carries text, so the light focus ring reads alpha 9. */
+  --color-brand-solid: var(--brand-9);
+  --color-brand-solid-hover: var(--brand-10);
+  --color-brand-solid-active: var(--brand-11);
+  --color-brand-subtle: var(--brand-a3);
+  --color-brand-subtle-hover: var(--brand-a4);
+  --color-brand-subtle-active: var(--brand-a5);
+  --color-brand-foreground: var(--brand-a10);
+  --color-on-brand-solid-foreground: var(--color-white-fill);
+  --color-on-brand-subtle-foreground: var(--brand-a9);
+  --color-brand-border-default: var(--brand-a6);
+  --color-brand-border-subtle: var(--brand-a5);
+  --color-brand-border-focus: var(--brand-a9);
+  --color-positive-solid: var(--positive-9);
+  --color-positive-solid-hover: var(--positive-10);
+  --color-positive-solid-active: var(--positive-11);
+  --color-positive-subtle: var(--positive-a3);
+  --color-positive-subtle-hover: var(--positive-a4);
+  --color-positive-subtle-active: var(--positive-a5);
+  --color-positive-foreground: var(--positive-a10);
+  --color-on-positive-solid-foreground: var(--positive-1);
+  --color-on-positive-subtle-foreground: var(--positive-a9);
+  --color-positive-border-default: var(--positive-a6);
+  --color-positive-border-subtle: var(--positive-a5);
+  --color-warning-solid: var(--warning-9);
+  --color-warning-solid-hover: var(--warning-10);
+  --color-warning-solid-active: var(--warning-11);
+  --color-warning-subtle: var(--warning-a3);
+  --color-warning-subtle-hover: var(--warning-a4);
+  --color-warning-subtle-active: var(--warning-a5);
+  --color-warning-foreground: var(--warning-a10);
+  --color-on-warning-solid-foreground: var(--warning-1);
+  --color-on-warning-subtle-foreground: var(--warning-a11);
+  --color-warning-border-default: var(--warning-a6);
+  --color-warning-border-subtle: var(--warning-a5);
+  --color-danger-solid: var(--danger-9);
+  --color-danger-solid-hover: var(--danger-10);
+  --color-danger-solid-active: var(--danger-11);
+  --color-danger-subtle: var(--danger-a3);
+  --color-danger-subtle-hover: var(--danger-a4);
+  --color-danger-subtle-active: var(--danger-a5);
+  --color-danger-foreground: var(--danger-a10);
+  --color-on-danger-solid-foreground: var(--danger-1);
+  --color-on-danger-subtle-foreground: var(--danger-a9);
+  --color-danger-border-default: var(--danger-a6);
+  --color-danger-border-subtle: var(--danger-a4);
+  --color-info-solid: var(--info-9);
+  --color-info-subtle: var(--info-a3);
+  --color-info-foreground: var(--info-a10);
+  --color-on-info-subtle-foreground: var(--info-a9);
+  --color-info-border-default: var(--info-a6);
+  /* Borders, from hairline to strong. */
+  --color-border-default: var(--gray-a3);
+  --color-border-subtle: var(--gray-a2);
+  --color-border-strong: var(--gray-a6);
+  --color-border-inverted: var(--color-black-fill);
+
+  /* Inter (OFL) carries all product text, headings included, with its ss03
+     alternates. Mono is the system stack. */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --default-font-family: var(--font-sans);
+  --default-font-feature-settings: "ss03";
+  --default-mono-font-family: var(--font-mono);
+
+  /* Between regular and medium; Inter is a variable font, so 450 renders. */
+  --font-weight-semimedium: 450;
+
+  --text-heading-1: 3.5rem;
+  --text-heading-1--line-height: 3.5rem;
+  --text-heading-2: 2.75rem;
+  --text-heading-2--line-height: 3.5rem;
+  --text-heading-3: 2.25rem;
+  --text-heading-3--line-height: 2.75rem;
+  --text-heading-4: 1.75rem;
+  --text-heading-4--line-height: 2.25rem;
+  --text-heading-5: 1.5rem;
+  --text-heading-5--line-height: 2rem;
+  --text-heading-6: 1.25rem;
+  --text-heading-6--line-height: 1.5rem;
+  --text-heading-1--font-weight: 500;
+  --text-heading-1--letter-spacing: -0.01em;
+  --text-heading-2--font-weight: 500;
+  --text-heading-2--letter-spacing: -0.01em;
+  --text-heading-3--font-weight: 500;
+  --text-heading-3--letter-spacing: -0.01em;
+  --text-heading-4--font-weight: 500;
+  --text-heading-4--letter-spacing: -0.01em;
+  --text-heading-5--font-weight: 500;
+  --text-heading-5--letter-spacing: -0.01em;
+  --text-heading-6--font-weight: 500;
+  --text-heading-6--letter-spacing: -0.01em;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.5rem;
+  --text-body-base: 0.9375rem;
+  --text-body-base--line-height: 1.5rem;
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.25rem;
+  --text-caption-lg: 0.75rem;
+  --text-caption-lg--line-height: 1rem;
+  --text-caption-base: 0.6875rem;
+  --text-caption-base--line-height: 1rem;
+  --text-caption-sm: 0.625rem;
+  --text-caption-sm--line-height: 1rem;
+  --text-caption-xs: 0.5rem;
+  --text-caption-xs--line-height: 0.75rem;
+  --text-code-sm: 0.8125rem;
+  --text-code-sm--line-height: 1.25rem;
+  --text-code-xs: 0.75rem;
+  --text-code-xs--line-height: 1rem;
+
+  /* 2, 4, 6, 8, 10, 12, 16, 20, 24px and a pill. */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 1rem;
+  --radius-4xl: 1.25rem;
+  --radius-5xl: 1.5rem;
+  --radius-pill: 9999px;
+
+  /* Elevation by layered hairlines. Light draws soft drops under a hairline;
+     dark drops the drops and draws a light inner hairline (roles-dark.css). */
+  --shadow-border: 0 0 0 1px #00000012;
+  --shadow-default: 0 0 0 0.5px #0000000f, 0 1px 1px -1px #0000001a, 0 1px 2px 0 #0000000d;
+  --shadow-large:
+    0 0 0 0.5px var(--gray-a3), 0 2px 3px -2px var(--gray-a3), 0 3px 12px -4px var(--black-a2),
+    0 4px 16px -8px var(--black-a1);
+  --shadow-extra-large: 0 0 0 0.5px #0000000f, 0 8px 40px 0 #0000000d, 0 12px 32px -16px #00000026;
+  --shadow-focus: 0 0 0 1px var(--color-brand-border-focus);
+
+  /* 150ms is the default duration; entrances use ease-out-quint, which moves
+     at once and then settles. */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+}

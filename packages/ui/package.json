@@ -8,11 +8,7 @@
     "*.css"
   ],
   "exports": {
-    "./base.css": "./src/tokens/base.css",
-    "./tokens.stylex": {
-      "types": "./src/tokens/tokens.stylex.ts",
-      "default": "./src/tokens/tokens.stylex.ts"
-    },
+    "./styles.css": "./src/styles/index.css",
     "./button": {
       "types": "./src/primitives/button.tsx",
       "default": "./src/primitives/button.tsx"
@@ -20,13 +16,13 @@
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "palette": "bun scripts/palette.ts",
     "test": "bun test test"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
-    "@fontsource-variable/eb-garamond": "5.3.0",
     "@fontsource-variable/inter": "5.3.0",
-    "@stylexjs/stylex": "0.19.1"
+    "tailwindcss": "4.3.3"
   },
   "devDependencies": {
     "@nomi/tsconfig": "workspace:*",

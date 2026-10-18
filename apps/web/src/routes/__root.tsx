@@ -1,35 +1,10 @@
 import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-router";
-import garamondUrl from "@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2?url";
 import interUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
-import * as stylex from "@stylexjs/stylex";
 import { Button } from "@nomi/ui/button";
-import { color, font, fontSize, fontWeight, space, tracking } from "@nomi/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
+import { THEME_SCRIPT } from "#features/theme/theme-toggle";
 import { DevAnnotations } from "../dev-annotations";
-
-const styles = stylex.create({
-  // Base UI portals render into <body>; isolating the app keeps every popup
-  // above page content without z-index bookkeeping.
-  root: { isolation: "isolate", minHeight: "100dvh" },
-  notFound: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: space.s4,
-    minHeight: "100dvh",
-    padding: space.s6,
-    textAlign: "center",
-  },
-  notFoundTitle: {
-    fontFamily: font.heading,
-    fontSize: fontSize.xxl,
-    fontWeight: fontWeight.medium,
-    letterSpacing: tracking.heading,
-  },
-  notFoundText: { color: color.mutedForeground },
-});
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,17 +14,16 @@ export const Route = createRootRoute({
       { title: "Nomi" },
     ],
     links: [
-      // The latin files base.css loads: preloading them lets text paint in its
-      // own font instead of swapping after the stylesheet is parsed.
-      ...[garamondUrl, interUrl].map((href) => ({
+      // The latin file the stylesheet loads: preloading it lets text paint in
+      // its own font instead of swapping after the stylesheet is parsed.
+      {
         rel: "preload",
         as: "font",
         type: "font/woff2",
-        href,
+        href: interUrl,
         crossOrigin: "anonymous" as const,
-      })),
+      },
       { rel: "stylesheet", href: appCss },
-      ...(import.meta.env.DEV ? [{ rel: "stylesheet", href: "/virtual:stylex.css" }] : []),
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
     ],
   }),
@@ -59,10 +33,10 @@ export const Route = createRootRoute({
 
 function NotFound() {
   return (
-    <main {...stylex.props(styles.notFound)}>
-      <h1 {...stylex.props(styles.notFoundTitle)}>Page not found</h1>
-      <p {...stylex.props(styles.notFoundText)}>There's nothing at this address.</p>
-      <Button variant="outline" render={<Link to="/" />}>
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6 text-center">
+      <h1 className="text-heading-5 text-primary-foreground">Page not found</h1>
+      <p className="text-body-base text-secondary-foreground">There's nothing at this address.</p>
+      <Button variant="secondary" render={<Link to="/" />}>
         Back home
       </Button>
     </main>
@@ -71,12 +45,16 @@ function NotFound() {
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    // The theme script adds a class to <html> before hydration.
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
-        <div {...stylex.props(styles.root)}>{children}</div>
+        {/* Base UI portals render into <body>; isolating the app keeps every
+            popup above page content without z-index bookkeeping. */}
+        <div className="isolate min-h-dvh">{children}</div>
         <DevAnnotations />
         <Scripts />
       </body>
