@@ -4,7 +4,7 @@ State: DONE
 Branch: chore/rename-kipos-to-nomi (stacked on chore/strip-fde-copilot)
 Worktree: .claude/worktrees/rename-kipos-to-nomi-22cf6d
 Base SHA: ddf1352
-Head SHA:
+Head SHA: 6a97f8d
 Depends on: chore/strip-fde-copilot
 
 ## Goal
