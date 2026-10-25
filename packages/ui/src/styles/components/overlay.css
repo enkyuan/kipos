@@ -1,0 +1,121 @@
+/* Overlays: tooltip, dialog, toast. Entrances use Base UI's starting and
+   ending style attributes and only animate without reduced-motion. */
+@layer components {
+  .nm-tooltip {
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-standout);
+    box-shadow: var(--shadow-large);
+    color: var(--color-on-standout-primary-foreground);
+    font-size: var(--text-caption-lg);
+    font-weight: 500;
+    line-height: 1rem;
+  }
+
+  .nm-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-backdrop);
+  }
+
+  .nm-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: min(28rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 1.25rem;
+    overflow-y: auto;
+    translate: -50% -50%;
+    border-radius: var(--radius-2xl);
+    background-color: var(--color-modal);
+    box-shadow: var(--shadow-extra-large);
+    color: var(--color-primary-foreground);
+  }
+
+  .nm-dialog-title {
+    margin: 0;
+    font-size: var(--text-heading-6);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.5rem;
+  }
+
+  .nm-dialog-description {
+    margin: 0;
+    color: var(--color-secondary-foreground);
+    font-size: var(--text-body-sm);
+    line-height: 1.25rem;
+  }
+
+  .nm-toast-viewport {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: min(22rem, calc(100vw - 2rem));
+  }
+
+  .nm-toast {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 2.25rem 0.75rem 0.75rem;
+    position: relative;
+    border-radius: var(--radius-xl);
+    background-color: var(--color-modal);
+    box-shadow: var(--shadow-large);
+    color: var(--color-primary-foreground);
+  }
+
+  .nm-toast-title {
+    margin: 0;
+    font-size: var(--text-body-sm);
+    font-weight: 500;
+    line-height: 1.25rem;
+  }
+
+  .nm-toast-description {
+    margin: 0;
+    color: var(--color-secondary-foreground);
+    font-size: var(--text-body-sm);
+    line-height: 1.25rem;
+  }
+
+  .nm-toast-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nm-tooltip,
+    .nm-dialog,
+    .nm-dialog-backdrop,
+    .nm-toast {
+      transition:
+        opacity 150ms var(--ease-out),
+        scale 200ms var(--ease-out-quint);
+    }
+
+    .nm-tooltip[data-starting-style],
+    .nm-tooltip[data-ending-style],
+    .nm-dialog[data-starting-style],
+    .nm-dialog[data-ending-style],
+    .nm-toast[data-starting-style],
+    .nm-toast[data-ending-style] {
+      opacity: 0;
+      scale: 0.97;
+    }
+
+    .nm-dialog-backdrop[data-starting-style],
+    .nm-dialog-backdrop[data-ending-style] {
+      opacity: 0;
+    }
+  }
+}

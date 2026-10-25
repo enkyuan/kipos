@@ -6,6 +6,7 @@ import {
   modeVars,
   parse,
   read,
+  readComponents,
   resolve,
   ruleBody,
   type Vars,
@@ -19,7 +20,7 @@ const modes: Mode[] = ["light", "dark"];
 const theme = declarations(ruleBody(read("theme.css"), "@theme static"));
 const roleNames = Object.keys(theme).filter((name) => name.startsWith("--color-"));
 const darkRoles = declarations(ruleBody(read("roles-dark.css"), ".dark"));
-const components = read("components.css");
+const components = readComponents();
 
 describe("scales", () => {
   test("scales.css is what scripts/palette.ts generates", () => {
@@ -71,6 +72,9 @@ describe("components", () => {
     });
   });
 
+  // Base UI sets these on the tab list at runtime.
+  const providedByBaseUi = ["--active-tab-left", "--active-tab-width"];
+
   test("every variable a component reads is defined", () => {
     const defined: Vars = {
       ...modeVars("dark"),
@@ -78,7 +82,7 @@ describe("components", () => {
     };
     const missing = [...components.matchAll(/var\((--[\w-]+)\)/g)]
       .map((match) => match[1]!)
-      .filter((name) => !(name in defined));
+      .filter((name) => !(name in defined) && !providedByBaseUi.includes(name));
     expect(missing).toEqual([]);
   });
 });
