@@ -2,8 +2,8 @@ import { createRootRoute, HeadContent, Link, Scripts } from "@tanstack/react-rou
 import garamondUrl from "@fontsource-variable/eb-garamond/files/eb-garamond-latin-wght-normal.woff2?url";
 import interUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import * as stylex from "@stylexjs/stylex";
-import { Button } from "@kipos/ui/button";
-import { color, font, fontSize, fontWeight, space, tracking } from "@kipos/ui/tokens.stylex";
+import { Button } from "@nomi/ui/button";
+import { color, font, fontSize, fontWeight, space, tracking } from "@nomi/ui/tokens.stylex";
 import type { ReactNode } from "react";
 import appCss from "../app.css?url";
 import { DevAnnotations } from "../dev-annotations";
@@ -36,7 +36,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kipos" },
+      { title: "Nomi" },
     ],
     links: [
       // The latin files base.css loads: preloading them lets text paint in its

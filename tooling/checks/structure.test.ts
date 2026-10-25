@@ -31,17 +31,17 @@ describe("dependency direction", () => {
   // its runtime: that would ship server code, and bun:sqlite, to browsers.
   // One file owns that boundary, and it imports types only. It has no subject
   // until the first API call creates that file; the check then guards it.
-  test("only apps/web/src/api/client.ts reaches @kipos/api, and for types only", async () => {
+  test("only apps/web/src/api/client.ts reaches @nomi/api, and for types only", async () => {
     const client = "apps/web/src/api/client.ts";
-    const mentions = /["']@kipos\/api["']/;
+    const mentions = /["']@nomi\/api["']/;
     const valueImport =
-      /import\s+(?!type\b)[^;]*?from\s*["']@kipos\/api["']|import\(\s*["']@kipos\/api["']|require\(\s*["']@kipos\/api["']/s;
+      /import\s+(?!type\b)[^;]*?from\s*["']@nomi\/api["']|import\(\s*["']@nomi\/api["']|require\(\s*["']@nomi\/api["']/s;
     const offenders: string[] = [];
     for (const path of files("apps/web/**/*.{ts,tsx}")) {
       const source = await read(path);
       if (!mentions.test(source)) continue;
-      if (path !== client) offenders.push(`${path}: imports @kipos/api outside ${client}`);
-      else if (valueImport.test(source)) offenders.push(`${path}: value import of @kipos/api`);
+      if (path !== client) offenders.push(`${path}: imports @nomi/api outside ${client}`);
+      else if (valueImport.test(source)) offenders.push(`${path}: value import of @nomi/api`);
     }
     expect(offenders).toEqual([]);
   });

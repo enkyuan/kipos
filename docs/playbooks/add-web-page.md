@@ -5,10 +5,10 @@
    commit it.
 2. **Feature**: put the page's sections in `apps/web/src/features/<concept>/`.
    Routes compose features; features do not import each other.
-3. **UI**: use `@kipos/ui` primitives. If coss has a component you need that
-   `@kipos/ui` lacks, port it first (`packages/ui/AGENTS.md`).
+3. **UI**: use `@nomi/ui` primitives. If coss has a component you need that
+   `@nomi/ui` lacks, port it first (`packages/ui/AGENTS.md`).
 4. **Styles**: `stylex.create` beside the component, values from
-   `@kipos/ui/tokens.stylex`.
+   `@nomi/ui/tokens.stylex`.
 5. **Head**: set the page's `title` and `description` in the route's `head`.
 6. **Test**: add an assertion to `apps/web/test/build/` that the page
    server-renders its key content.

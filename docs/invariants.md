@@ -25,7 +25,7 @@ Truths every change must preserve. Each names the test that proves it.
 ## Boundaries
 
 - **No API runtime in the web bundle.** The only file that may import
-  `@kipos/api` is `apps/web/src/api/client.ts` (created with the first API
+  `@nomi/api` is `apps/web/src/api/client.ts` (created with the first API
   call), and with `import type` only. Proven in
   `tooling/checks/structure.test.ts`.
 - **Features never import each other**, in either app. Enforced by

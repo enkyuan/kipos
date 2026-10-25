@@ -1,5 +1,5 @@
 {
-  "name": "@kipos/api",
+  "name": "@nomi/api",
   "version": "0.0.0",
   "private": true,
   "license": "UNLICENSED",
@@ -20,6 +20,6 @@
     "elysia": "1.4.30"
   },
   "devDependencies": {
-    "@kipos/tsconfig": "workspace:*"
+    "@nomi/tsconfig": "workspace:*"
   }
 }

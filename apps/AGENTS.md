@@ -47,9 +47,9 @@ levels up. The first API call adds `src/api/client.ts` and its `#api/*` alias
 ## Styling
 
 - Style with `stylex.create` beside the component. Pass styles down through a
-  component's `xstyle` prop; `@kipos/ui` primitives take no `className` or
+  component's `xstyle` prop; `@nomi/ui` primitives take no `className` or
   `style`.
-- Read values from `@kipos/ui/tokens.stylex` (`color`, `space`, `fontSize`,
+- Read values from `@nomi/ui/tokens.stylex` (`color`, `space`, `fontSize`,
   `radius`, `media`, ...). No raw hex, rgb, or pixel spacing in app code.
 - Brand: headings and the wordmark use `font.heading` (EB Garamond) with
   `tracking.heading`; body and UI text stay Inter. Brand color comes from
@@ -58,7 +58,7 @@ levels up. The first API call adds `src/api/client.ts` and its `#api/*` alias
   (`{ default: ..., [media.sm]: ... }`), not separate rules.
 - Light and dark follow the system preference through the tokens; app code
   never branches on color scheme.
-- Global CSS is limited to `app.css`, which imports `@kipos/ui/base.css`.
+- Global CSS is limited to `app.css`, which imports `@nomi/ui/base.css`.
 
 ## Data
 

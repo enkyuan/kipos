@@ -20,9 +20,9 @@ describe("home page (production build)", () => {
     const html = await response.text();
     expect(html).toContain("<h1");
     expect(html).toContain("A Grok bot for students.");
-    expect(html).toContain("<title>Kipos</title>");
+    expect(html).toContain("<title>Nomi</title>");
     expect(html).toContain('<html lang="en"');
-    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>kipos<\/a>/);
+    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>nomi<\/a>/);
   });
 
   test("ships no development annotation tooling", async () => {
