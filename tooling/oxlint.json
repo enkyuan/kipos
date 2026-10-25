@@ -29,8 +29,8 @@
     // The automatic JSX runtime needs no React in scope.
     "react/react-in-jsx-scope": "off",
     // Base UI's render prop takes an empty element (`render={<a href="/" />}`,
-    // `render={<h3 />}`) and fills it with the component's children; these
-    // two rules read the empty element as an unlabeled control or heading.
+    // `render={<Link to="/" />}`) and fills it with the component's children;
+    // these two rules read the empty element as an unlabeled control or heading.
     "jsx-a11y/control-has-associated-label": "off",
     "jsx-a11y/heading-has-content": "off"
   },
@@ -92,7 +92,7 @@
     },
     {
       // apps/web: @kipos/ui through its public exports only, and the API as
-      // types only, through the Eden client (#api/client).
+      // types only, through the typed client the first API call adds (#api/client).
       "files": ["**/apps/web/src/**"],
       "rules": {
         "no-restricted-imports": [
@@ -105,11 +105,11 @@
               },
               {
                 "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
-                "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
+                "message": "apps/web reaches the API only through its typed client (added with the first API call), never its source or runtime."
               },
               {
                 "group": ["../../*", "../../**"],
-                "message": "Two levels up crosses an ownership boundary: import through #api/* or #features/*."
+                "message": "Two levels up crosses an ownership boundary: import through #features/* (or #api/*, once the API client exists)."
               }
             ]
           }
@@ -161,11 +161,11 @@
               },
               {
                 "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
-                "message": "apps/web reaches the API only through #api/client (Eden), never its source or runtime."
+                "message": "apps/web reaches the API only through its typed client (added with the first API call), never its source or runtime."
               },
               {
                 "group": ["../../*", "../../**"],
-                "message": "Two levels up crosses an ownership boundary: import through #api/* or #features/*."
+                "message": "Two levels up crosses an ownership boundary: import through #features/* (or #api/*, once the API client exists)."
               },
               {
                 "regex": "^#features/",

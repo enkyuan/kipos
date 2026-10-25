@@ -22,7 +22,6 @@ import {
 // slightly, so a click is felt before its result arrives.
 
 const focusRing = `0 0 0 ${shadow.focusOffset} ${color.background}, 0 0 0 ${shadow.focusWidth} ${color.ring}`;
-const spin = stylex.keyframes({ to: { rotate: "360deg" } });
 
 const styles = stylex.create({
   base: {
@@ -58,23 +57,6 @@ const styles = stylex.create({
       borderRadius: `calc(${radius.lg} - 1px)`,
       pointerEvents: "none",
     },
-  },
-  loading: { color: "transparent", userSelect: "none" },
-  spinner: {
-    position: "absolute",
-    width: "1rem",
-    height: "1rem",
-    borderWidth: 2,
-    borderStyle: "solid",
-    borderColor: "currentColor",
-    borderInlineEndColor: "transparent",
-    borderRadius: radius.full,
-    animationName: spin,
-    // Reduced motion slows the spin rather than stopping it: a still spinner
-    // would read as frozen.
-    animationDuration: { default: "700ms", [media.reducedMotion]: "1500ms" },
-    animationTimingFunction: "linear",
-    animationIterationCount: "infinite",
   },
 });
 
@@ -205,25 +187,12 @@ const variants = stylex.create({
   },
 });
 
-// The label turns transparent while loading, so the spinner takes the
-// variant's label color explicitly.
-const spinnerTone = stylex.create({
-  default: { color: color.primaryForeground },
-  destructive: { color: color.white },
-  outline: { color: color.foreground },
-  secondary: { color: color.secondaryForeground },
-  ghost: { color: color.foreground },
-  link: { color: color.foreground },
-});
-
 export type ButtonVariant = keyof typeof variants;
 export type ButtonSize = keyof typeof sizes;
 
 export type ButtonProps = Omit<useRender.ComponentProps<"button">, "className" | "style"> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Keeps the button's size, hides its label and shows a spinner. */
-  loading?: boolean;
   xstyle?: stylex.StyleXStyles;
 };
 
@@ -231,7 +200,6 @@ export type ButtonProps = Omit<useRender.ComponentProps<"button">, "className" |
 export function Button({
   variant = "default",
   size = "default",
-  loading = false,
   disabled,
   render,
   children,
@@ -239,16 +207,9 @@ export function Button({
   ...props
 }: ButtonProps): ReactElement {
   const ownProps = {
-    ...stylex.props(styles.base, sizes[size], variants[variant], loading && styles.loading, xstyle),
-    children: (
-      <>
-        {children}
-        {loading && <span aria-hidden {...stylex.props(styles.spinner, spinnerTone[variant])} />}
-      </>
-    ),
-    disabled: loading || disabled,
-    "aria-busy": loading || undefined,
-    "data-loading": loading ? "" : undefined,
+    ...stylex.props(styles.base, sizes[size], variants[variant], xstyle),
+    children,
+    disabled,
     "data-slot": "button",
     // A rendered <a> or custom element must not get a button type.
     type: render ? undefined : ("button" as const),

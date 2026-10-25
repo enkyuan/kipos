@@ -21,11 +21,9 @@ src/tokens/
                        lineHeight, fontWeight, tracking, shadow, motion,
                        media (consts)
   base.css             coss's base layer: fonts, borders, body, the
-                       descendant rules StyleX cannot express, and toast
-                       stacking (arithmetic on Base UI's per-toast CSS
-                       variables under compound state selectors). It sits
-                       below StyleX's layers, so it cannot override a
-                       property a primitive sets.
+                       descendant rules StyleX cannot express (button
+                       icon sizing). It sits below StyleX's layers, so it
+                       cannot override a property a primitive sets.
 src/primitives/        one file per coss component, exported as
                        `@kipos/ui/<name>`
 test/                  public-export contract
@@ -57,7 +55,7 @@ router, or server code (oxlint enforces it).
 
 4. Descendant selectors (`[&_svg]:size-4`, `*:data-[slot=x]:…`) cannot be
    expressed in StyleX. Put them in `base.css`, keyed on `data-slot`, or
-   restructure (the card owns its rhythm with `gap` instead of sibling
+   restructure (a component owns its rhythm with `gap` instead of sibling
    selectors).
 5. Replace `className` with an `xstyle?: stylex.StyleXStyles` prop, applied
    last so callers win. Accept Base UI's `render` prop where coss does.

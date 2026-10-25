@@ -12,9 +12,6 @@ apps/web      TanStack Start (SSR) + TanStack Router (file routes) + React 19
 packages/ui   coss/ui primitives on Base UI, translated to StyleX
 ```
 
-`motion` animates elements that mount and unmount (presence), and nothing
-else: state transitions stay CSS (`docs/decisions/0005-motion-for-presence.md`).
-
 Adopt another framework, state layer, or data library (TanStack Query, a
 form library) only when it removes concrete complexity from accepted
 product behavior, and record the decision in `docs/decisions/`.
@@ -28,8 +25,7 @@ apps/web/
 ├── src/
 │   ├── routes/            # URL topology; one file per navigable surface
 │   │   └── __root.tsx     # document shell, head, not-found page
-│   ├── features/          # concrete product concepts (workspace, meetings, analysis)
-│   ├── api/client.ts      # the one typed boundary to apps/api (Eden)
+│   ├── features/          # concrete product concepts (page-frame)
 │   ├── dev-annotations.tsx # Agentation toolbar, development only
 │   ├── router.tsx
 │   ├── app.css            # the one global stylesheet
@@ -40,12 +36,13 @@ apps/web/
 A route exists because a person needs a durable, navigable surface. A
 feature folder exists because a product concept does. Routes compose
 features; features never import each other (oxlint enforces it). A frame that hosts
-another feature takes it as `children` (`WorkspaceLayout` receives the
-meeting view from `routes/meetings.$meetingId.tsx`); what two features share
+another feature takes it as `children` (`PageFrame` receives the
+page content from `routes/index.tsx`); what two features share
 moves to the narrowest common owner.
 
-Imports across folders go through the package aliases (`#api/*`,
-`#features/*`); never two levels up.
+Imports across folders go through the package alias `#features/*`; never two
+levels up. The first API call adds `src/api/client.ts` and its `#api/*` alias
+(`docs/playbooks/add-api-feature.md`).
 
 ## Styling
 
@@ -65,22 +62,15 @@ Imports across folders go through the package aliases (`#api/*`,
 
 ## Data
 
-- The browser calls the API at its own origin under `/api`
-  (`src/api/client.ts`); the dev server and the production proxy forward it to
-  `apps/api`. Never hard-code an API host.
+- The browser calls the API at its own origin under `/api` (through the typed
+  client and the dev proxy, both added with the first API call); the
+  production reverse proxy forwards it to `apps/api`. Never hard-code an API
+  host.
 - Wrap each API call in a feature function that returns what the person
-  should see (`startShadowing` → `StartOutcome`), so components never
-  interpret HTTP status codes.
-- Live data arrives over Server-Sent Events through `listenToMeeting` in
-  `src/api/client.ts` (it rebuilds a closed connection with backoff). A
-  stream replays persisted state on every (re)connect, so consumers merge
-  records by id. `draft` events are live only (never replayed) and show
-  words in progress; nothing derived from the record may read them.
-- Features that refer to the transcript link to `#utterance-<id>`: the
-  transcript renders each line with that id and highlights the `:target`.
-  It is the one cross-feature contract, and it is a URL, not an import.
-- Never present more than the server confirmed: UI state for an external
-  process (the notetaker) comes from the status the API reports.
+  should see, not an HTTP response, so components never interpret HTTP status
+  codes.
+- Never present more than the server confirmed: UI state for work the API
+  does elsewhere comes from the status the API reports.
 - Server failures surface at the field they concern (Base UI `Form` `errors`)
   or as one sentence near the action, never as a raw message.
 

@@ -17,9 +17,10 @@ without losing correctness, built by humans and agents in parallel.
   the runtime, and needs no service to run locally. Move to PostgreSQL when
   concurrent writers or multiple API instances require it (a new ADR).
 - **Web: TanStack Start + Router** for server rendering and file-based routes,
-  so the landing page ships HTML and later product surfaces fit the same app.
+  so pages ship HTML and later product surfaces fit the same app.
 - **Eden** for the API client: `apps/web` compiles against `type App`, so a
-  contract change is a type error, with no code generation step.
+  contract change is a type error, with no code generation step. The client
+  is added with the first API call, not before.
 - **Design system: coss/ui on StyleX.** coss provides accessible Base UI
   primitives and a coherent base theme; StyleX replaces Tailwind so styles are
   typed, colocated, compiled to atomic CSS, and composable through `xstyle`
@@ -33,3 +34,5 @@ without losing correctness, built by humans and agents in parallel.
 - StyleX cannot express descendant selectors; those few rules live in
   `@kipos/ui/base.css`, keyed on `data-slot`.
 - SQLite limits the API to one writer process. That is the current scale.
+- The API does not open the database until a feature stores data
+  (`openDatabase` in `src/database.ts` is ready and tested).

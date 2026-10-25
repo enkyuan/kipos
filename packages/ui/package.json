@@ -13,61 +13,9 @@
       "types": "./src/tokens/tokens.stylex.ts",
       "default": "./src/tokens/tokens.stylex.ts"
     },
-    "./alert": {
-      "types": "./src/primitives/alert.tsx",
-      "default": "./src/primitives/alert.tsx"
-    },
-    "./badge": {
-      "types": "./src/primitives/badge.tsx",
-      "default": "./src/primitives/badge.tsx"
-    },
     "./button": {
       "types": "./src/primitives/button.tsx",
       "default": "./src/primitives/button.tsx"
-    },
-    "./card": {
-      "types": "./src/primitives/card.tsx",
-      "default": "./src/primitives/card.tsx"
-    },
-    "./checkbox": {
-      "types": "./src/primitives/checkbox.tsx",
-      "default": "./src/primitives/checkbox.tsx"
-    },
-    "./collapsible": {
-      "types": "./src/primitives/collapsible.tsx",
-      "default": "./src/primitives/collapsible.tsx"
-    },
-    "./dialog": {
-      "types": "./src/primitives/dialog.tsx",
-      "default": "./src/primitives/dialog.tsx"
-    },
-    "./field": {
-      "types": "./src/primitives/field.tsx",
-      "default": "./src/primitives/field.tsx"
-    },
-    "./form": {
-      "types": "./src/primitives/form.tsx",
-      "default": "./src/primitives/form.tsx"
-    },
-    "./input": {
-      "types": "./src/primitives/input.tsx",
-      "default": "./src/primitives/input.tsx"
-    },
-    "./input-group": {
-      "types": "./src/primitives/input-group.tsx",
-      "default": "./src/primitives/input-group.tsx"
-    },
-    "./separator": {
-      "types": "./src/primitives/separator.tsx",
-      "default": "./src/primitives/separator.tsx"
-    },
-    "./spinner": {
-      "types": "./src/primitives/spinner.tsx",
-      "default": "./src/primitives/spinner.tsx"
-    },
-    "./toast": {
-      "types": "./src/primitives/toast.tsx",
-      "default": "./src/primitives/toast.tsx"
     }
   },
   "scripts": {

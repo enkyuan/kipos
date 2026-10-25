@@ -1,4 +1,3 @@
 # oxfmt reads this beside .gitignore. Generated files are never hand-formatted.
 bun.lock
 **/routeTree.gen.ts
-apps/claude-plugin/dist/
