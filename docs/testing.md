@@ -17,7 +17,9 @@ workspace for a tight loop, `bun test tooling` for structure checks.
 - `apps/api/src/**/*.test.ts` — beside the code. Exercise features through
   `createApp(...).handle(request)` with `openDatabase(":memory:")`; assert
   durable state, not only status codes.
-- `packages/ui/test/` — the public-export contract.
+- `packages/ui/test/` — the public-export contract, role contrast (WCAG AA
+  per mode), and the token tiers (`scales.css` is what the generator writes,
+  every role resolves in light and dark, components read roles only).
 - `apps/web/test/build/` — against `dist/` after `vite build`: what a
   deployment serves.
 - `tooling/checks/` — conventions: naming, dependency direction, pinned

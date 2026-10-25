@@ -37,8 +37,7 @@
   "overrides": [
     {
       // packages/ui sits below every app (docs/architecture.md): no app code,
-      // no router, no server framework. Components read semantic tokens,
-      // never palette shades.
+      // no router, no server framework.
       "files": ["**/packages/ui/**"],
       "rules": {
         "no-restricted-imports": [
@@ -52,20 +51,11 @@
               {
                 "group": ["@tanstack/*", "elysia", "elysia/*", "@elysiajs/*"],
                 "message": "packages/ui stays framework-free: routing and data belong to the app."
-              },
-              {
-                "group": ["**/palette.stylex"],
-                "message": "Components consume semantic roles from tokens.stylex, never palette shades."
               }
             ]
           }
         ]
       }
-    },
-    {
-      // The token layer is the one place that maps palette → roles.
-      "files": ["**/packages/ui/src/tokens/**"],
-      "rules": { "no-restricted-imports": "off" }
     },
     {
       "files": ["**/apps/api/**"],

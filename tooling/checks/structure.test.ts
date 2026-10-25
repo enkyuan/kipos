@@ -47,6 +47,46 @@ describe("dependency direction", () => {
   });
 });
 
+describe("design system", () => {
+  const source = "{apps,packages}/**/*.{ts,tsx,css,json}";
+
+  // The system is Tailwind v4 and CSS variables (ADR 0008); a second styling
+  // engine would split every component in two.
+  test("no styling engine other than Tailwind remains", async () => {
+    const offenders: string[] = [];
+    const retired = new RegExp(["style", "x"].join(""), "i");
+    for (const path of files(source)) {
+      if (retired.test(await read(path))) offenders.push(path);
+    }
+    for (const path of ["package.json", "knip.jsonc", "tooling/oxlint.json"]) {
+      if (retired.test(await read(path))) offenders.push(path);
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  // Roles are the only colors app and primitive code may name; the scales
+  // under them are replaceable (docs/decisions/0008-tailwind-design-system.md).
+  test("app and primitive code names color roles only", async () => {
+    const forbidden: [string, RegExp][] = [
+      ["scale step", /--(gray|brand|positive|warning|danger|info|black|white)-a?\d/],
+      ["literal color", /#[0-9a-f]{3,8}\b|\b(oklch|rgba?|hsla?)\(/i],
+      [
+        "arbitrary color",
+        /\b(bg|text|border|fill|stroke|ring|outline|shadow)-\[(#|oklch|rgb|hsl|var\(--(gray|brand))/,
+      ],
+      ["dark: variant", /\bdark:/],
+    ];
+    const offenders: string[] = [];
+    for (const path of files("{apps/web/src,packages/ui/src/primitives}/**/*.tsx")) {
+      const code = await read(path);
+      for (const [name, pattern] of forbidden) {
+        if (pattern.test(code)) offenders.push(`${path}: ${name}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+});
+
 describe("workspaces", () => {
   const manifests = files("{apps,packages}/*/package.json");
 

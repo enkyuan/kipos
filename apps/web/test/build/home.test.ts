@@ -35,10 +35,28 @@ describe("home page (production build)", () => {
     }
   });
 
-  test("links the compiled stylesheet, not the dev-only StyleX module", async () => {
+  test("links one compiled stylesheet carrying the design system", async () => {
     const html = await (await render("/")).text();
-    expect(html).toMatch(/<link[^>]+href="\/assets\/app-[^"]+\.css"/);
-    expect(html).not.toContain("virtual:stylex.css");
+    const href = html.match(/<link[^>]+href="(\/assets\/app-[^"]+\.css)"/)?.[1];
+    expect(href).toBeDefined();
+    const css = await Bun.file(new URL(`.${href}`, clientDir)).text();
+    // Scales, roles, the dark switch, a component class and a type utility.
+    expect(css).toContain("--brand-9:");
+    expect(css).toContain("--color-page:");
+    expect(css).toContain(".dark{");
+    expect(css).toContain(".nm-btn{");
+    expect(css).toContain(".text-heading-3{");
+    // The retired styling engine must not return through a dependency.
+    expect(css).not.toMatch(new RegExp(["style", "x"].join(""), "i"));
+  });
+
+  // Value: protects=a saved theme is pinned before first paint; fails_when=the head script is dropped or reads another key; why_new=nothing covered the theme switch; seam=none; no_claim=the script's effect in a browser
+  test("pins a saved theme before paint and offers the three modes", async () => {
+    const html = await (await render("/")).text();
+    expect(html).toMatch(/<script>try\{var t=localStorage\.getItem\("nomi-theme"\)/);
+    for (const label of ["System", "Light", "Dark"]) {
+      expect(html).toMatch(new RegExp(`<button[^>]+class="nm-btn[^"]*"[^>]*>.*?${label}`, "s"));
+    }
   });
 
   // Value: protects=an unknown path answers 404 with the not-found message and a way home; fails_when=the not-found component or its link is dropped; why_new=the previous assertion covered the status only; seam=none; no_claim=visual layout
@@ -47,6 +65,6 @@ describe("home page (production build)", () => {
     expect(response.status).toBe(404);
     const html = await response.text();
     expect(html).toContain("Page not found");
-    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>Back home<\/a>/);
+    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>(<span[^>]*>)?Back home/);
   });
 });

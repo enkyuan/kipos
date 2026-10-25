@@ -16,7 +16,7 @@ browser ──▶ apps/web (TanStack Start, SSR)          :3000
 | ------------------- | ----------------------------------------------------------------- |
 | `apps/api`          | The HTTP API: validation, product rules, persistence, migrations. |
 | `apps/web`          | Pages, routing, server rendering.                                 |
-| `packages/ui`       | Design tokens and accessible primitives (coss/ui on StyleX).      |
+| `packages/ui`       | Design tokens and accessible primitives (Tailwind v4, Base UI).   |
 | `packages/tsconfig` | Shared compiler options.                                          |
 
 ## Dependency direction
@@ -24,7 +24,7 @@ browser ──▶ apps/web (TanStack Start, SSR)          :3000
 ```text
 apps/web ──types only──▶ apps/api ──▶ elysia, bun:sqlite
    │
-   └──▶ packages/ui ──▶ @base-ui/react, @stylexjs/stylex
+   └──▶ packages/ui ──▶ @base-ui/react, tailwindcss
 ```
 
 - Once `apps/web` calls the API, it imports `type App` from `@nomi/api` and

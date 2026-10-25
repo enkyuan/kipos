@@ -19,7 +19,7 @@ Scoped instructions extend this file and never override it:
 ```text
 apps/api/AGENTS.md      backend delta (Elysia, persistence, HTTP contract)
 apps/AGENTS.md          frontend delta (apps/web)
-packages/ui/AGENTS.md   design-system delta (coss/ui on StyleX)
+packages/ui/AGENTS.md   design-system delta (Tailwind v4 + Base UI)
 ```
 
 ## Engineering standard
@@ -57,13 +57,13 @@ A strong change is easy to locate, explain, test, and delete.
 │   │       ├── health/      # liveness route
 │   │       ├── <feature>/   # one folder per product concept (routes, store)
 │   │       └── *.ts         # cross-feature primitives (env, database, errors)
-│   └── web/                 # @nomi/web — TanStack Start + React + StyleX
+│   └── web/                 # @nomi/web — TanStack Start + React + Tailwind
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
 │       │   └── features/    # product concepts (page-frame)
 │       └── test/            # tests against the production build
 ├── packages/
-│   ├── ui/                  # @nomi/ui — coss/ui primitives on StyleX
+│   ├── ui/                  # @nomi/ui — Base UI primitives, Tailwind v4 tokens
 │   └── tsconfig/            # shared compiler options
 ├── docs/
 │   ├── product.md           # what / who / non-goals
@@ -96,7 +96,7 @@ apps/web ──types only──▶ apps/api
 packages/ui            bun:sqlite, elysia
    │
    ▼
-@base-ui/react, @stylexjs/stylex
+@base-ui/react, tailwindcss
 ```
 
 Rules (enforced by `tooling/oxlint.json` and `tooling/checks/`):
@@ -108,8 +108,9 @@ Rules (enforced by `tooling/oxlint.json` and `tooling/checks/`):
   API source or Bun built-ins.
 - Feature folders never import each other, in either app.
 - `apps/web` consumes `@nomi/ui` through its package exports only.
-- Components read semantic tokens (`@nomi/ui/tokens.stylex`), never palette
-  shades.
+- Components and pages read semantic color roles (`bg-page`,
+  `text-secondary-foreground`, `var(--color-brand-solid)`), never scale steps
+  (`--brand-9`) or literal colors (enforced by `tooling/checks/`).
 - Circular imports are forbidden.
 
 ## Code shape

@@ -1,7 +1,7 @@
 # Nomi
 
 A Grok bot for students. Early development: a Bun + Elysia API and a
-TanStack Start web app, styled with coss/ui primitives on StyleX.
+TanStack Start web app, styled with Tailwind v4 and Base UI primitives.
 
 ```bash
 bun install
@@ -15,8 +15,8 @@ the running app for agents.
 | Path          | What                                                                |
 | ------------- | ------------------------------------------------------------------- |
 | `apps/api`    | HTTP API (Elysia, SQLite)                                           |
-| `apps/web`    | Web app (TanStack Start, StyleX)                                    |
-| `packages/ui` | Design system: coss/ui on Base UI + StyleX                          |
+| `apps/web`    | Web app (TanStack Start, Tailwind v4)                               |
+| `packages/ui` | Design system: Tailwind v4 tokens + Base UI primitives              |
 | `docs/`       | Product, architecture, invariants, testing, decisions, work records |
 
 Start with [AGENTS.md](AGENTS.md): it is the working agreement for humans and

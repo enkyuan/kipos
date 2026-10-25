@@ -1,83 +1,60 @@
 # AGENTS.md — `packages/ui`
 
 The frontend contract in `apps/AGENTS.md` governs how apps consume this
-package; this file is only the design-system delta.
+package; this file is only the design-system delta. The decision and its
+reasoning are in `docs/decisions/0008-tailwind-design-system.md`; the measured
+reference it follows is `docs/design/`.
 
 ## What this is
 
-coss/ui (<https://coss.com/ui>) — Base UI primitives with coss's base theme —
-translated from Tailwind classes to StyleX. Behavior and accessibility come
-from Base UI; geometry, color, and states come from coss, class by class.
+Base UI primitives with data attributes, styled by a three-tier CSS variable
+model on Tailwind CSS v4 (CSS-first, no config file): scales, then semantic
+roles, then component variables read by `nm-*` classes. Behavior and
+accessibility come from Base UI; look comes from the tiers below.
 
 ## Layers
 
 ```text
-src/tokens/
-  palette.stylex.ts    primitive OKLCH colors, read only by tokens.stylex.ts:
-                       the Tailwind shades coss's theme uses, and the brand
-                       ramps (darkSalmon, lightPink, lavenderBlush 50–950)
-  tokens.stylex.ts     coss's semantic variables plus brand roles as StyleX
-                       tokens: color, radius, font (vars); space, fontSize,
-                       lineHeight, fontWeight, tracking, shadow, motion,
-                       media (consts)
-  base.css             coss's base layer: fonts, borders, body, the
-                       descendant rules StyleX cannot express (button
-                       icon sizing). It sits below StyleX's layers, so it
-                       cannot override a property a primitive sets.
-src/primitives/        one file per coss component, exported as
-                       `@nomi/ui/<name>`
-test/                  public-export contract
+scripts/palette.ts    generates scales.css from OKLCH ladders (bun run palette)
+src/styles/
+  index.css           the entry (`@nomi/ui/styles.css`): Tailwind, fonts,
+                      the files below in order, and the base layer
+  scales.css          GENERATED. Tier 1: --gray-1..12, --gray-a1..a12 and the
+                      same for brand, positive, warning, danger, info, plus
+                      black/white alpha. Light on :root, dark on .dark and on
+                      the system preference unless .light pins light
+  theme.css           Tier 2: `@theme static` — ~90 --color-* roles that
+                      point at scale steps, and fonts, type scale, radius,
+                      shadows, easings. Tailwind turns these into utilities
+  roles-dark.css      the roles whose dark value differs, twice (.dark and the
+                      system preference), plus prefers-contrast overrides
+  components.css      Tier 3: nm-* classes. A size and a variant class set
+                      --button-* style variables; the base class reads them
+src/primitives/       one file per component, exported as `@nomi/ui/<name>`
+test/                 exports, contrast (AA per mode), token tiers
 ```
 
-`tokens → primitives`. There is no other layer. The package imports no app,
-router, or server code (oxlint enforces it).
-
-## Translating a coss component
-
-1. Fetch the source: `packages/ui/src/components/<name>.tsx` in
-   `github.com/cosscom/coss`, and read the matching guide in the `coss` skill.
-2. Keep coss's public API: component and part names, `variant` and `size`
-   values, defaults, and `data-slot` attributes.
-3. Translate classes to `stylex.create` using the token names, which mirror
-   coss's variables and Tailwind's scale:
-
-   ```text
-   bg-primary            → backgroundColor: color.primary
-   text-muted-foreground → color: color.mutedForeground
-   p-6 / px-2.5          → padding: space.s6 / paddingInline: space.s2_5
-   rounded-lg            → borderRadius: radius.lg
-   h-9 sm:h-8            → height: { default: "2.25rem", [media.sm]: "2rem" }
-   hover:bg-primary/90   → ":hover": `color-mix(in srgb, ${color.primary} 90%, transparent)`
-   has-focus-visible:…   → [":has(:focus-visible)"]: …
-   before:shadow-[…]     → "::before": { content: "''", …, boxShadow: color.highlight }
-   dark:…                → [media.dark] condition, or a dark value in tokens
-   ```
-
-4. Descendant selectors (`[&_svg]:size-4`, `*:data-[slot=x]:…`) cannot be
-   expressed in StyleX. Put them in `base.css`, keyed on `data-slot`, or
-   restructure (a component owns its rhythm with `gap` instead of sibling
-   selectors).
-5. Replace `className` with an `xstyle?: stylex.StyleXStyles` prop, applied
-   last so callers win. Accept Base UI's `render` prop where coss does.
-6. Add the subpath to `package.json` `exports`. `test/exports.test.ts` fails
-   until you do.
+Reading flows one way: components read roles, roles read scales. There is no
+other layer. The package imports no app, router, or server code (oxlint
+enforces it).
 
 ## Rules
 
-- Primitives read semantic tokens only; numbered shades stay in
-  `palette.stylex.ts`.
-- `defineVars` for the groups a theme may override (`color`, `radius`,
-  `font`), even where a value is the same in light and dark; everything else
-  is `defineConsts`, inlined at build time.
-- Brand colors reach components as roles (`color.brand`, `brandText`,
-  `brandSurface`, ...), never ramp steps. A new ramp is named by its
-  nearest CSS named color and documented in an ADR
-  (`docs/decisions/0002-brand-typography-and-palette.md`).
-- Typography: `font.heading` (EB Garamond) for headings and the wordmark,
-  with `tracking.heading`; `font.sans` (Inter) for everything else.
-- StyleX evaluates styles at build time: values must be literals, token
-  references, or template strings of them — no runtime computation.
-- `base.css` repeats a handful of token values in plain CSS (it cannot read
-  StyleX variables). Change both together.
-- Do not add a primitive until an app needs it; port it from coss when it
-  does.
+- Components read roles (`var(--color-*)`), never scale steps or literal
+  colors in `components.css` or primitive classes (`test/tokens.test.ts`).
+- Change the palette in `scripts/palette.ts` (a ladder, or one hue number),
+  run `bun run palette`, commit `scales.css`. Never edit it by hand.
+- A new role goes in `theme.css`; if its dark value differs, add it to both
+  dark blocks in `roles-dark.css`. `test/contrast.test.ts` then needs a pair
+  for any text role.
+- Every part has `data-slot`; controls also expose `data-variant` and
+  `data-size`. Variants are classes that set component variables, never inline
+  conditionals; hover is gated by `@media (hover: hover)`, motion by
+  `prefers-reduced-motion: no-preference`, and touch hit areas grow with
+  `@media (pointer: coarse)`.
+- Typography is Inter (OFL) with `ss03`, headings included, and the system
+  mono. Never add a font that is not redistributable.
+- Primitives take `className` for layout only.
+- Add a primitive when an app needs it, with its Base UI behavior, its
+  `data-slot` parts, and an entry in `package.json` `exports`
+  (`test/exports.test.ts` fails until you do).

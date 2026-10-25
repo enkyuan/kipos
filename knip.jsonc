@@ -13,15 +13,13 @@
       // Knip's TanStack and Vite plugins find the router and config;
       // routeTree.gen.ts is generated and imports every route.
       "entry": ["src/routes/**/*.tsx", "test/**/*.test.ts"],
-      "project": ["src/**/*.{ts,tsx}", "test/**/*.ts"],
+      "project": ["src/**/*.{ts,tsx,css}", "test/**/*.ts"],
     },
     "packages/ui": {
       // Every subpath export is public API consumed as source by the apps,
       // so each exported module is an entry point.
-      "entry": ["src/**/*.{ts,tsx}", "test/**/*.test.ts"],
-      "project": ["src/**/*.{ts,tsx}", "test/**/*.ts"],
-      // Loaded from base.css, which Knip does not parse.
-      "ignoreDependencies": ["@fontsource-variable/inter", "@fontsource-variable/eb-garamond"],
+      "entry": ["src/**/*.{ts,tsx}", "scripts/*.ts", "test/**/*.test.ts"],
+      "project": ["src/**/*.{ts,tsx,css}", "scripts/*.ts", "test/**/*.ts"],
     },
     "packages/tsconfig": {
       // Consumed through tsconfig `extends`, which is not an import graph.

@@ -1,0 +1,120 @@
+/*
+ * The roles whose dark value differs from theme.css. Everything else follows
+ * the scales, which scales.css already flips. The same declarations appear
+ * twice: under `.dark` (the theme toggle pins it) and under the system
+ * preference unless `.light` pins light. CSS cannot share one block between a
+ * class and a media query, so test/tokens.test.ts fails when they differ.
+ * The theme class goes on <html>, where the roles are declared.
+ */
+.dark {
+  --color-page: oklch(15% 0 0);
+  --color-shell: var(--color-black-fill);
+  --color-container: var(--gray-1);
+  --color-modal: oklch(25.2% 0 0);
+  --color-sunken: var(--black-a6);
+  --color-standout: var(--gray-3);
+  --color-component-on-sunken: var(--gray-4);
+  --color-component-on-inverted: var(--black-a2);
+  --color-component-on-container-subtle: var(--gray-a2);
+  --color-component-on-container-subtle-hover: var(--gray-a3);
+  --color-component-on-container-strong: var(--gray-a3);
+  --color-component-on-container-strong-hover: var(--gray-a4);
+  --color-transparent-hover: var(--gray-a4);
+  --color-disabled: var(--gray-a2);
+  --color-inverted-solid: var(--white-a12);
+  --color-inverted-solid-hover: var(--white-a10);
+  --color-inverted-solid-active: var(--white-a9);
+  --color-on-inverted-foreground: var(--color-black-fill);
+  --color-on-standout-primary-foreground: var(--gray-a12);
+  --color-border-on-standout: var(--white-a1);
+  --color-on-brand-subtle-foreground: var(--brand-a11);
+  --color-on-positive-solid-foreground: var(--color-white-fill);
+  --color-on-positive-subtle-foreground: var(--positive-a11);
+  --color-on-warning-solid-foreground: var(--color-white-fill);
+  --color-on-danger-solid-foreground: var(--color-white-fill);
+  --color-on-danger-subtle-foreground: var(--danger-a11);
+  --color-on-info-subtle-foreground: var(--info-a11);
+  --color-border-inverted: var(--color-white-fill);
+  --shadow-border: 0 0 0 1px #ffffff12;
+  --shadow-default: inset 0 0 0 0.5px #ffffff12;
+  --shadow-large:
+    0 0 0 1px var(--gray-a6), 0 2px 3px -2px var(--black-a3), 0 3px 8px -2px var(--black-a6),
+    0 4px 12px -4px var(--black-a7);
+  --shadow-extra-large:
+    inset 0 0 0 0.5px #ffffff12, 0 8px 40px 0 #0000000d, 0 12px 32px -16px #00000026;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-page: oklch(15% 0 0);
+    --color-shell: var(--color-black-fill);
+    --color-container: var(--gray-1);
+    --color-modal: oklch(25.2% 0 0);
+    --color-sunken: var(--black-a6);
+    --color-standout: var(--gray-3);
+    --color-component-on-sunken: var(--gray-4);
+    --color-component-on-inverted: var(--black-a2);
+    --color-component-on-container-subtle: var(--gray-a2);
+    --color-component-on-container-subtle-hover: var(--gray-a3);
+    --color-component-on-container-strong: var(--gray-a3);
+    --color-component-on-container-strong-hover: var(--gray-a4);
+    --color-transparent-hover: var(--gray-a4);
+    --color-disabled: var(--gray-a2);
+    --color-inverted-solid: var(--white-a12);
+    --color-inverted-solid-hover: var(--white-a10);
+    --color-inverted-solid-active: var(--white-a9);
+    --color-on-inverted-foreground: var(--color-black-fill);
+    --color-on-standout-primary-foreground: var(--gray-a12);
+    --color-border-on-standout: var(--white-a1);
+    --color-on-brand-subtle-foreground: var(--brand-a11);
+    --color-on-positive-solid-foreground: var(--color-white-fill);
+    --color-on-positive-subtle-foreground: var(--positive-a11);
+    --color-on-warning-solid-foreground: var(--color-white-fill);
+    --color-on-danger-solid-foreground: var(--color-white-fill);
+    --color-on-danger-subtle-foreground: var(--danger-a11);
+    --color-on-info-subtle-foreground: var(--info-a11);
+    --color-border-inverted: var(--color-white-fill);
+    --shadow-border: 0 0 0 1px #ffffff12;
+    --shadow-default: inset 0 0 0 0.5px #ffffff12;
+    --shadow-large:
+      0 0 0 1px var(--gray-a6), 0 2px 3px -2px var(--black-a3), 0 3px 8px -2px var(--black-a6),
+      0 4px 12px -4px var(--black-a7);
+    --shadow-extra-large:
+      inset 0 0 0 0.5px #ffffff12, 0 8px 40px 0 #0000000d, 0 12px 32px -16px #00000026;
+  }
+}
+
+/*
+ * prefers-contrast: more re-points text, borders and intent colors to higher
+ * alpha steps, in both modes. `:root:root` outranks the dark blocks above.
+ */
+@media (prefers-contrast: more) {
+  :root:root {
+    --color-secondary-foreground: var(--gray-a12);
+    --color-tertiary-foreground: var(--gray-a11);
+    --color-disabled-foreground: var(--gray-a11);
+    --color-brand-foreground: var(--brand-a11);
+    --color-positive-foreground: var(--positive-a11);
+    --color-warning-foreground: var(--warning-a11);
+    --color-danger-foreground: var(--danger-a11);
+    --color-info-foreground: var(--info-a11);
+    --color-on-brand-subtle-foreground: var(--brand-a11);
+    --color-on-positive-subtle-foreground: var(--positive-a11);
+    --color-on-warning-subtle-foreground: var(--warning-a11);
+    --color-on-danger-subtle-foreground: var(--danger-a11);
+    --color-on-info-subtle-foreground: var(--info-a11);
+    --color-border-default: var(--gray-a7);
+    --color-border-subtle: var(--gray-a6);
+    --color-border-strong: var(--gray-a8);
+    --color-brand-border-default: var(--brand-a11);
+    --color-brand-border-subtle: var(--brand-a10);
+    --color-brand-border-focus: var(--brand-a11);
+    --color-positive-border-default: var(--positive-a11);
+    --color-positive-border-subtle: var(--positive-a10);
+    --color-warning-border-default: var(--warning-a11);
+    --color-warning-border-subtle: var(--warning-a10);
+    --color-danger-border-default: var(--danger-a11);
+    --color-danger-border-subtle: var(--danger-a10);
+    --color-info-border-default: var(--info-a11);
+  }
+}
