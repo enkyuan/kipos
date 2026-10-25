@@ -32,6 +32,7 @@
   --color-card: var(--gray-a2);
   --color-sunken: var(--black-a1);
   --color-standout: var(--gray-12);
+  --color-backdrop: var(--black-a7);
   /* Component fills with hover and active states, and the fills that sit on a container. */
   --color-component: var(--gray-a3);
   --color-component-hover: var(--gray-a4);

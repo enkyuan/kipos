@@ -1,14 +1,18 @@
 /*
  * @nomi/ui styles: import once from the app's global stylesheet. Order is the
  * architecture: Tailwind, then scales (tier 1) -> theme roles (tier 2) ->
- * dark overrides -> component classes that read component variables (tier 3).
+ * dark overrides -> component classes (components/*.css) that read
+ * component variables (tier 3).
  */
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
 @import "./scales.css";
 @import "./theme.css";
 @import "./roles-dark.css";
-@import "./components.css";
+@import "./components/button.css";
+@import "./components/form.css";
+@import "./components/surface.css";
+@import "./components/overlay.css";
 
 /* The apps scan their own sources; this adds the primitives' class strings. */
 @source "../primitives";

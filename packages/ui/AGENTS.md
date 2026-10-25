@@ -28,10 +28,14 @@ src/styles/
                       shadows, easings. Tailwind turns these into utilities
   roles-dark.css      the roles whose dark value differs, twice (.dark and the
                       system preference), plus prefers-contrast overrides
-  components.css      Tier 3: nm-* classes. A size and a variant class set
-                      --button-* style variables; the base class reads them
-src/primitives/       one file per component, exported as `@nomi/ui/<name>`
-test/                 exports, contrast (AA per mode), token tiers
+  components/*.css    Tier 3: nm-* classes (button, form, surface, overlay).
+                      A size and a variant class set component variables
+                      (--button-*, --badge-*); the base class reads them
+src/primitives/       one file per component, exported as `@nomi/ui/<name>`;
+                      classes.ts joins class names and types `className`
+test/                 exports, contrast (AA per mode), token tiers, slot
+                      markup (SSR), behavior (happy-dom: keyboard, focus,
+                      open/close)
 ```
 
 Reading flows one way: components read roles, roles read scales. There is no
@@ -56,5 +60,7 @@ enforces it).
   mono. Never add a font that is not redistributable.
 - Primitives take `className` for layout only.
 - Add a primitive when an app needs it, with its Base UI behavior, its
-  `data-slot` parts, and an entry in `package.json` `exports`
-  (`test/exports.test.ts` fails until you do).
+  `data-slot` parts, an `nm-*` class block in `components/`, a row in
+  `test/slots.test.tsx`, a behavior test for anything interactive, and an
+  entry in `package.json` `exports` (`test/exports.test.ts` fails until you
+  do). Any new text role needs a pair in `test/contrast.test.ts`.

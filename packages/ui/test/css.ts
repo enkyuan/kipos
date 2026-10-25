@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 // Reads the design system's stylesheets as data, so tests judge the files
@@ -7,6 +7,13 @@ import { join } from "node:path";
 const styles = join(import.meta.dir, "../src/styles");
 
 export const read = (file: string) => readFileSync(join(styles, file), "utf8");
+
+/** Every component stylesheet, concatenated. */
+export const readComponents = () =>
+  readdirSync(join(styles, "components"))
+    .filter((name) => name.endsWith(".css"))
+    .map((name) => read(`components/${name}`))
+    .join("\n");
 
 export type Vars = Record<string, string>;
 export type Mode = "light" | "dark";

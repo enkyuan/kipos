@@ -21,7 +21,13 @@ describe("role contrast", () => {
     });
 
     test(`${mode}: text clears AA on cards, components and the container`, () => {
-      for (const surface of ["card", "component", "component-on-container-strong", "container"]) {
+      for (const surface of [
+        "card",
+        "component",
+        "component-on-container-strong",
+        "container",
+        "modal",
+      ]) {
         const bg = on(surface);
         for (const name of ["primary-foreground", "secondary-foreground"]) {
           expect({ surface, name, ok: contrast(on(name, bg), bg) >= 4.5 }).toEqual({
@@ -58,6 +64,23 @@ describe("role contrast", () => {
     test(`${mode}: text on the primary (inverted) button clears AA`, () => {
       const solid = on("inverted-solid");
       expect(contrast(on("on-inverted-foreground", solid), solid)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    test(`${mode}: placeholder text clears AA inside an input`, () => {
+      const input = on("component-on-container-strong");
+      expect(contrast(on("tertiary-foreground", input), input)).toBeGreaterThanOrEqual(4.5);
+    });
+
+    test(`${mode}: tooltip text clears AA on its fill`, () => {
+      const tooltip = on("standout");
+      expect(
+        contrast(on("on-standout-primary-foreground", tooltip), tooltip),
+      ).toBeGreaterThanOrEqual(4.5);
+    });
+
+    test(`${mode}: control borders and checked fills reach 3:1 on the page`, () => {
+      expect(contrast(on("tertiary-foreground"), page)).toBeGreaterThanOrEqual(3);
+      expect(contrast(on("brand-solid"), page)).toBeGreaterThanOrEqual(3);
     });
 
     test(`${mode}: the focus ring is visible (3:1) on the page`, () => {

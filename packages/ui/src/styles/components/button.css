@@ -1,13 +1,6 @@
-/*
- * Tier 3: component classes. A size class and a variant class set component
- * variables (--button-*); the base class reads them, so a new variant is a
- * few variables and never touches geometry. Variables read roles only, never
- * scale steps. Hover is gated to real hover devices, motion to
- * prefers-reduced-motion: no-preference, and touch screens get a larger hit
- * area without a larger button.
- */
+/* Button. See the header of index.css for the three tiers; this class reads
+   --button-* variables that its size and variant classes set. */
 @layer components {
-  /* Button */
   .nm-btn {
     --button-height: 1.75rem;
     --button-padding-start: 0.625rem;

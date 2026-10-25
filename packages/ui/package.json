@@ -9,9 +9,65 @@
   ],
   "exports": {
     "./styles.css": "./src/styles/index.css",
+    "./badge": {
+      "types": "./src/primitives/badge.tsx",
+      "default": "./src/primitives/badge.tsx"
+    },
     "./button": {
       "types": "./src/primitives/button.tsx",
       "default": "./src/primitives/button.tsx"
+    },
+    "./card": {
+      "types": "./src/primitives/card.tsx",
+      "default": "./src/primitives/card.tsx"
+    },
+    "./checkbox": {
+      "types": "./src/primitives/checkbox.tsx",
+      "default": "./src/primitives/checkbox.tsx"
+    },
+    "./dialog": {
+      "types": "./src/primitives/dialog.tsx",
+      "default": "./src/primitives/dialog.tsx"
+    },
+    "./divider": {
+      "types": "./src/primitives/divider.tsx",
+      "default": "./src/primitives/divider.tsx"
+    },
+    "./input": {
+      "types": "./src/primitives/input.tsx",
+      "default": "./src/primitives/input.tsx"
+    },
+    "./label": {
+      "types": "./src/primitives/label.tsx",
+      "default": "./src/primitives/label.tsx"
+    },
+    "./radio-group": {
+      "types": "./src/primitives/radio-group.tsx",
+      "default": "./src/primitives/radio-group.tsx"
+    },
+    "./skeleton": {
+      "types": "./src/primitives/skeleton.tsx",
+      "default": "./src/primitives/skeleton.tsx"
+    },
+    "./spinner": {
+      "types": "./src/primitives/spinner.tsx",
+      "default": "./src/primitives/spinner.tsx"
+    },
+    "./switch": {
+      "types": "./src/primitives/switch.tsx",
+      "default": "./src/primitives/switch.tsx"
+    },
+    "./tabs": {
+      "types": "./src/primitives/tabs.tsx",
+      "default": "./src/primitives/tabs.tsx"
+    },
+    "./toast": {
+      "types": "./src/primitives/toast.tsx",
+      "default": "./src/primitives/toast.tsx"
+    },
+    "./tooltip": {
+      "types": "./src/primitives/tooltip.tsx",
+      "default": "./src/primitives/tooltip.tsx"
     }
   },
   "scripts": {
@@ -25,6 +81,7 @@
     "tailwindcss": "4.3.3"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "21.0.4",
     "@nomi/tsconfig": "workspace:*",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

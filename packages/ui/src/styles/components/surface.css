@@ -1,0 +1,184 @@
+/* Surfaces and status: card, badge, divider, spinner, skeleton, tabs. */
+@layer components {
+  .nm-card {
+    padding: 1rem;
+    border-radius: var(--radius-2xl);
+    background-color: var(--color-component-on-container-subtle);
+    box-shadow: var(--shadow-default);
+  }
+
+  .nm-badge {
+    --badge-bg: var(--color-component);
+    --badge-fg: var(--color-secondary-foreground);
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.25rem;
+    padding-inline: 0.375rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--badge-bg);
+    color: var(--badge-fg);
+    font-size: var(--text-caption-lg);
+    font-weight: 500;
+    line-height: 1rem;
+    white-space: nowrap;
+  }
+
+  .nm-badge-brand {
+    --badge-bg: var(--color-brand-subtle);
+    --badge-fg: var(--color-on-brand-subtle-foreground);
+  }
+
+  .nm-badge-positive {
+    --badge-bg: var(--color-positive-subtle);
+    --badge-fg: var(--color-on-positive-subtle-foreground);
+  }
+
+  .nm-badge-warning {
+    --badge-bg: var(--color-warning-subtle);
+    --badge-fg: var(--color-on-warning-subtle-foreground);
+  }
+
+  .nm-badge-danger {
+    --badge-bg: var(--color-danger-subtle);
+    --badge-fg: var(--color-on-danger-subtle-foreground);
+  }
+
+  .nm-badge-info {
+    --badge-bg: var(--color-info-subtle);
+    --badge-fg: var(--color-on-info-subtle-foreground);
+  }
+
+  .nm-divider {
+    flex-shrink: 0;
+    background-color: var(--color-border-default);
+  }
+
+  .nm-divider[data-orientation="horizontal"] {
+    width: 100%;
+    height: 1px;
+  }
+
+  .nm-divider[data-orientation="vertical"] {
+    align-self: stretch;
+    width: 1px;
+  }
+
+  .nm-spinner {
+    --spinner-size: 1rem;
+
+    display: inline-block;
+    flex-shrink: 0;
+    width: var(--spinner-size);
+    height: var(--spinner-size);
+    border: 2px solid currentcolor;
+    border-right-color: transparent;
+    border-radius: 9999px;
+    color: var(--color-secondary-foreground);
+    animation: nm-spin 0.7s linear infinite;
+  }
+
+  .nm-spinner-sm {
+    --spinner-size: 0.75rem;
+  }
+
+  .nm-spinner-lg {
+    --spinner-size: 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nm-spinner {
+      animation-duration: 2s;
+    }
+  }
+
+  .nm-skeleton {
+    border-radius: var(--radius-md);
+    background-color: var(--color-component);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nm-skeleton {
+      animation: nm-pulse 2s ease-in-out infinite;
+    }
+  }
+
+  /* Tabs: the indicator is positioned by Base UI's --active-tab-* variables. */
+  .nm-tabs-list {
+    position: relative;
+    display: flex;
+    gap: 0.25rem;
+    box-shadow: inset 0 -1px 0 var(--color-border-default);
+  }
+
+  .nm-tab {
+    display: inline-flex;
+    align-items: center;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--color-secondary-foreground);
+    font-family: inherit;
+    font-size: var(--text-body-sm);
+    font-weight: 500;
+    cursor: default;
+  }
+
+  @media (hover: hover) {
+    .nm-tab:hover:not([data-disabled], [data-active]) {
+      background-color: var(--color-transparent-hover);
+      color: var(--color-primary-foreground);
+    }
+  }
+
+  .nm-tab[data-active] {
+    color: var(--color-primary-foreground);
+  }
+
+  .nm-tab[data-disabled] {
+    color: var(--color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  .nm-tab:focus-visible,
+  .nm-tabs-panel:focus-visible {
+    outline: 2px solid var(--color-brand-border-focus);
+    outline-offset: 2px;
+  }
+
+  .nm-tabs-indicator {
+    position: absolute;
+    bottom: 0;
+    left: var(--active-tab-left);
+    width: var(--active-tab-width);
+    height: 2px;
+    background-color: var(--color-inverted-solid);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .nm-tabs-indicator {
+      transition:
+        left 200ms var(--ease-out-quint),
+        width 200ms var(--ease-out-quint);
+    }
+  }
+
+  .nm-tabs-panel {
+    padding-top: 0.75rem;
+  }
+}
+
+@keyframes nm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nm-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
