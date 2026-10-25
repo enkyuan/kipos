@@ -1,6 +1,6 @@
 # Product
 
-Kipos is a Grok bot for students. This file records only what exists, so
+Nomi is a Grok bot for students. This file records only what exists, so
 nobody builds against an imagined product.
 
 ## What exists

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Kipos is a Grok bot for students, in early development: a Bun + Elysia API
+Nomi is a Grok bot for students, in early development: a Bun + Elysia API
 and a TanStack Start web app. Nothing of the product is built yet beyond the
 shell; `docs/product.md` records what exists.
 
@@ -48,7 +48,7 @@ A strong change is easy to locate, explain, test, and delete.
 ├── AGENTS.md
 ├── apps/
 │   ├── AGENTS.md            # frontend delta
-│   ├── api/                 # @kipos/api — Bun + Elysia HTTP API
+│   ├── api/                 # @nomi/api — Bun + Elysia HTTP API
 │   │   ├── AGENTS.md
 │   │   ├── migrations/      # SQLite migrations, applied in filename order
 │   │   └── src/
@@ -57,13 +57,13 @@ A strong change is easy to locate, explain, test, and delete.
 │   │       ├── health/      # liveness route
 │   │       ├── <feature>/   # one folder per product concept (routes, store)
 │   │       └── *.ts         # cross-feature primitives (env, database, errors)
-│   └── web/                 # @kipos/web — TanStack Start + React + StyleX
+│   └── web/                 # @nomi/web — TanStack Start + React + StyleX
 │       ├── src/
 │       │   ├── routes/      # URL topology (file-based)
 │       │   └── features/    # product concepts (page-frame)
 │       └── test/            # tests against the production build
 ├── packages/
-│   ├── ui/                  # @kipos/ui — coss/ui primitives on StyleX
+│   ├── ui/                  # @nomi/ui — coss/ui primitives on StyleX
 │   └── tsconfig/            # shared compiler options
 ├── docs/
 │   ├── product.md           # what / who / non-goals
@@ -102,13 +102,13 @@ packages/ui            bun:sqlite, elysia
 Rules (enforced by `tooling/oxlint.json` and `tooling/checks/`):
 
 - `packages/ui` never imports an app, a router, or a server framework.
-- `apps/api` never imports `@kipos/ui`, `@kipos/web`, or React.
-- `apps/web` imports `@kipos/api` with `import type` only, and only in
+- `apps/api` never imports `@nomi/ui`, `@nomi/web`, or React.
+- `apps/web` imports `@nomi/api` with `import type` only, and only in
   `src/api/client.ts` (created with the first API call); it never imports
   API source or Bun built-ins.
 - Feature folders never import each other, in either app.
-- `apps/web` consumes `@kipos/ui` through its package exports only.
-- Components read semantic tokens (`@kipos/ui/tokens.stylex`), never palette
+- `apps/web` consumes `@nomi/ui` through its package exports only.
+- Components read semantic tokens (`@nomi/ui/tokens.stylex`), never palette
   shades.
 - Circular imports are forbidden.
 
@@ -209,7 +209,7 @@ Keep the primary checkout clean on `main`. Concurrent tasks get isolated
 worktrees outside it:
 
 ```bash
-git worktree add ../kipos-wt/feat-study-sessions -b feat/study-sessions origin/main
+git worktree add ../nomi-wt/feat-study-sessions -b feat/study-sessions origin/main
 ```
 
 One owner controls one worktree at a time. Plan parallel work around conflict

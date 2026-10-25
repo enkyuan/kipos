@@ -7,7 +7,7 @@ import { openDatabase } from "./database";
 let dir: string;
 
 beforeEach(() => {
-  dir = mkdtempSync(join(tmpdir(), "kipos-db-"));
+  dir = mkdtempSync(join(tmpdir(), "nomi-db-"));
 });
 
 afterEach(() => {

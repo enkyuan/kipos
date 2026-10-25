@@ -46,7 +46,7 @@
           {
             "patterns": [
               {
-                "group": ["@kipos/web", "@kipos/web/*", "@kipos/api", "@kipos/api/*", "**/apps/**"],
+                "group": ["@nomi/web", "@nomi/web/*", "@nomi/api", "@nomi/api/*", "**/apps/**"],
                 "message": "packages/ui never imports an app (docs/architecture.md)."
               },
               {
@@ -76,10 +76,10 @@
             "patterns": [
               {
                 "group": [
-                  "@kipos/web",
-                  "@kipos/web/*",
-                  "@kipos/ui",
-                  "@kipos/ui/*",
+                  "@nomi/web",
+                  "@nomi/web/*",
+                  "@nomi/ui",
+                  "@nomi/ui/*",
                   "react",
                   "react-dom"
                 ],
@@ -91,7 +91,7 @@
       }
     },
     {
-      // apps/web: @kipos/ui through its public exports only, and the API as
+      // apps/web: @nomi/ui through its public exports only, and the API as
       // types only, through the typed client the first API call adds (#api/client).
       "files": ["**/apps/web/src/**"],
       "rules": {
@@ -100,11 +100,11 @@
           {
             "patterns": [
               {
-                "group": ["@kipos/ui/src/*", "**/packages/ui/**"],
-                "message": "Consume @kipos/ui through its package exports (packages/ui/package.json)."
+                "group": ["@nomi/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @nomi/ui through its package exports (packages/ui/package.json)."
               },
               {
-                "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
+                "group": ["**/apps/api/**", "@nomi/api/*", "bun", "bun:*"],
                 "message": "apps/web reaches the API only through its typed client (added with the first API call), never its source or runtime."
               },
               {
@@ -128,10 +128,10 @@
             "patterns": [
               {
                 "group": [
-                  "@kipos/web",
-                  "@kipos/web/*",
-                  "@kipos/ui",
-                  "@kipos/ui/*",
+                  "@nomi/web",
+                  "@nomi/web/*",
+                  "@nomi/ui",
+                  "@nomi/ui/*",
                   "react",
                   "react-dom"
                 ],
@@ -156,11 +156,11 @@
           {
             "patterns": [
               {
-                "group": ["@kipos/ui/src/*", "**/packages/ui/**"],
-                "message": "Consume @kipos/ui through its package exports (packages/ui/package.json)."
+                "group": ["@nomi/ui/src/*", "**/packages/ui/**"],
+                "message": "Consume @nomi/ui through its package exports (packages/ui/package.json)."
               },
               {
-                "group": ["**/apps/api/**", "@kipos/api/*", "bun", "bun:*"],
+                "group": ["**/apps/api/**", "@nomi/api/*", "bun", "bun:*"],
                 "message": "apps/web reaches the API only through its typed client (added with the first API call), never its source or runtime."
               },
               {

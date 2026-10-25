@@ -1,4 +1,4 @@
-# Kipos
+# Nomi
 
 A Grok bot for students. Early development: a Bun + Elysia API and a
 TanStack Start web app, styled with coss/ui primitives on StyleX.

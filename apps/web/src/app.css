@@ -3,7 +3,7 @@
  * the compiled StyleX rules (in their own layers) to it; in development they
  * load from /virtual:stylex.css (routes/__root.tsx).
  */
-@import "@kipos/ui/base.css";
+@import "@nomi/ui/base.css";
 
 @layer base {
   html {
