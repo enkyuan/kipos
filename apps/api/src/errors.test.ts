@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { Elysia, t } from "elysia";
-import { apiError, errorBoundary, type ApiError } from "./errors";
+import { apiError, apiErrorSchema, errorBoundary, type ApiError } from "./errors";
 
 const app = new Elysia()
   .use(errorBoundary)
@@ -8,9 +8,13 @@ const app = new Elysia()
   .get("/boom", () => {
     throw new Error("connection string postgres://secret");
   })
-  .get("/conflict", ({ status }) => {
-    throw status(409, apiError("conflict", "Already exists."));
-  })
+  .get(
+    "/conflict",
+    ({ status }) => {
+      throw status(409, apiError("conflict", "Already exists."));
+    },
+    { response: { 409: apiErrorSchema } },
+  )
   // A handler whose output breaks its own declared schema: a server bug.
   .get("/drift", () => ({ count: "three" }) as unknown as { count: number }, {
     response: { 200: t.Object({ count: t.Number() }) },
@@ -37,6 +41,20 @@ describe("errorBoundary", () => {
     const response = await silenced(() => app.handle(new Request("http://test/boom")));
     expect(response.status).toBe(500);
     expect(await response.text()).not.toContain("secret");
+  });
+
+  test("answers an unparsable body as a typed 400", async () => {
+    const response = await app.handle(
+      new Request("http://test/echo", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "{not json",
+      }),
+    );
+    expect(response.status).toBe(400);
+    expect((await response.json()) as ApiError).toEqual(
+      apiError("malformed_request", "The request body could not be parsed."),
+    );
   });
 
   test("keeps the status and body of a deliberately thrown failure", async () => {

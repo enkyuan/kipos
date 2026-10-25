@@ -145,7 +145,7 @@ export const fontWeight = stylex.defineConsts({
 export const shadow = stylex.defineConsts({
   // Tailwind `shadow-xs/5`.
   xs: "0 1px 2px 0 oklch(0 0 0 / 5%)",
-  // Tailwind `shadow-lg/5`: raised overlays (toasts).
+  // Tailwind `shadow-lg/5`: raised overlays.
   lg: "0 10px 15px -3px oklch(0 0 0 / 5%), 0 4px 6px -4px oklch(0 0 0 / 5%)",
   // Focus: `ring-2 ring-ring ring-offset-1 ring-offset-background`.
   focusOffset: "1px",

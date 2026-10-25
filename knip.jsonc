@@ -15,17 +15,6 @@
       "entry": ["src/routes/**/*.tsx", "test/**/*.test.ts"],
       "project": ["src/**/*.{ts,tsx}", "test/**/*.ts"],
     },
-    "apps/claude-plugin": {
-      // The MCP server and the SessionStart hook are run by Claude Code from
-      // their bundles (dist/), named in .mcp.json and hooks/hooks.json.
-      "entry": ["src/server.ts", "src/session-context.ts", "src/**/*.test.ts"],
-      "project": ["src/**/*.ts"],
-    },
-    "apps/dial-service": {
-      // Vercel serves every file under api/ as a function.
-      "entry": ["api/**/*.ts"],
-      "project": ["api/**/*.ts", "src/**/*.ts"],
-    },
     "packages/ui": {
       // Every subpath export is public API consumed as source by the apps,
       // so each exported module is an entry point.

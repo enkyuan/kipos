@@ -29,7 +29,8 @@ describe("naming", () => {
 describe("dependency direction", () => {
   // apps/web compiles against the API's types (Eden) but must never bundle
   // its runtime: that would ship server code, and bun:sqlite, to browsers.
-  // One file owns that boundary, and it imports types only.
+  // One file owns that boundary, and it imports types only. It has no subject
+  // until the first API call creates that file; the check then guards it.
   test("only apps/web/src/api/client.ts reaches @kipos/api, and for types only", async () => {
     const client = "apps/web/src/api/client.ts";
     const mentions = /["']@kipos\/api["']/;

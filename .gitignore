@@ -6,8 +6,6 @@
 # Bun workspace dependencies and build output.
 node_modules/
 dist/
-# The Claude Code plugin is installed by copying its folder, so its bundle ships.
-!apps/claude-plugin/dist/
 .output/
 .tanstack/
 *.tsbuildinfo

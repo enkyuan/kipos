@@ -12,22 +12,17 @@ const clientDir = new URL("../../dist/client/", import.meta.url);
 
 const render = async (path: string) => server.fetch(new Request(`http://localhost${path}`));
 
-describe("FDE workspace (production build)", () => {
-  test("server-renders the meetings grid with its New meeting control", async () => {
+describe("home page (production build)", () => {
+  // Value: protects=the home page ships the root title, language and wordmark link; fails_when=the root head or the layout drops them; why_new=the existing assertions covered status and h1 only; seam=none; no_claim=visual layout
+  test("server-renders the home page with its heading", async () => {
     const response = await render("/");
     expect(response.status).toBe(200);
     const html = await response.text();
     expect(html).toContain("<h1");
-    expect(html).toContain("Meetings");
-    expect(html).toMatch(/<button[^>]+aria-label="New meeting"/);
-    // The list itself loads in the browser.
-    expect(html).toContain("Loading your meetings");
-  });
-
-  test("renders a meeting page shell that loads its session in the browser", async () => {
-    const response = await render("/meetings/some-session-id");
-    expect(response.status).toBe(200);
-    expect(await response.text()).toContain("Loading the meeting");
+    expect(html).toContain("A Grok bot for students.");
+    expect(html).toContain("<title>Kipos</title>");
+    expect(html).toContain('<html lang="en"');
+    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>kipos<\/a>/);
   });
 
   test("ships no development annotation tooling", async () => {
@@ -46,7 +41,12 @@ describe("FDE workspace (production build)", () => {
     expect(html).not.toContain("virtual:stylex.css");
   });
 
+  // Value: protects=an unknown path answers 404 with the not-found message and a way home; fails_when=the not-found component or its link is dropped; why_new=the previous assertion covered the status only; seam=none; no_claim=visual layout
   test("answers an unknown path with 404", async () => {
-    expect((await render("/no-such-page")).status).toBe(404);
+    const response = await render("/no-such-page");
+    expect(response.status).toBe(404);
+    const html = await response.text();
+    expect(html).toContain("Page not found");
+    expect(html).toMatch(/<a[^>]+href="\/"[^>]*>Back home<\/a>/);
   });
 });

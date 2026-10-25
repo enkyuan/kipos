@@ -17,8 +17,6 @@
     "test": "bun test src"
   },
   "dependencies": {
-    "@anthropic-ai/bedrock-sdk": "0.33.8",
-    "@sinclair/typebox": "0.34.52",
     "elysia": "1.4.30"
   },
   "devDependencies": {
