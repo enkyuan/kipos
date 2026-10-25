@@ -4,7 +4,7 @@ State: DONE
 Branch: feat/nomi-primitives-core (stacked on feat/nomi-design-system-foundations)
 Worktree: .claude/worktrees/rename-kipos-to-nomi-22cf6d
 Base SHA: a4ff34c
-Head SHA:
+Head SHA: ac3c2eb
 Depends on: feat/nomi-design-system-foundations
 
 ## Goal
