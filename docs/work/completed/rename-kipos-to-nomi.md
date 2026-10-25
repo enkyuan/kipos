@@ -44,6 +44,7 @@ step.
 
 ## Remaining
 
-Out-of-repo rename (`mv` of the checkout and worktree folders,
-`git worktree repair`, `gh repo rename`, `git remote set-url`) is left to the
-owner.
+Done after this PR was opened (2026-10-24): `gh repo rename` to `enkyuan/nomi`
+and `git remote set-url origin`. Still left to the owner: `mv` of the checkout
+and worktree folders and `git worktree repair`, once no session has a worktree
+open there.

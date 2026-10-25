@@ -106,4 +106,5 @@ separate `utilities.css`.
 
 The project was renamed from kipos to nomi (PR chore/rename-kipos-to-nomi,
 `docs/work/completed/rename-kipos-to-nomi.md`). Earlier ADRs and work records
-keep the old name as written; the package scope is now `@nomi/*`.
+keep the old name as written; the package scope is now `@nomi/*`, and the
+GitHub repository is `enkyuan/nomi` (2026-10-24; the old URL redirects).

@@ -99,7 +99,7 @@ mv ~/Desktop/Projects/kipos-wt ~/Desktop/Projects/nomi-wt
 cd ~/Desktop/Projects/nomi && git worktree repair ~/Desktop/Projects/nomi-wt/*
 git worktree list   # every path should now show nomi / nomi-wt
 
-# GitHub (repo settings; GitHub redirects the old URL)
+# GitHub (repo settings; GitHub redirects the old URL) — done 2026-10-24
 gh repo rename nomi --repo enkyuan/kipos
 git remote set-url origin git@github.com:enkyuan/nomi.git
 ```
